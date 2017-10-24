@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Ergot</string>
+    <string name="bt_commander">Commander</string>
+    <string name="bt_y_aller">Y Aller</string>
+    <string name="bt_voir_commande">Voir la commande</string>
+    <string name="ws_load_message">Chargement en cours…</string>
+    <string name="generic_error">Une erreur est survenue</string>
+    <string name="bt_actualiser">Actualiser</string>
+</resources>

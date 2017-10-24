@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
+
+    <!-- dimension du text * 2 -->
+    <dimen name="font_10">30sp</dimen>
+    <dimen name="font_11">33sp</dimen>
+    <dimen name="font_12">36sp</dimen>
+    <dimen name="font_13">39sp</dimen>
+    <dimen name="font_14">42sp</dimen>
+    <dimen name="font_15">45sp</dimen>
+    <dimen name="font_16">48sp</dimen>
+    <dimen name="font_17">51sp</dimen>
+    <dimen name="font_18">54sp</dimen>
+    <dimen name="font_20">60sp</dimen>
+    <dimen name="font_25">75sp</dimen>
+    <dimen name="font_30">90sp</dimen>
+    <dimen name="font_40">120sp</dimen>
+    <dimen name="font_50">150sp</dimen>
+
+    <!-- Margin *2 -->
+    <dimen name="margin_1">2dp</dimen>
+    <dimen name="margin_2">6dp</dimen>
+    <dimen name="margin_5">15dp</dimen>
+    <dimen name="margin_8">24dp</dimen>
+    <dimen name="margin_10">30dp</dimen>
+    <dimen name="margin_13">39dp</dimen>
+    <dimen name="margin_15">45dp</dimen>
+    <dimen name="margin_20">60dp</dimen>
+    <dimen name="margin_25">75dp</dimen>
+    <dimen name="margin_30">90dp</dimen>
+    <dimen name="margin_40">120dp</dimen>
+    <dimen name="margin_50">150dp</dimen>
+    <dimen name="margin_60">180dp</dimen>
+    <dimen name="margin_80">240dp</dimen>
+    <dimen name="margin_100">300dp</dimen>
+    <dimen name="margin_120">360dp</dimen>
+    <dimen name="margin_150">450dp</dimen>
+
+    <!-- Standart height -->
+    <dimen name="standard_height">120dp</dimen>
+
+
+</resources>

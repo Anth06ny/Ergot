@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ergot.anthony.com.ergot.commander.CommanderActivity">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@+id/foot"
+        android:layout_alignParentTop="true"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_wait"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/load_shadow_color"
+        android:gravity="center"
+        android:padding="@dimen/margin_10"
+        android:text="@string/ws_load_message"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/font_16"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:id="@+id/ll_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/error_shadow_color"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_10">
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/generic_error"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_16"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/bt_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bt_actualiser"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_10"
+        android:layout_above="@id/foot"
+        android:background="@color/foot_shadow_color"/>
+
+
+    <include
+        android:id="@id/foot"
+        layout="@layout/foot_commande"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

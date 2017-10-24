@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#d1ae89</color>
+    <color name="colorPrimaryDark">#9f7f5c</color>
+    <color name="colorPrimaryLight">#ffe0b9</color>
+    <color name="category_name_bg_color">#c9131111</color>
+    <color name="error_color">#c62828</color>
+    <color name="foot_shadow_color">#da424242</color>
+    <color name="load_shadow_color">#cc2962ff</color>
+    <color name="error_shadow_color">#c62828</color>
+
+
+</resources>
