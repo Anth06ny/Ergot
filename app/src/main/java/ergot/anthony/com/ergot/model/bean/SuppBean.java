@@ -15,9 +15,6 @@ public class SuppBean implements Serializable {
     private boolean multi; //
     private boolean minOne; //Au moins 1
 
-    //Selection
-    private ArrayList<ProductBean> selected; //Supplement choisi
-
     public long getId() {
         return id;
     }
@@ -48,13 +45,5 @@ public class SuppBean implements Serializable {
 
     public void setMinOne(boolean minOne) {
         this.minOne = minOne;
-    }
-
-    public ArrayList<ProductBean> getSelected() {
-        return selected;
-    }
-
-    public void setSelected(ArrayList<ProductBean> selected) {
-        this.selected = selected;
     }
 }

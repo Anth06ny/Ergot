@@ -5,14 +5,20 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.commander.MotherActivity;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
+import ergot.anthony.com.ergot.model.bean.SuppBean;
+import ergot.anthony.com.ergot.utils.AlertDialogUtils;
 import ergot.anthony.com.ergot.utils.GlideApp;
 
 public class ProductListActivity extends MotherActivity implements ProductAdapter.OnProductClicListener {
@@ -51,8 +57,6 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
         tv_title.setText(categoryBean.getName());
         GlideApp.with(this).load(R.drawable.burger).into(civ);
     }
@@ -80,7 +84,25 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
     // -------------------------------- */
 
     @Override
-    public void onProductClick(ProductBean productBean) {
+    public void onProductClick(final ProductBean productBean) {
+        SuppBean suppBean = productBean.getSuppBean();
 
+        if (suppBean == null) {
+            // Pas de supplement
+            MyApplication.getCommande().getProductList().add(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, null));
+            supportFinishAfterTransition();
+        }
+        else {
+            AlertDialogUtils.getRadioAlertDialog(this, suppBean.getSupplement(), new AlertDialogUtils.RadioAlertDialogCB() {
+                @Override
+                public void onSupplementSelected(ProductBean supp) {
+                    //la liste de supplement
+                    ArrayList<ProductBean> selectedSupp = new ArrayList<>();
+                    selectedSupp.add(supp);
+                    MyApplication.getCommande().getProductList().add(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, selectedSupp));
+                    supportFinishAfterTransition();
+                }
+            });
+        }
     }
 }

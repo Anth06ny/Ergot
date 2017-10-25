@@ -7,7 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorButtonNormal">@color/colorPrimary</item>
-        <item name="colorControlNormal">@android:color/white</item>
+        <!-- Pour la couleur des radioButton -->
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AppThemeNoBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -16,13 +17,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorButtonNormal">@color/colorPrimary</item>
-        <item name="colorControlNormal">@android:color/white</item>
+        <!-- Pour la couleur des radioButton -->
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
     </style>
 
     <style name="MyAppTheme" parent="AppTheme">
 
     </style>
-
 
 
     <style name="MyAppThemeNoBar" parent="AppThemeNoBar">

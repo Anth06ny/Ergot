@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
 import ergot.anthony.com.ergot.utils.Utils;
@@ -23,12 +25,9 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
     protected TextView tvNbArticle, tv_price;
     protected Button bt_commande;
 
-    protected ArrayList<ProductBean> selectedProduct;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        selectedProduct = new ArrayList<>();
     }
 
     @Override
@@ -40,6 +39,11 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         tv_price = findViewById(R.id.tv_price);
 
         bt_commande.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         refreshFoot();
     }
@@ -48,23 +52,24 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         long totalPrice = 0;
 
         //On parcours tous les produits séléctionnés
-        for (ProductBean productBean : selectedProduct) {
+        for (Pair<ProductBean, ArrayList<ProductBean>> selection : MyApplication.getCommande().getProductList()) {
+            ProductBean productBean = selection.first;
             totalPrice += productBean.getPrice();
             //on regarde s'il y a des suppléments dans les produits séléctionnés
-            if (productBean.getSuppBean() != null && productBean.getSuppBean().getSelected() != null) {
-                for (ProductBean productSupp : productBean.getSuppBean().getSelected()) {
+            if (selection.second != null) {
+                for (ProductBean productSupp : selection.second) {
                     totalPrice += productSupp.getPrice();
                 }
             }
         }
 
-        tvNbArticle.setText(selectedProduct.size() + "");
+        tvNbArticle.setText(MyApplication.getCommande().getProductList().size() + "");
         tv_price.setText(Utils.longToStringPrice(totalPrice));
     }
 
     @Override
     public void onClick(View v) {
-        if(v == bt_commande) {
+        if (v == bt_commande) {
 
         }
     }

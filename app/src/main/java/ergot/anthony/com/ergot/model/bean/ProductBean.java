@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Anthony on 23/10/2017.
  */
 
-public class ProductBean implements Serializable {
+public class ProductBean implements Serializable, Cloneable {
 
     //Choix
     private String name;
