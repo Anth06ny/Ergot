@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
+import ergot.anthony.com.ergot.commander.CommanderActivity;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -22,8 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btCommander = (AppCompatButton) findViewById(R.id.btCommander);
-        btYAller = (AppCompatButton) findViewById(R.id.btYAller);
+        btCommander = findViewById(R.id.btCommander);
+        btYAller = findViewById(R.id.btYAller);
 
         btYAller.setOnClickListener(this);
         btCommander.setOnClickListener(this);
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (btCommander == v) {
-
+            startActivity(new Intent(this, CommanderActivity.class));
         }
         else if (btYAller == v) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL_ERGOT));

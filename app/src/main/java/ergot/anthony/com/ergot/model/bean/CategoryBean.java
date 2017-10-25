@@ -1,13 +1,13 @@
 package ergot.anthony.com.ergot.model.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Anthony on 23/10/2017.
  */
 
-public class CategoryBean {
-
+public class CategoryBean implements Serializable {
 
     private String name;
     private String url;

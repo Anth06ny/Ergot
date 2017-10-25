@@ -1,10 +1,12 @@
 package ergot.anthony.com.ergot.model.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Anthony on 23/10/2017.
  */
 
-public class ProductBean {
+public class ProductBean implements Serializable {
 
     //Choix
     private String name;

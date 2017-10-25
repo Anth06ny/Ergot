@@ -6,4 +6,5 @@
     <string name="ws_load_message">Chargement en cours…</string>
     <string name="generic_error">Une erreur est survenue</string>
     <string name="bt_actualiser">Actualiser</string>
+    <string name="title_activity_product_list">ProductListActivity</string>
 </resources>

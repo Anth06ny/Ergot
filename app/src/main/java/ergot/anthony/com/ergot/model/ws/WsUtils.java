@@ -1,5 +1,6 @@
 package ergot.anthony.com.ergot.model.ws;
 
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -59,7 +60,30 @@ public class WsUtils {
         }
     }
 
-    public static void printJSon() {
+    public static ArrayList<CategoryBean> getCategories() {
+        SystemClock.sleep(1000);
+        ResultBean resultBean = printJSon();
+
+        //ON Parcourt tous les produits et on leur applique le supplement qu'il convient
+        for (CategoryBean categoryBean : resultBean.getCategories()) {
+            for (ProductBean productBean : categoryBean.getProductBeenList()) {
+                productBean.setSuppBean(getSuppBean(productBean.getIdSuppBean(), resultBean.getSupplements()));
+            }
+        }
+
+        return resultBean.getCategories();
+    }
+
+    private static SuppBean getSuppBean(long id, ArrayList<SuppBean> suppBeen) {
+        for (SuppBean s : suppBeen) {
+            if (s.getId() == id) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public static ResultBean printJSon() {
         ResultBean resultBean = new ResultBean();
 
         //Complements
@@ -142,15 +166,15 @@ public class WsUtils {
         quartFermier.setIdSuppBean(2);
 
         ProductBean quartFermierBio = new ProductBean();
-        quartFermier.setName("1/4 de poulet Roti fermier bio");
-        quartFermier.setDescription("+ garniture au choix");
-        quartFermier.setPrice(1195);
-        quartFermier.setIdSuppBean(2);
+        quartFermierBio.setName("1/4 de poulet Roti fermier bio");
+        quartFermierBio.setDescription("+ garniture au choix");
+        quartFermierBio.setPrice(1195);
+        quartFermierBio.setIdSuppBean(2);
 
         ProductBean quartRaclette = new ProductBean();
-        quartFermier.setName("1/4 de poulet Roti standard façon raclette");
-        quartFermier.setDescription("(bacon ou jambon cru, fromage à raclette et pommes de terre maison)");
-        quartFermier.setPrice(1095);
+        quartRaclette.setName("1/4 de poulet Roti standard façon raclette");
+        quartRaclette.setDescription("(bacon ou jambon cru, fromage à raclette et pommes de terre maison)");
+        quartRaclette.setPrice(1095);
 
         CategoryBean poulet = new CategoryBean();
         poulet.setName("Poulet Rôti");
@@ -179,5 +203,6 @@ public class WsUtils {
 
         Log.w("JSON", new Gson().toJson(resultBean));
 
+        return resultBean;
     }
 }

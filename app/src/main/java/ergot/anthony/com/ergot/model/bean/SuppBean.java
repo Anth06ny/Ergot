@@ -1,12 +1,13 @@
 package ergot.anthony.com.ergot.model.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Anthony on 23/10/2017.
  */
 
-public class SuppBean {
+public class SuppBean implements Serializable {
 
     //Choix
     private long id;
@@ -16,7 +17,6 @@ public class SuppBean {
 
     //Selection
     private ArrayList<ProductBean> selected; //Supplement choisi
-
 
     public long getId() {
         return id;

@@ -9,5 +9,7 @@
     <color name="load_shadow_color">#cc2962ff</color>
     <color name="error_shadow_color">#c62828</color>
 
+    <color name="cardview_bg">#FAFAFA</color>
+
 
 </resources>
