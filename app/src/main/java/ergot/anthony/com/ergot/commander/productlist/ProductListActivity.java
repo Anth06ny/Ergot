@@ -89,7 +89,7 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
 
         if (suppBean == null) {
             // Pas de supplement
-            MyApplication.getCommande().getProductList().add(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, null));
+            MyApplication.getCommandeBean().getProductList().add(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, null));
             supportFinishAfterTransition();
         }
         else {
@@ -99,7 +99,7 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
                     //la liste de supplement
                     ArrayList<ProductBean> selectedSupp = new ArrayList<>();
                     selectedSupp.add(supp);
-                    MyApplication.getCommande().getProductList().add(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, selectedSupp));
+                    MyApplication.getCommandeBean().getProductList().add(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, selectedSupp));
                     supportFinishAfterTransition();
                 }
             });

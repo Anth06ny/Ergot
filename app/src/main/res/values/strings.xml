@@ -3,8 +3,14 @@
     <string name="bt_commander">Commander</string>
     <string name="bt_y_aller">Y Aller</string>
     <string name="bt_voir_commande">Voir la commande</string>
+    <string name="bt_payer">Payer</string>
     <string name="ws_load_message">Chargement en cours…</string>
     <string name="generic_error">Une erreur est survenue</string>
     <string name="bt_actualiser">Actualiser</string>
     <string name="title_activity_product_list">ProductListActivity</string>
+    <string name="commande_pour">Commande pour</string>
+    <string name="bt_modifier">Modifier</string>
+    <string name="remarques">Remarques</string>
+    <string name="au_plus_tot">Au plus tôt</string>
+
 </resources>

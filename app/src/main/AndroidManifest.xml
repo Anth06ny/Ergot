@@ -14,8 +14,7 @@
         android:theme="@style/MyAppThemeNoBar">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -30,12 +29,12 @@
         <activity
             android:name=".commander.productlist.ProductListActivity"
             android:label=""
-            android:parentActivityName=".commander.CommanderActivity"
-
-            >
+            android:parentActivityName=".commander.CommanderActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ergot.anthony.com.ergot.commander.CommanderActivity"/>
+        </activity>
+        <activity android:name=".panier.PanierActivity">
         </activity>
     </application>
 

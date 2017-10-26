@@ -2,7 +2,7 @@ package ergot.anthony.com.ergot;
 
 import android.app.Application;
 
-import ergot.anthony.com.ergot.model.bean.Commande;
+import ergot.anthony.com.ergot.model.bean.CommandeBean;
 
 /**
  * Created by Anthony on 25/10/2017.
@@ -10,16 +10,16 @@ import ergot.anthony.com.ergot.model.bean.Commande;
 
 public class MyApplication extends Application {
 
-    private static Commande commande;
+    private static CommandeBean commandeBean;
 
-    public static Commande getCommande() {
-        return commande;
+    public static CommandeBean getCommandeBean() {
+        return commandeBean;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        commande = new Commande();
+        commandeBean = new CommandeBean();
     }
 }

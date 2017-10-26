@@ -1,5 +1,6 @@
 package ergot.anthony.com.ergot.commander;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
+import ergot.anthony.com.ergot.panier.PanierActivity;
 import ergot.anthony.com.ergot.utils.Utils;
 
 /**
@@ -24,6 +26,7 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
 
     protected TextView tvNbArticle, tv_price;
     protected Button bt_commande;
+    protected boolean panierVersion;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +42,15 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         tv_price = findViewById(R.id.tv_price);
 
         bt_commande.setOnClickListener(this);
+
+        if (this instanceof PanierActivity) {
+            panierVersion = true;
+            bt_commande.setText(R.string.bt_payer);
+        }
+        else {
+            panierVersion = false;
+            bt_commande.setText(R.string.bt_voir_commande);
+        }
     }
 
     @Override
@@ -52,7 +64,7 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         long totalPrice = 0;
 
         //On parcours tous les produits séléctionnés
-        for (Pair<ProductBean, ArrayList<ProductBean>> selection : MyApplication.getCommande().getProductList()) {
+        for (Pair<ProductBean, ArrayList<ProductBean>> selection : MyApplication.getCommandeBean().getProductList()) {
             ProductBean productBean = selection.first;
             totalPrice += productBean.getPrice();
             //on regarde s'il y a des suppléments dans les produits séléctionnés
@@ -63,14 +75,19 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
 
-        tvNbArticle.setText(MyApplication.getCommande().getProductList().size() + "");
+        tvNbArticle.setText(MyApplication.getCommandeBean().getProductList().size() + "");
         tv_price.setText(Utils.longToStringPrice(totalPrice));
     }
 
     @Override
     public void onClick(View v) {
         if (v == bt_commande) {
+            if (panierVersion) {
 
+            }
+            else {
+                startActivity(new Intent(this, PanierActivity.class));
+            }
         }
     }
 }
