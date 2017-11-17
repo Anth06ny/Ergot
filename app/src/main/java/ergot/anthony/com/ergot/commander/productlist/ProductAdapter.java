@@ -51,7 +51,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 if (onCategoryClicListener != null) {
-                    onCategoryClicListener.onProductClick(productBean);
+                    int[] clicOnScreen = new int[2];
+                    holder.tv_price.getLocationOnScreen(clicOnScreen);
+                    onCategoryClicListener.onProductClick(productBean, clicOnScreen);
                 }
             }
         });
@@ -80,6 +82,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public interface OnProductClicListener {
-        void onProductClick(ProductBean productBean);
+        void onProductClick(ProductBean productBean, int[] clicOnScreen);
     }
 }

@@ -10,6 +10,7 @@
     <color name="error_shadow_color">#c62828</color>
 
     <color name="cardview_bg">#FAFAFA</color>
+    <color name="add_color">#64dd17</color>
 
 
 </resources>

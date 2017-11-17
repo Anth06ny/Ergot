@@ -12,5 +12,9 @@
     <string name="bt_modifier">Modifier</string>
     <string name="remarques">Remarques</string>
     <string name="au_plus_tot">Au plus tôt</string>
+    <string name="coordonees">Coordonnées* : </string>
+    <string name="email">E-mail</string>
+    <string name="phone">Téléphone</string>
+    <string name="nophone_or_email">Veuillez saisir un téléphone ou un e-mail</string>
 
 </resources>

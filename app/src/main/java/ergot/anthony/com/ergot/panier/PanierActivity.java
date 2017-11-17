@@ -13,7 +13,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.SimpleDateFormat;
@@ -33,6 +35,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     private Button bt_modifier;
     private EditText et_rem;
     private RecyclerView rv;
+    private EditText etPhone, etEmail;
     //Gestion de la date
     private Calendar calendar;
     private SimpleDateFormat formatCompl = new SimpleDateFormat("EEE d MMM 'à' HH:mm");
@@ -51,6 +54,8 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         tv_time = findViewById(R.id.tv_time);
         bt_modifier = findViewById(R.id.bt_modifier);
         et_rem = findViewById(R.id.et_rem);
+        etPhone = findViewById(R.id.etPhone);
+        etEmail = findViewById(R.id.etEmail);
 
         commandeBean = MyApplication.getCommandeBean();
 
@@ -89,6 +94,15 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
             new DatePickerDialog(this, this,
                     calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show();
+        }
+        else if (v == bt_commande) {
+            if (StringUtils.isBlank(etEmail.getText().toString()) && StringUtils.isBlank(etPhone.getText().toString())) {
+                Toast.makeText(this, R.string.nophone_or_email, Toast.LENGTH_LONG).show();
+            }
+
+        }
+        else {
+            super.onClick(v);
         }
     }
 
@@ -141,10 +155,10 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         }
         //Si c'est aujourd'hui
         else if (DateUtils.isSameDay(calendar.getTime(), date)) {
-            System.out.println("Aujourd'hui à " + formatheure.format(calendar.getTime()));
+            tv_time.setText("Aujourd'hui à " + formatheure.format(calendar.getTime()));
         }
         else {
-            System.out.println(formatCompl.format(calendar.getTime()));
+            tv_time.setText(formatCompl.format(calendar.getTime()));
         }
     }
 }

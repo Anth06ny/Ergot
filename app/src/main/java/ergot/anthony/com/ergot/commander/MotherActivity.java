@@ -1,13 +1,19 @@
 package ergot.anthony.com.ergot.commander;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,6 +33,8 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
     protected TextView tvNbArticle, tv_price;
     protected Button bt_commande;
     protected boolean panierVersion;
+    protected ImageView tvPlusUn;
+    protected View shadow;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +48,13 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         tvNbArticle = findViewById(R.id.tvNbArticle);
         bt_commande = findViewById(R.id.bt_commande);
         tv_price = findViewById(R.id.tv_price);
+        tvPlusUn = findViewById(R.id.tvPlusUn);
+        shadow = findViewById(R.id.shadow);
 
+        if (tvPlusUn != null) {
+            tvPlusUn.setVisibility(View.INVISIBLE);
+            tvPlusUn.setColorFilter(getResources().getColor(R.color.add_color));
+        }
         bt_commande.setOnClickListener(this);
 
         if (this instanceof PanierActivity) {
@@ -89,5 +103,46 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(new Intent(this, PanierActivity.class));
             }
         }
+    }
+
+    public void addProduct(Pair<ProductBean, ArrayList<ProductBean>> product, int[] clicOnScreen) {
+        MyApplication.getCommandeBean().getProductList().add(product);
+        if (tvPlusUn != null) {
+            animAteFromeClicToFoot(clicOnScreen);
+        }
+        else {
+            refreshFoot();
+        }
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        v.vibrate(500);
+    }
+
+    private void animAteFromeClicToFoot(int[] clicOnScreen) {
+        int originalPos[] = new int[2];
+        shadow.getLocationOnScreen(originalPos);
+
+        TranslateAnimation anim = new TranslateAnimation(clicOnScreen[0], originalPos[0], clicOnScreen[1], originalPos[1]);
+        anim.setDuration(600);
+        anim.setInterpolator(new DecelerateInterpolator());
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                tvPlusUn.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tvPlusUn.setVisibility(View.INVISIBLE);
+                refreshFoot();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        tvPlusUn.startAnimation(anim);
     }
 }

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.commander.MotherActivity;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
@@ -84,23 +83,22 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
     // -------------------------------- */
 
     @Override
-    public void onProductClick(final ProductBean productBean) {
+    public void onProductClick(final ProductBean productBean, final int[] clicOnScreen) {
         SuppBean suppBean = productBean.getSuppBean();
 
         if (suppBean == null) {
             // Pas de supplement
-            MyApplication.getCommandeBean().getProductList().add(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, null));
-            supportFinishAfterTransition();
+            addProduct(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, null), clicOnScreen);
         }
         else {
             AlertDialogUtils.getRadioAlertDialog(this, suppBean.getSupplement(), new AlertDialogUtils.RadioAlertDialogCB() {
                 @Override
                 public void onSupplementSelected(ProductBean supp) {
+
                     //la liste de supplement
                     ArrayList<ProductBean> selectedSupp = new ArrayList<>();
                     selectedSupp.add(supp);
-                    MyApplication.getCommandeBean().getProductList().add(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, selectedSupp));
-                    supportFinishAfterTransition();
+                    addProduct(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, selectedSupp), clicOnScreen);
                 }
             });
         }
