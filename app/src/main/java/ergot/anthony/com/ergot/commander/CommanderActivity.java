@@ -176,6 +176,7 @@ public class CommanderActivity extends MotherActivity implements View.OnClickLis
         protected void onPostExecute(Void le) {
             showWaintingMessage(false);
 
+
             if (le != null) {
                 updateError(technicalException);
             }

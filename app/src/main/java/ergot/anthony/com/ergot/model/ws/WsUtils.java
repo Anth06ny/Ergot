@@ -1,6 +1,5 @@
 package ergot.anthony.com.ergot.model.ws;
 
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -34,7 +33,6 @@ public class WsUtils {
     public static ArrayList<CategoryBean> getStationsDuServeur() throws Exception {
 
         Log.w("TAG_URL", URL);
-        //OkHttpClient client = new OkHttpClient();
         OkHttpClient client = new OkHttpClient();
 
         //Création de la requete
@@ -61,7 +59,6 @@ public class WsUtils {
     }
 
     public static ArrayList<CategoryBean> getCategories() {
-        SystemClock.sleep(1000);
         ResultBean resultBean = printJSon();
 
         //ON Parcourt tous les produits et on leur applique le supplement qu'il convient
