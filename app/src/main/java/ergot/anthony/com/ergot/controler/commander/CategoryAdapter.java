@@ -1,4 +1,4 @@
-package ergot.anthony.com.ergot.commander;
+package ergot.anthony.com.ergot.controler.commander;
 
 import android.content.Context;
 import android.graphics.PorterDuff;

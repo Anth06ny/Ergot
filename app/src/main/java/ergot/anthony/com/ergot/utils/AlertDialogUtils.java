@@ -6,7 +6,7 @@ import android.support.v7.app.AlertDialog;
 
 import java.util.ArrayList;
 
-import ergot.anthony.com.ergot.model.bean.ProductBean;
+import ergot.anthony.com.ergot.model.bean.SuppBean;
 
 /**
  * Created by Anthony on 25/10/2017.
@@ -14,15 +14,16 @@ import ergot.anthony.com.ergot.model.bean.ProductBean;
 
 public class AlertDialogUtils {
 
-    public static void getRadioAlertDialog(final Context context, final ArrayList<ProductBean> list, final RadioAlertDialogCB radioAlertDialogCB) {
+    public static void showSelectSuppDialog(final Context context, final ArrayList<SuppBean> list, final RadioAlertDialogCB radioAlertDialogCB) {
         ArrayList<String> strings = new ArrayList<>();
 
-        for (ProductBean p : list) {
-            if (p.getPrice() > 0) {
-                strings.add(p.getName() + " (" + Utils.longToStringPrice(p.getPrice()) + ")");
+        for (SuppBean p : list) {
+
+            if (p.getNewPrice() > 0) {
+                strings.add(p.getProduit().getName() + " (" + Utils.longToStringPrice(p.getNewPrice()) + ")");
             }
             else {
-                strings.add(p.getName());
+                strings.add(p.getProduit().getName());
             }
         }
 
@@ -44,6 +45,6 @@ public class AlertDialogUtils {
     }
 
     public interface RadioAlertDialogCB {
-        void onSupplementSelected(ProductBean productBean);
+        void onSupplementSelected(SuppBean suppBean);
     }
 }

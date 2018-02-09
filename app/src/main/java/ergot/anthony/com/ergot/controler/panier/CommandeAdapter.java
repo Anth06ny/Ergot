@@ -1,4 +1,4 @@
-package ergot.anthony.com.ergot.panier;
+package ergot.anthony.com.ergot.controler.panier;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
@@ -12,14 +12,15 @@ import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
+import ergot.anthony.com.ergot.model.bean.SuppBean;
 import ergot.anthony.com.ergot.utils.Utils;
 
 public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHolder> {
 
-    private ArrayList<Pair<ProductBean, ArrayList<ProductBean>>> commandList;
+    private ArrayList<Pair<ProductBean, SuppBean>> commandList;
     private OnCommandListener onCommandListener;
 
-    public CommandeAdapter(ArrayList<Pair<ProductBean, ArrayList<ProductBean>>> commandList, OnCommandListener onCommandListener) {
+    public CommandeAdapter(ArrayList<Pair<ProductBean, SuppBean>> commandList, OnCommandListener onCommandListener) {
         this.commandList = commandList;
         this.onCommandListener = onCommandListener;
     }
@@ -33,26 +34,22 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        final Pair<ProductBean, ArrayList<ProductBean>> command = commandList.get(position);
-        final ProductBean productBean = command.first;
-        ArrayList<ProductBean> supp = command.second;
+        final Pair<ProductBean, SuppBean> produitAndSupp = commandList.get(position);
 
         //Nom du produit
-        holder.tv_title.setText(productBean.getName());
+        holder.tv_title.setText(produitAndSupp.first.getName());
 
         //On parcourt les supp pour remplir la description et calculer le prix final avec supplement
         String description = "";
-        long price = productBean.getPrice();
-        if (supp != null) {
-            for (ProductBean pb : supp) {
-                price += pb.getPrice();
+        long price = produitAndSupp.first.getPrice();
+        if (produitAndSupp.second != null) {
+            price += produitAndSupp.second.getNewPrice();
 
-                if (pb.getPrice() == 0) {
-                    description += pb.getName() + "  ";
-                }
-                else {
-                    description += pb.getName() + " (+" + Utils.longToStringPrice(pb.getPrice()) + ")";
-                }
+            if (price == 0) {
+                description += produitAndSupp.second.getProduit().getName() + "  ";
+            }
+            else {
+                description += produitAndSupp.second.getProduit().getName() + " (+" + Utils.longToStringPrice(price) + ")";
             }
         }
 
@@ -62,7 +59,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         holder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCommandListener.onDeleteComande(command);
+                onCommandListener.onRemoveProductClic(produitAndSupp);
             }
         });
     }
@@ -93,6 +90,6 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
     }
 
     public interface OnCommandListener {
-        void onDeleteComande(Pair<ProductBean, ArrayList<ProductBean>> command);
+        void onRemoveProductClic(Pair<ProductBean, SuppBean> produitAndSupp);
     }
 }

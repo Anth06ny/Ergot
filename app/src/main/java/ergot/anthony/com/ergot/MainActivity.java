@@ -7,8 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
-import ergot.anthony.com.ergot.commander.CommanderActivity;
-import ergot.anthony.com.ergot.model.ws.WsUtils;
+import ergot.anthony.com.ergot.controler.commander.CommanderActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,8 +27,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btYAller.setOnClickListener(this);
         btCommander.setOnClickListener(this);
-
-        WsUtils.printJSon();
     }
 
     @Override

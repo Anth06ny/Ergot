@@ -1,6 +1,7 @@
 package ergot.anthony.com.ergot.model.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Anthony on 23/10/2017.
@@ -8,14 +9,24 @@ import java.io.Serializable;
 
 public class ProductBean implements Serializable, Cloneable {
 
-    //Choix
+    //Base
+    private long id;
     private String name;
     private String description;
     private long price;
-    private long idSuppBean; //S'il y a un supplement à proposer
-    private SuppBean suppBean;
+    private boolean is_supp;
+    private ArrayList<SuppBean> supplements;
+
 
     public ProductBean() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -42,19 +53,19 @@ public class ProductBean implements Serializable, Cloneable {
         this.price = price;
     }
 
-    public long getIdSuppBean() {
-        return idSuppBean;
+    public boolean isIs_supp() {
+        return is_supp;
     }
 
-    public void setIdSuppBean(long idSuppBean) {
-        this.idSuppBean = idSuppBean;
+    public void setIs_supp(boolean is_supp) {
+        this.is_supp = is_supp;
     }
 
-    public SuppBean getSuppBean() {
-        return suppBean;
+    public ArrayList<SuppBean> getSupplements() {
+        return supplements;
     }
 
-    public void setSuppBean(SuppBean suppBean) {
-        this.suppBean = suppBean;
+    public void setSupplements(ArrayList<SuppBean> supplements) {
+        this.supplements = supplements;
     }
 }

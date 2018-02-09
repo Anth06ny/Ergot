@@ -9,11 +9,20 @@ import java.util.ArrayList;
 
 public class CategoryBean implements Serializable {
 
+    private long id;
     private String name;
-    private String url;
-    private ArrayList<ProductBean> productBeenList;
+    private String url_image;
+    private ArrayList<ProductBean> products;
 
     public CategoryBean() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -24,19 +33,19 @@ public class CategoryBean implements Serializable {
         this.name = name;
     }
 
-    public String getUrl() {
-        return url;
+    public String getUrl_image() {
+        return url_image;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrl_image(String url_image) {
+        this.url_image = url_image;
     }
 
-    public ArrayList<ProductBean> getProductBeenList() {
-        return productBeenList;
+    public ArrayList<ProductBean> getProducts() {
+        return products;
     }
 
-    public void setProductBeenList(ArrayList<ProductBean> productBeenList) {
-        this.productBeenList = productBeenList;
+    public void setProducts(ArrayList<ProductBean> products) {
+        this.products = products;
     }
 }

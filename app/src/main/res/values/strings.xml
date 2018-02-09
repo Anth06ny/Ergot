@@ -4,8 +4,9 @@
     <string name="bt_y_aller">Y Aller</string>
     <string name="bt_voir_commande">Voir la commande</string>
     <string name="bt_payer">Payer</string>
+    <string name="bt_envoyer">Envoyer</string>
     <string name="ws_load_message">Chargement en cours…</string>
-    <string name="generic_error">Une erreur est survenue</string>
+
     <string name="bt_actualiser">Actualiser</string>
     <string name="title_activity_product_list">ProductListActivity</string>
     <string name="commande_pour">Commande pour</string>
@@ -16,5 +17,15 @@
     <string name="email">E-mail</string>
     <string name="phone">Téléphone</string>
     <string name="nophone_or_email">Veuillez saisir un téléphone ou un e-mail</string>
+
+
+    <!-- Erreur -->
+    <string name="generic_error">Une erreur est survenue</string>
+    <string name="server_error">Une erreur avec le serveur s\'est produite, veuillez réessayer ulterieurement.</string>
+    <string name="no_internet_error">Vous n\'êtes pas connecté à internet</string>
+    <string name="bad_internet_connexion_error">Le débit de votre connexion internet est insuffisant. Veuillez rééssayer</string>
+    <string name="identify">S\'identifier</string>
+    <string name="commande_no_identify">Les commandes non identifiées seront préparées à votre arrivée</string>
+    <string name="identification_impossible">Identification impossible avec votre appareil</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package ergot.anthony.com.ergot.commander.productlist;
+package ergot.anthony.com.ergot.controler.productlist;
 
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
-import ergot.anthony.com.ergot.commander.MotherActivity;
+import ergot.anthony.com.ergot.controler.commander.MotherActivity;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
 import ergot.anthony.com.ergot.model.bean.SuppBean;
@@ -49,7 +49,7 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
 
-        productAdapter = new ProductAdapter(categoryBean.getProductBeenList(), this);
+        productAdapter = new ProductAdapter(categoryBean.getProducts(), this);
         rv.setAdapter(productAdapter);
 
         //Réglage toolbar
@@ -84,21 +84,18 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
 
     @Override
     public void onProductClick(final ProductBean productBean, final int[] clicOnScreen) {
-        SuppBean suppBean = productBean.getSuppBean();
 
-        if (suppBean == null) {
+        ArrayList<SuppBean> suppBeanList = productBean.getSupplements();
+
+        if (suppBeanList == null || suppBeanList.isEmpty()) {
             // Pas de supplement
-            addProduct(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, null), clicOnScreen);
+            addProduct(new Pair<ProductBean, SuppBean>(productBean, null), clicOnScreen);
         }
         else {
-            AlertDialogUtils.getRadioAlertDialog(this, suppBean.getSupplement(), new AlertDialogUtils.RadioAlertDialogCB() {
+            AlertDialogUtils.showSelectSuppDialog(this, suppBeanList, new AlertDialogUtils.RadioAlertDialogCB() {
                 @Override
-                public void onSupplementSelected(ProductBean supp) {
-
-                    //la liste de supplement
-                    ArrayList<ProductBean> selectedSupp = new ArrayList<>();
-                    selectedSupp.add(supp);
-                    addProduct(new Pair<ProductBean, ArrayList<ProductBean>>(productBean, selectedSupp), clicOnScreen);
+                public void onSupplementSelected(SuppBean supp) {
+                    addProduct(new Pair<ProductBean, SuppBean>(productBean, supp), clicOnScreen);
                 }
             });
         }

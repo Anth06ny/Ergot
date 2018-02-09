@@ -1,4 +1,4 @@
-package ergot.anthony.com.ergot.commander;
+package ergot.anthony.com.ergot.controler.commander;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,14 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
-import ergot.anthony.com.ergot.commander.productlist.ProductListActivity;
+import ergot.anthony.com.ergot.controler.productlist.ProductListActivity;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
-import ergot.anthony.com.ergot.model.bean.TechnicalException;
+import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
 
 public class CommanderActivity extends MotherActivity implements View.OnClickListener, CategoryAdapter.OnCategoryClicListener {
@@ -29,6 +27,10 @@ public class CommanderActivity extends MotherActivity implements View.OnClickLis
     private TextView tv_wait, tv_error;
     private Button bt_refresh;
     private View ll_error;
+
+    //data affichage
+    private TechnicalException erreur;
+    private boolean showWaitingMessage;
 
     //metier
     private CategoryAdapter categoryAdapter;
@@ -96,51 +98,22 @@ public class CommanderActivity extends MotherActivity implements View.OnClickLis
     // private
     // -------------------------------- */
 
-    /**
-     * Gestion de l'exception
-     *
-     * @param le
-     */
-    private void updateError(TechnicalException le) {
+    private void refreshScreen() {
 
-        le.printStackTrace();
+        tv_wait.setVisibility(View.INVISIBLE);
+        ll_error.setVisibility(View.INVISIBLE);
 
-        if (StringUtils.isNotBlank(le.getUserMessage())) {
-            showErrorMessage(le.getUserMessage());
-        }
-        else {
-            showErrorMessage(getString(R.string.generic_error));
-        }
-    }
-
-    /**
-     * Gere l'affichage du bandeau d'erreur
-     *
-     * @param message
-     */
-    private void showErrorMessage(String message) {
-        if (message == null) {
-            ll_error.setVisibility(View.INVISIBLE);
-        }
-        else {
-            ll_error.setVisibility(View.VISIBLE);
-            tv_error.setText(message);
-        }
-    }
-
-    /**
-     * Gestion du bandeau d'attente
-     *
-     * @param show
-     */
-    private void showWaintingMessage(boolean show) {
-        if (show) {
+        if (showWaitingMessage) {
             tv_wait.setVisibility(View.VISIBLE);
         }
-        else {
-            tv_wait.setVisibility(View.INVISIBLE);
+        else if (erreur != null) {
+            ll_error.setVisibility(View.VISIBLE);
+            tv_error.setText(erreur.getUserMessage());
         }
     }
+
+
+
 
     /* ---------------------------------
     //      AsyncTask
@@ -154,37 +127,37 @@ public class CommanderActivity extends MotherActivity implements View.OnClickLis
         @Override
         protected Void doInBackground(Void... params) {
 
-            result = WsUtils.getCategories();
-
-            //            try {
-            //
-            //            }
-            //            catch (TechnicalException e) {
-            //                technicalException = e;
-            //            }
-
+            try {
+                result = WsUtils.getCatalogue();
+            }
+            catch (TechnicalException e) {
+                this.technicalException = e;
+            }
             return null;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showWaintingMessage(true);
+            showWaitingMessage = true;
+            refreshScreen();
         }
 
         @Override
         protected void onPostExecute(Void le) {
-            showWaintingMessage(false);
+            showWaitingMessage = false;
 
-
-            if (le != null) {
-                updateError(technicalException);
+            if (technicalException != null) {
+                erreur = technicalException;
             }
             else {
+                erreur = null;
                 categoryList.clear();
                 categoryList.addAll(result);
                 categoryAdapter.notifyDataSetChanged();
             }
+
+            refreshScreen();
         }
     }
 }

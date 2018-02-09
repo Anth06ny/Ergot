@@ -3,7 +3,6 @@ package ergot.anthony.com.ergot.model.bean;
 import android.util.Pair;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Anthony on 25/10/2017.
@@ -11,30 +10,41 @@ import java.util.Date;
 
 public class CommandeBean {
 
-    //Liste de produit ainsi que son ArrayList de supplement
-    private ArrayList<Pair<ProductBean, ArrayList<ProductBean>>> productList;
-    private Date dateCommande;
+    //Liste de produit ainsi que son ArrayList de supplement. En transient pour en pas l'envoyer
+    private ArrayList<Pair<ProductBean, SuppBean>> productList;
+    private long dateCommande;
+    private long datePrevision;
+    private int status;
     private String remarque;
+    private String telephone;
+    private String email;
 
     public CommandeBean() {
-
         productList = new ArrayList<>();
     }
 
-    public void setProductList(ArrayList<Pair<ProductBean, ArrayList<ProductBean>>> productList) {
-        this.productList = productList;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public Date getDateCommande() {
-        return dateCommande;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
-    public void setDateCommande(Date dateCommande) {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setDateCommande(long dateCommande) {
         this.dateCommande = dateCommande;
     }
 
-    public ArrayList<Pair<ProductBean, ArrayList<ProductBean>>> getProductList() {
-        return productList;
+    public long getDateCommande() {
+        return dateCommande;
     }
 
     public String getRemarque() {
@@ -43,5 +53,13 @@ public class CommandeBean {
 
     public void setRemarque(String remarque) {
         this.remarque = remarque;
+    }
+
+    public ArrayList<Pair<ProductBean, SuppBean>> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(ArrayList<Pair<ProductBean, SuppBean>> productList) {
+        this.productList = productList;
     }
 }

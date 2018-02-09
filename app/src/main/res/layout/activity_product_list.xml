@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="ergot.anthony.com.ergot.commander.productlist.ProductListActivity">
+    tools:context="ergot.anthony.com.ergot.controler.productlist.ProductListActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

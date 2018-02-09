@@ -1,4 +1,4 @@
-package ergot.anthony.com.ergot.commander.productlist;
+package ergot.anthony.com.ergot.controler.productlist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

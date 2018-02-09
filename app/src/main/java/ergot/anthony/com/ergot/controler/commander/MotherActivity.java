@@ -1,4 +1,4 @@
-package ergot.anthony.com.ergot.commander;
+package ergot.anthony.com.ergot.controler.commander;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.os.Vibrator;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.animation.Animation;
@@ -16,12 +17,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
+import ergot.anthony.com.ergot.controler.panier.PanierActivity;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
-import ergot.anthony.com.ergot.panier.PanierActivity;
+import ergot.anthony.com.ergot.model.bean.SuppBean;
 import ergot.anthony.com.ergot.utils.Utils;
 
 /**
@@ -39,6 +39,7 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.w("TAG_ACTIVITY", "Activity : " + getClass().getName());
     }
 
     @Override
@@ -59,7 +60,7 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
 
         if (this instanceof PanierActivity) {
             panierVersion = true;
-            bt_commande.setText(R.string.bt_payer);
+            bt_commande.setText(R.string.bt_envoyer);
         }
         else {
             panierVersion = false;
@@ -78,14 +79,12 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         long totalPrice = 0;
 
         //On parcours tous les produits séléctionnés
-        for (Pair<ProductBean, ArrayList<ProductBean>> selection : MyApplication.getCommandeBean().getProductList()) {
+        for (Pair<ProductBean, SuppBean> selection : MyApplication.getCommandeBean().getProductList()) {
             ProductBean productBean = selection.first;
             totalPrice += productBean.getPrice();
             //on regarde s'il y a des suppléments dans les produits séléctionnés
             if (selection.second != null) {
-                for (ProductBean productSupp : selection.second) {
-                    totalPrice += productSupp.getPrice();
-                }
+                totalPrice += selection.second.getNewPrice();
             }
         }
 
@@ -105,7 +104,7 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public void addProduct(Pair<ProductBean, ArrayList<ProductBean>> product, int[] clicOnScreen) {
+    public void addProduct(Pair<ProductBean, SuppBean> product, int[] clicOnScreen) {
         MyApplication.getCommandeBean().getProductList().add(product);
         if (tvPlusUn != null) {
             animAteFromeClicToFoot(clicOnScreen);

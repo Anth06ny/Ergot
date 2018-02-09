@@ -1,21 +1,28 @@
 package ergot.anthony.com.ergot.model.ws;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
+import ergot.anthony.com.ergot.MyApplication;
+import ergot.anthony.com.ergot.R;
+import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
-import ergot.anthony.com.ergot.model.bean.ProductBean;
-import ergot.anthony.com.ergot.model.bean.ResultBean;
-import ergot.anthony.com.ergot.model.bean.SuppBean;
+import ergot.anthony.com.ergot.model.bean.CommandeBean;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -24,182 +31,151 @@ import okhttp3.Response;
 
 public class WsUtils {
 
-    private static final String KEY = "2a1b07b2a523f81188fe34e348206a57ffa6f2a7";
-    private static final String CONTRAT = "Toulouse";
-    private static final String URL = "https://api.jcdecaux.com/vls/v1/stations?contract=" + CONTRAT + "&apiKey=" + KEY;
+    private static final String PING_GOOGLE = "http://www.google.fr";
+
+    private static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);// "http://192.168.20.10:8000/";
+    private static final String URL_GET_CATALOGUE = URL_SERVEUR + "getCatalogue";
+    private static final String URL_SEND_COMMAND = URL_SERVEUR + "setCommande";
 
     private static final Gson gson = new Gson();
 
-    public static ArrayList<CategoryBean> getStationsDuServeur() throws Exception {
+    public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-        Log.w("TAG_URL", URL);
-        OkHttpClient client = new OkHttpClient();
+    /**
+     * Récupère le catalogue des produits
+     *
+     * @return
+     * @throws TechnicalException
+     */
+    public static ArrayList<CategoryBean> getCatalogue() throws TechnicalException {
+
+        Log.w("TAG_URL", URL_GET_CATALOGUE);
 
         //Création de la requete
-        Request request = new Request.Builder().url(URL).build();
+        Request request = new Request.Builder().url(URL_GET_CATALOGUE).build();
 
         //Execution de la requête
-        Response response = client.newCall(request).execute();
+        Response response = null;
+        try {
+            response = getOkHttpClient().newCall(request).execute();
+        }
+        catch (IOException e) {
+            //On test si google répond pour différencier si c'est internet ou le serveur le probleme
+            request = new Request.Builder().url(PING_GOOGLE).build();
+            try {
+
+                new OkHttpClient.Builder().connectTimeout(2, TimeUnit.SECONDS).build().newCall(request).execute();
+                //Ca marche -> C'est le serveur le probleme
+                throw new TechnicalException("Le serveur ne répond pas.", e, R.string.server_error);
+            }
+            catch (IOException e1) {
+                //Ca crash encore -> problème d'internet
+                throw new TechnicalException("Le serveur ne répond pas.", R.string.bad_internet_connexion_error);
+            }
+        }
 
         //Analyse du code retour
         if (response.code() != HttpURLConnection.HTTP_OK) {
-            throw new Exception("Reponse du serveur incorrect : " + response.code());
+            throw new TechnicalException("Reponse du serveur incorrect : " + response.code(), R.string.generic_error);
         }
         else {
+
+            InputStreamReader inputStreamReader = new InputStreamReader(response.body().byteStream());
+
+            //JSON -> Java (Parser une ArrayList typée)
+            ArrayList<CategoryBean> catalogue = gson.fromJson(inputStreamReader,
+                    new TypeToken<ArrayList<CategoryBean>>() {
+                    }.getType());
+
+            return catalogue;
+
+        }
+    }
+
+    /**
+     * Envoyer une commande
+     *
+     * @param commandeBean
+     * @return l'historique des commandes
+     */
+    public static ArrayList<CommandeBean> sendCommande(CommandeBean commandeBean) throws TechnicalException {
+
+        String json = gson.toJson(commandeBean);
+        Log.w("TAG_URL", URL_SEND_COMMAND + "\nJson : " + json);
+        //Création de la requete
+
+        Request request = new Request.Builder().url(URL_SEND_COMMAND).post(RequestBody.create(JSON, json)).build();
+
+        //Execution de la requête
+        Response response = null;
+        try {
+            response = getOkHttpClient().newCall(request).execute();
+        }
+        catch (IOException e) {
+            //On test si google répond pour différencier si c'est internet ou le serveur le probleme
+            request = new Request.Builder().url(PING_GOOGLE).build();
+            try {
+
+                new OkHttpClient.Builder().connectTimeout(2, TimeUnit.SECONDS).build().newCall(request).execute();
+                //Ca marche -> C'est le serveur le probleme
+                throw new TechnicalException("Le serveur ne répond pas.", e, R.string.server_error);
+            }
+            catch (IOException e1) {
+                //Ca crash encore -> problème d'internet
+                throw new TechnicalException("Le serveur ne répond pas.", R.string.bad_internet_connexion_error);
+            }
+        }
+
+        //Analyse du code retour
+        if (response.code() != HttpURLConnection.HTTP_OK) {
+            throw new TechnicalException("Reponse du serveur incorrect : " + response.code(), R.string.generic_error);
+        }
+        else {
+
+            //Résultat de la requete.
+            try {
+                Log.w("TAG_REQ", "Reponse json : " + response.body().string());
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /*
+
             //Résultat de la requete.
             InputStreamReader inputStreamReader = new InputStreamReader(response.body().byteStream());
 
             //JSON -> Java (Parser une ArrayList typée)
-            ArrayList<CategoryBean> listStation = gson.fromJson(inputStreamReader,
+            ArrayList<CommandeBean> historique = gson.fromJson(inputStreamReader,
                     new TypeToken<ArrayList<CategoryBean>>() {
                     }.getType());
 
-            return listStation;
+            return historique;
+            */
+
+            return null;
         }
     }
 
-    public static ArrayList<CategoryBean> getCategories() {
-        ResultBean resultBean = printJSon();
-
-        //ON Parcourt tous les produits et on leur applique le supplement qu'il convient
-        for (CategoryBean categoryBean : resultBean.getCategories()) {
-            for (ProductBean productBean : categoryBean.getProductBeenList()) {
-                productBean.setSuppBean(getSuppBean(productBean.getIdSuppBean(), resultBean.getSupplements()));
-            }
+    private static OkHttpClient getOkHttpClient() throws TechnicalException {
+        //On test la connexion à un réseau
+        if (!isNetworkAvailable()) {
+            throw new TechnicalException("Non connecté à un réseau.", R.string.no_internet_error);
         }
 
-        return resultBean.getCategories();
+        return new OkHttpClient.Builder()
+                .connectTimeout(3, TimeUnit.SECONDS)
+                .build();
     }
 
-    private static SuppBean getSuppBean(long id, ArrayList<SuppBean> suppBeen) {
-        for (SuppBean s : suppBeen) {
-            if (s.getId() == id) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    public static ResultBean printJSon() {
-        ResultBean resultBean = new ResultBean();
-
-        //Complements
-        ProductBean frites = new ProductBean();
-        frites.setName("Frites");
-        frites.setDescription("");
-        frites.setPrice(395);
-
-        final ProductBean aucun = new ProductBean();
-        aucun.setName("Aucun");
-        aucun.setDescription("");
-        aucun.setPrice(0);
-
-        ProductBean pdt = new ProductBean();
-        pdt.setName("Pomme de terre maison");
-        pdt.setDescription("");
-        pdt.setPrice(395);
-
-        //Supplement  1
-        SuppBean suppBean1 = new SuppBean();
-        suppBean1.setId(1);
-        suppBean1.setSupplement(new ArrayList<>(Arrays.asList(new ProductBean[]{aucun, frites, pdt})));
-        suppBean1.setMinOne(true);
-
-        //Supplement  2
-        frites = new ProductBean();
-        frites.setName("Frites");
-        frites.setDescription("");
-        frites.setPrice(0);
-
-        pdt = new ProductBean();
-        pdt.setName("Pomme de terre maison");
-        pdt.setDescription("");
-        pdt.setPrice(0);
-
-        SuppBean suppBean2 = new SuppBean();
-        suppBean2.setId(2);
-        suppBean2.setSupplement(new ArrayList<>(Arrays.asList(new ProductBean[]{frites, pdt})));
-        suppBean2.setMinOne(true);
-
-        resultBean.setSupplements(new ArrayList<>(Arrays.asList(new SuppBean[]{suppBean1, suppBean2})));
-
-        //--------------
-        //Produit  Burger
-        ProductBean special = new ProductBean();
-        special.setName("LE SPÉCIAL");
-        special.setDescription("Pain burger, sauce, tartare de légumes, salade fraîche, poulet rôti du Sud-ouest");
-        special.setPrice(495);
-        special.setIdSuppBean(1);
-
-        ProductBean chedar = new ProductBean();
-        chedar.setName("LE CHEDDAR");
-        chedar.setDescription("Pain burger, sauce, tartare de légumes, salade fraîche, poulet rôti du Sud ouest, cheddar");
-        chedar.setPrice(550);
-        special.setIdSuppBean(1);
-
-        ProductBean chevre = new ProductBean();
-        chevre.setName("LE CHÈVRE-MIEL");
-        chevre.setDescription("Pain burger, sauce blanche, tartare de légumes, salade fraîche, poulet rôti du Sud ouest, chèvre, miel");
-        chevre.setPrice(595);
-        special.setIdSuppBean(1);
-
-        CategoryBean burger = new CategoryBean();
-        burger.setName("Burger");
-        burger.setUrl("burger.jpg");
-        burger.setProductBeenList(new ArrayList<>(Arrays.asList(new ProductBean[]{special, chedar, chevre})));
-
-        //--------------
-        //Produit  Poulet
-        ProductBean quart = new ProductBean();
-        quart.setName("1/4 de poulet Roti");
-        quart.setDescription("+ garniture au choix");
-        quart.setPrice(695);
-        quart.setIdSuppBean(2);
-
-        ProductBean quartFermier = new ProductBean();
-        quartFermier.setName("1/4 de poulet Roti fermier");
-        quartFermier.setDescription("+ garniture au choix");
-        quartFermier.setPrice(895);
-        quartFermier.setIdSuppBean(2);
-
-        ProductBean quartFermierBio = new ProductBean();
-        quartFermierBio.setName("1/4 de poulet Roti fermier bio");
-        quartFermierBio.setDescription("+ garniture au choix");
-        quartFermierBio.setPrice(1195);
-        quartFermierBio.setIdSuppBean(2);
-
-        ProductBean quartRaclette = new ProductBean();
-        quartRaclette.setName("1/4 de poulet Roti standard façon raclette");
-        quartRaclette.setDescription("(bacon ou jambon cru, fromage à raclette et pommes de terre maison)");
-        quartRaclette.setPrice(1095);
-
-        CategoryBean poulet = new CategoryBean();
-        poulet.setName("Poulet Rôti");
-        poulet.setUrl("poulet.jpg");
-        poulet.setProductBeenList(new ArrayList<>(Arrays.asList(new ProductBean[]{quart, quartFermier, quartFermierBio, quartRaclette})));
-
-        //--------------
-        //Produit  Accompagnement
-        CategoryBean accompagnement = new CategoryBean();
-
-        frites = new ProductBean();
-        frites.setName("Frites");
-        frites.setDescription("");
-        frites.setPrice(395);
-
-        pdt = new ProductBean();
-        pdt.setName("Pomme de terre maison");
-        pdt.setDescription("");
-        pdt.setPrice(395);
-
-        accompagnement.setName("Accompagnements");
-        accompagnement.setUrl("accompagnements.jpg");
-        accompagnement.setProductBeenList(new ArrayList<>(Arrays.asList(new ProductBean[]{frites, pdt})));
-
-        resultBean.setCategories(new ArrayList<>(Arrays.asList(new CategoryBean[]{burger, poulet, accompagnement})));
-
-        Log.w("JSON", new Gson().toJson(resultBean));
-
-        return resultBean;
+    /**
+     * Est ce que le téléphone est relié à un réseau ?
+     *
+     * @return
+     */
+    private static boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) MyApplication.getMyApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
