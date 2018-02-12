@@ -13,8 +13,7 @@ public class MyApplication extends Application {
     /***
      * AFaire
      *
-     * -Verifier l'identification dans PanierActivity
-     * -Ajouter la deconnexion  (et le retirer du mail et du sharedpreference
+     * -Vcorriger json recu en retour de l'envoie de commande. Et tester l'historique
      *
      * -
      */

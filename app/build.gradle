@@ -38,5 +38,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
 
+    //Image arrondi
+    compile 'de.hdodenhof:circleimageview:2.2.0'
+
     compile 'com.google.android.gms:play-services-auth:11.8.0'
 }

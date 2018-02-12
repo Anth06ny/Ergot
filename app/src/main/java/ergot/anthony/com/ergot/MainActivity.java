@@ -8,11 +8,12 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
 import ergot.anthony.com.ergot.controler.commander.CommanderActivity;
+import ergot.anthony.com.ergot.controler.historique.HstoriqueCommandActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Composants
-    private AppCompatButton btCommander, btYAller;
+    private AppCompatButton btCommander, btYAller, bthisto;
 
     //Url
     private static final String URL_ERGOT = "https://www.google.com/maps/place/L'Ergot/@43.5841389,1.4282618,18.58z/data=!4m12!1m6!3m5!1s0x12aebb9943811f61:0x50fa05dc0fe6d00f!2sL'Ergot!8m2!3d43.5846299!4d1.4282615!3m4!1s0x12aebb9943811f61:0x50fa05dc0fe6d00f!8m2!3d43.5846299!4d1.4282615";
@@ -24,9 +25,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btCommander = findViewById(R.id.btCommander);
         btYAller = findViewById(R.id.btYAller);
+        bthisto = findViewById(R.id.bthisto);
 
         btYAller.setOnClickListener(this);
         btCommander.setOnClickListener(this);
+        bthisto.setOnClickListener(this);
     }
 
     @Override
@@ -37,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (btYAller == v) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL_ERGOT));
             startActivity(browserIntent);
+        }
+        else if (bthisto == v) {
+            startActivity(new Intent(this, HstoriqueCommandActivity.class));
         }
     }
 }

@@ -76,20 +76,9 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     protected void refreshFoot() {
-        long totalPrice = 0;
-
-        //On parcours tous les produits séléctionnés
-        for (Pair<ProductBean, SuppBean> selection : MyApplication.getCommandeBean().getProductList()) {
-            ProductBean productBean = selection.first;
-            totalPrice += productBean.getPrice();
-            //on regarde s'il y a des suppléments dans les produits séléctionnés
-            if (selection.second != null) {
-                totalPrice += selection.second.getNewPrice();
-            }
-        }
 
         tvNbArticle.setText(MyApplication.getCommandeBean().getProductList().size() + "");
-        tv_price.setText(Utils.longToStringPrice(totalPrice));
+        tv_price.setText(Utils.longToStringPrice(MyApplication.getCommandeBean().getTotalPrice()));
     }
 
     @Override

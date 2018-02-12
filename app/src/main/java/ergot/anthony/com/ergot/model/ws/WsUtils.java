@@ -19,6 +19,8 @@ import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
+import ergot.anthony.com.ergot.model.bean.sendbean.UserBean;
+import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,10 +38,15 @@ public class WsUtils {
     private static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);// "http://192.168.20.10:8000/";
     private static final String URL_GET_CATALOGUE = URL_SERVEUR + "getCatalogue";
     private static final String URL_SEND_COMMAND = URL_SERVEUR + "setCommande";
+    private static final String URL_GET_HISTORY = URL_SERVEUR + "getHistory";
 
     private static final Gson gson = new Gson();
 
     public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    /* ---------------------------------
+    // GET
+    // -------------------------------- */
 
     /**
      * Récupère le catalogue des produits
@@ -61,22 +68,12 @@ public class WsUtils {
         }
         catch (IOException e) {
             //On test si google répond pour différencier si c'est internet ou le serveur le probleme
-            request = new Request.Builder().url(PING_GOOGLE).build();
-            try {
-
-                new OkHttpClient.Builder().connectTimeout(2, TimeUnit.SECONDS).build().newCall(request).execute();
-                //Ca marche -> C'est le serveur le probleme
-                throw new TechnicalException("Le serveur ne répond pas.", e, R.string.server_error);
-            }
-            catch (IOException e1) {
-                //Ca crash encore -> problème d'internet
-                throw new TechnicalException("Le serveur ne répond pas.", R.string.bad_internet_connexion_error);
-            }
+            testInternetConnexionOnGoogle(e);
         }
 
         //Analyse du code retour
-        if (response.code() != HttpURLConnection.HTTP_OK) {
-            throw new TechnicalException("Reponse du serveur incorrect : " + response.code(), R.string.generic_error);
+        if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
+            throw new TechnicalException("Réponse du serveur incorrect : " + response.code(), R.string.generic_error);
         }
         else {
 
@@ -88,9 +85,69 @@ public class WsUtils {
                     }.getType());
 
             return catalogue;
-
         }
     }
+
+    /**
+     * Récupère la liste des commande de l'utilisateur
+     *
+     * @return
+     * @throws TechnicalException
+     */
+    public static ArrayList<CommandeBean> getHistory() throws TechnicalException {
+
+        UserBean userBean = new UserBean();
+        userBean.setEmail(SharedPreferenceUtils.getSaveEmail());
+        userBean.setDeviceToken(SharedPreferenceUtils.getUniqueToken());
+
+        String json = gson.toJson(userBean);
+        Log.w("TAG_URL", URL_GET_HISTORY + "\nJson : " + json);
+        //Création de la requete
+        Request request = new Request.Builder().url(URL_GET_HISTORY).post(RequestBody.create(JSON, json)).build();
+
+        //Execution de la requête
+        Response response = null;
+        try {
+            response = getOkHttpClient().newCall(request).execute();
+        }
+        catch (IOException e) {
+            //On test si google répond pour différencier si c'est internet ou le serveur le probleme
+            testInternetConnexionOnGoogle(e);
+        }
+
+        //Analyse du code retour si non copmris entre 200 et 299
+        if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
+            throw new TechnicalException("Réponse du serveur incorrect : " + response.code(), R.string.generic_error);
+        }
+        else {
+
+            //Résultat de la requete.
+            try {
+                Log.w("TAG_REQ", "Reponse json : " + response.body().string());
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //Résultat de la requete.
+            InputStreamReader inputStreamReader = new InputStreamReader(response.body().byteStream());
+
+            //JSON -> Java (Parser une ArrayList typée)
+            ArrayList<CommandeBean> historique = gson.fromJson(inputStreamReader,
+                    new TypeToken<ArrayList<CategoryBean>>() {
+                    }.getType());
+
+            return historique;
+        }
+    }
+
+
+
+
+
+    /* ---------------------------------
+    // SEND
+    // -------------------------------- */
 
     /**
      * Envoyer une commande
@@ -113,34 +170,14 @@ public class WsUtils {
         }
         catch (IOException e) {
             //On test si google répond pour différencier si c'est internet ou le serveur le probleme
-            request = new Request.Builder().url(PING_GOOGLE).build();
-            try {
-
-                new OkHttpClient.Builder().connectTimeout(2, TimeUnit.SECONDS).build().newCall(request).execute();
-                //Ca marche -> C'est le serveur le probleme
-                throw new TechnicalException("Le serveur ne répond pas.", e, R.string.server_error);
-            }
-            catch (IOException e1) {
-                //Ca crash encore -> problème d'internet
-                throw new TechnicalException("Le serveur ne répond pas.", R.string.bad_internet_connexion_error);
-            }
+            testInternetConnexionOnGoogle(e);
         }
 
-        //Analyse du code retour
-        if (response.code() != HttpURLConnection.HTTP_OK) {
-            throw new TechnicalException("Reponse du serveur incorrect : " + response.code(), R.string.generic_error);
+        //Analyse du code retour si non copmris entre 200 et 299
+        if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
+            throw new TechnicalException("Réponse du serveur incorrect : " + response.code(), R.string.generic_error);
         }
         else {
-
-            //Résultat de la requete.
-            try {
-                Log.w("TAG_REQ", "Reponse json : " + response.body().string());
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            /*
 
             //Résultat de la requete.
             InputStreamReader inputStreamReader = new InputStreamReader(response.body().byteStream());
@@ -151,9 +188,25 @@ public class WsUtils {
                     }.getType());
 
             return historique;
-            */
+        }
+    }
 
-            return null;
+    /* ---------------------------------
+    // private
+    // -------------------------------- */
+
+    private static void testInternetConnexionOnGoogle(IOException e) throws TechnicalException {
+        //On test si google répond pour différencier si c'est internet ou le serveur le probleme
+        Request request = request = new Request.Builder().url(PING_GOOGLE).build();
+        try {
+
+            new OkHttpClient.Builder().connectTimeout(2, TimeUnit.SECONDS).build().newCall(request).execute();
+            //Ca marche -> C'est le serveur le probleme
+            throw new TechnicalException("Le serveur ne répond pas.", e, R.string.server_error);
+        }
+        catch (IOException e1) {
+            //Ca crash encore -> problème d'internet
+            throw new TechnicalException("Le serveur ne répond pas.", R.string.bad_internet_connexion_error);
         }
     }
 

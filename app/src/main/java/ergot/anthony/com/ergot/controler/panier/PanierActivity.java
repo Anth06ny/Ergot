@@ -6,8 +6,10 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,12 +19,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
+import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -35,6 +39,7 @@ import java.util.Date;
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.commander.MotherActivity;
+import ergot.anthony.com.ergot.controler.historique.HstoriqueCommandActivity;
 import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
@@ -55,6 +60,8 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     private TextView tvEmail;
     private CardView cvIdentification, cvIdentifier;
     private Button btIdentifier;
+    private ImageView iv_logout;
+    private View rl_root;
 
     //Gestion de la date
     private Calendar calendar;
@@ -82,11 +89,14 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         etPhone = findViewById(R.id.etPhone);
         tvEmail = findViewById(R.id.tvEmail);
         btIdentifier = findViewById(R.id.btIdentifier);
+        iv_logout = findViewById(R.id.iv_logout);
+        rl_root = findViewById(R.id.rl_root);
 
         commandeBean = MyApplication.getCommandeBean();
 
         bt_modifier.setOnClickListener(this);
         btIdentifier.setOnClickListener(this);
+        iv_logout.setOnClickListener(this);
 
         //RecylcerView
         rv.setHasFixedSize(false);
@@ -124,26 +134,27 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
                     calendar.get(Calendar.DAY_OF_MONTH)).show();
         }
         else if (v == bt_commande) {
-            if (StringUtils.isBlank(tvEmail.getText().toString()) && StringUtils.isBlank(etPhone.getText().toString())) {
-                Toast.makeText(this, R.string.nophone_or_email, Toast.LENGTH_LONG).show();
-            }
-            else {
 
-                MyApplication.getCommandeBean().setEmail(tvEmail.getText().toString());
-                MyApplication.getCommandeBean().setTelephone(etPhone.getText().toString());
-                MyApplication.getCommandeBean().setRemarque(et_rem.getText().toString());
-                //Tout est on on lance la validation
-                new WSAsyncTask().execute();
-            }
+            MyApplication.getCommandeBean().setEmail(tvEmail.getText().toString());
+            MyApplication.getCommandeBean().setTelephone(etPhone.getText().toString());
+            MyApplication.getCommandeBean().setRemarque(et_rem.getText().toString());
+            //Tout est on on lance la validation
+            new WSAsyncTask().execute();
         }
         else if (v == btIdentifier) {
             try {
-                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
+                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, true, null, null, null, null);
                 startActivityForResult(intent, REQUEST_CODE_EMAIL);
             }
             catch (ActivityNotFoundException e) {
                 Toast.makeText(this, R.string.identification_impossible, Toast.LENGTH_SHORT).show();
             }
+        }
+        else if (v == iv_logout) {
+            //On supprime l'email sauvegarder
+            tokenEmail = null;
+            SharedPreferenceUtils.saveEmail("");
+            refreshScreen();
         }
         else {
             super.onClick(v);
@@ -154,6 +165,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             tokenEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+            SharedPreferenceUtils.saveEmail(tokenEmail);
             refreshScreen();
         }
     }
@@ -260,8 +272,16 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
 
             if (technicalException != null) {
                 // erreur = technicalException;
+                technicalException.printStackTrace();
+                Snackbar snackbar = Snackbar.make(rl_root, technicalException.getUserMessage(), Snackbar.LENGTH_LONG);
+                snackbar.setActionTextColor(Color.RED);
+                snackbar.show();
             }
             else {
+                //On redirige sur l'écran d'Historique
+                Intent intent = new Intent(PanierActivity.this, HstoriqueCommandActivity.class);
+                intent.putExtra(HstoriqueCommandActivity.LIST_COMMANDE_EXTRA, new Gson().toJson(result));
+                startActivity(intent);
             }
         }
     }

@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_above="@+id/view">
+        android:layout_above="@+id/ll_yaller">
 
 
         <View
@@ -48,18 +48,11 @@
     </LinearLayout>
 
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
-        android:layout_centerInParent="true"
-        android:layout_margin="@dimen/margin_10"
-        android:visibility="invisible"/>
-
     <LinearLayout
+        android:id="@+id/ll_yaller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view">
+        android:layout_centerInParent="true">
 
 
         <View
@@ -74,6 +67,35 @@
             android:layout_height="@dimen/margin_50"
             android:layout_weight="3"
             android:text="@string/bt_y_aller"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_16"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_weight="2"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_yaller">
+
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_weight="2"
+            android:visibility="invisible"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/bthisto"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/margin_50"
+            android:layout_weight="3"
+            android:text="@string/bt_histo"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_16"/>
 

@@ -11,6 +11,7 @@
 
     <color name="cardview_bg">#FAFAFA</color>
     <color name="add_color">#64dd17</color>
+    <color name="grey_subtitle">#999999</color>
 
 
 </resources>

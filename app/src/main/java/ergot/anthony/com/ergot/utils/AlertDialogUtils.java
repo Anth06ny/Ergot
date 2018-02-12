@@ -2,10 +2,12 @@ package ergot.anthony.com.ergot.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 
 import java.util.ArrayList;
 
+import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.SuppBean;
 
 /**
@@ -46,5 +48,15 @@ public class AlertDialogUtils {
 
     public interface RadioAlertDialogCB {
         void onSupplementSelected(SuppBean suppBean);
+    }
+
+    public static void showConfirmDialog(final Context context, @StringRes int question, @StringRes int positiveText, DialogInterface.OnClickListener positiveButton) {
+
+        AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
+        alt_bld.setMessage(question);
+        alt_bld.setPositiveButton(positiveText, positiveButton);
+        alt_bld.setNegativeButton(R.string.bt_cancel, null);
+        alt_bld.setCancelable(true);
+        alt_bld.create().show();
     }
 }

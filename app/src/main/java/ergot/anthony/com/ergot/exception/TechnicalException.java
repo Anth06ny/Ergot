@@ -2,7 +2,10 @@ package ergot.anthony.com.ergot.exception;
 
 import android.support.annotation.StringRes;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ergot.anthony.com.ergot.MyApplication;
+import ergot.anthony.com.ergot.R;
 
 /**
  * Created by Anthony on 24/10/2017.
@@ -38,6 +41,9 @@ public class TechnicalException extends Exception {
     }
 
     public String getUserMessage() {
+        if (!StringUtils.isNotBlank(userMessage)) {
+            return MyApplication.getMyApplication().getResources().getString(R.string.generic_error);
+        }
         return userMessage;
     }
 

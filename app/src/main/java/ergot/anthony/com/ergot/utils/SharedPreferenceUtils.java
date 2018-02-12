@@ -2,6 +2,10 @@ package ergot.anthony.com.ergot.utils;
 
 import android.content.SharedPreferences;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.UUID;
+
 import ergot.anthony.com.ergot.MyApplication;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -17,7 +21,7 @@ public class SharedPreferenceUtils {
     }
 
     /* ---------------------------------
-    //Sauvegarde TOKEN
+    //Sauvegarde EMAIL
     // -------------------------------- */
     private static final String USER_EMAIL_KEY = "USER_EMAIL_KEY";
 
@@ -27,5 +31,26 @@ public class SharedPreferenceUtils {
 
     public static void saveEmail(String token) {
         getSharedPreference().edit().putString(USER_EMAIL_KEY, token).apply();
+    }
+
+    /* ---------------------------------
+   //Gestion Token
+   // -------------------------------- */
+    private static final String TOKEN_KEY = "TOKEN_KEY";
+
+    /**
+     * retourne un token unique et toujours le même sauf si réistlation de l'appli
+     *
+     * @return
+     */
+    public static String getUniqueToken() {
+
+        String uniqueToken = getSharedPreference().getString(TOKEN_KEY, "");
+        if (StringUtils.isNotBlank(uniqueToken)) {
+            uniqueToken = UUID.randomUUID().toString();
+            getSharedPreference().edit().putString(TOKEN_KEY, uniqueToken).apply();
+        }
+
+        return uniqueToken;
     }
 }

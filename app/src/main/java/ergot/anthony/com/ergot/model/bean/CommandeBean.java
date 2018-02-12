@@ -4,6 +4,8 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 
+import ergot.anthony.com.ergot.MyApplication;
+
 /**
  * Created by Anthony on 25/10/2017.
  */
@@ -21,6 +23,37 @@ public class CommandeBean {
 
     public CommandeBean() {
         productList = new ArrayList<>();
+    }
+
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        if (productList != null) {
+            for (Pair<ProductBean, SuppBean> selection : MyApplication.getCommandeBean().getProductList()) {
+                ProductBean productBean = selection.first;
+                totalPrice += productBean.getPrice();
+                //on regarde s'il y a des suppléments dans les produits séléctionnés
+                if (selection.second != null) {
+                    totalPrice += selection.second.getNewPrice();
+                }
+            }
+        }
+        return totalPrice;
+    }
+
+    public long getDatePrevision() {
+        return datePrevision;
+    }
+
+    public void setDatePrevision(long datePrevision) {
+        this.datePrevision = datePrevision;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getTelephone() {
