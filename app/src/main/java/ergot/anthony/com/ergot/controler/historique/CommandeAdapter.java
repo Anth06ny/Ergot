@@ -55,14 +55,10 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
 
         holder.tv_date.setText(formatCompl.format(commandeBean.getDateCommande()));
         holder.tv_price.setText(Utils.longToStringPrice(commandeBean.getTotalPrice()));
-        if (commandeBean.getDatePrevision() > 0) {
-            holder.tv_time_expected.setText(formatheure.format(commandeBean.getDatePrevision()));
-        }
-        else {
-            holder.tv_time_expected.setText(" - ");
-        }
+
         holder.bt_cancel_order.setVisibility(View.VISIBLE);
 
+        //Par defaut bouton
         holder.bt_accept.setTextColor(Color.BLACK);
         holder.bt_accept.setTypeface(null, Typeface.ITALIC);
         holder.bt_accept.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
@@ -78,6 +74,15 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         holder.bt_cancel.setTextColor(Color.BLACK);
         holder.bt_cancel.setTypeface(null, Typeface.ITALIC);
         holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
+        holder.ll_expected_time.setVisibility(View.VISIBLE);
+
+        //defaut datePrevision
+        if (commandeBean.getDatePrevision() == 0) {
+            holder.tv_time_expected.setText(" - ");
+        }
+        else {
+            holder.tv_time_expected.setText(formatheure.format(commandeBean.getDatePrevision()));
+        }
 
         switch (commandeBean.getStatut()) {
             case Status.STATUS_SEND:
@@ -94,18 +99,21 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
                 holder.bt_ready.setTypeface(null, Typeface.BOLD);
                 holder.bt_ready.setTextColor(Color.GREEN);
                 holder.bt_ready.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
+                holder.ll_expected_time.setVisibility(View.GONE);
                 break;
             case Status.STATUS_DELIVERY:
                 holder.bt_delivery.setTypeface(null, Typeface.BOLD);
                 holder.bt_delivery.setTextColor(Color.GREEN);
                 holder.bt_delivery.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 holder.bt_cancel_order.setVisibility(View.GONE);//On affiche pas le bouton si la commande est déja annulé ou livré
+                holder.ll_expected_time.setVisibility(View.GONE);
                 break;
             case Status.STATUS_CANCEL:
                 holder.bt_cancel.setTypeface(null, Typeface.BOLD);
                 holder.bt_cancel.setTextColor(Color.RED);
                 holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 holder.bt_cancel_order.setVisibility(View.GONE);//On affiche pas le bouton si la commande est déja annulé ou livré
+                holder.ll_expected_time.setVisibility(View.GONE);
                 break;
         }
 
@@ -154,6 +162,8 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         public TextView bt_cancel;
         public TextView bt_show_detail;
         public TextView bt_cancel_order;
+        public TextView tv_statut_title;
+        public View ll_expected_time;
         private View root;
 
         public ViewHolder(View itemView) {
@@ -168,6 +178,8 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
             bt_cancel = itemView.findViewById(R.id.bt_cancel);
             bt_show_detail = itemView.findViewById(R.id.bt_show_detail);
             bt_cancel_order = itemView.findViewById(R.id.bt_cancel_order);
+            tv_statut_title = itemView.findViewById(R.id.tv_statut_title);
+            ll_expected_time = itemView.findViewById(R.id.ll_expected_time);
 
             root = itemView.findViewById(R.id.root);
         }

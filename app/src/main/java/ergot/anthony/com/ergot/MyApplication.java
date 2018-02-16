@@ -13,7 +13,7 @@ public class MyApplication extends Application {
     /***
      * AFaire
      *
-     * -Afficher aucune commande
+     * -Continuer l'historique coté admin. L'xml est fait row_history_admin. Modifier l'adapter pour prendre en comtpe si on est coté admin
      *
      * -
      */

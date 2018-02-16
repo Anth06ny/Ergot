@@ -27,20 +27,26 @@
 
     <!-- History -->
     <string name="time_expected">Heure estimée : </string>
-    <string name="statut">Status</string>
+    <string name="statut">Statut</string>
     <string name="bt_detail">Détail</string>
     <string name="bt_masque">Masquer</string>
     <string name="bt_annuler_com">Annuler la\ncommande</string>
+    <string name="bt_valider_com">Valider la\ncommande</string>
+    <string name="bt_refuser">Refuser</string>
     <string name="dialog_supp_commande">Etes vous sur de vouloir annuler la commande ?</string>
     <string name="history_title">Mes Commandes</string>
     <string name="no_commande">Aucune commande disponible</string>
+    <string name="client">Client : </string>
+    <string name="telephone">Téléphone : </string>
 
     <!-- Status commande-->
     <string name="status_attente">Envoyé</string>
+    <string name="status_aattente_admin">Attente</string>
     <string name="status_Accepté">Accepté</string>
     <string name="status_ready">Prêt</string>
     <string name="status_livre">Livré</string>
     <string name="status_cancel">Annulé</string>
+
 
     <!-- Erreur -->
     <string name="generic_error">Une erreur est survenue</string>
