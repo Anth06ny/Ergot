@@ -15,6 +15,10 @@ public class TechnicalException extends Exception {
 
     private String userMessage;
 
+    public TechnicalException(String message) {
+        super(message);
+    }
+
     public TechnicalException(String message, @StringRes int userMessageId) {
         super(message);
         this.userMessage = MyApplication.getMyApplication().getString(userMessageId);
@@ -35,9 +39,8 @@ public class TechnicalException extends Exception {
         this.userMessage = MyApplication.getMyApplication().getString(userMessageId);
     }
 
-    public TechnicalException(Throwable cause, String userMessage) {
-        super(cause);
-        this.userMessage = userMessage;
+    public TechnicalException(Throwable cause, String message) {
+        super(message, cause);
     }
 
     public String getUserMessage() {

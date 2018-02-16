@@ -13,7 +13,7 @@ public class MyApplication extends Application {
     /***
      * AFaire
      *
-     * -Vcorriger json recu en retour de l'envoie de commande. Et tester l'historique
+     * -Afficher aucune commande
      *
      * -
      */
@@ -30,6 +30,10 @@ public class MyApplication extends Application {
         commandeBean = new CommandeBean();
 
         debugMode = getResources().getBoolean(R.bool.debug);
+    }
+
+    public static void newCommande() {
+        commandeBean = new CommandeBean();
     }
 
     public static CommandeBean getCommandeBean() {

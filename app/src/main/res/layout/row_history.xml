@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/status"
+            android:text="@string/statut"
             android:textColor="@android:color/black"
             android:textSize="@dimen/font_14"
             android:textStyle="bold"/>
@@ -84,56 +84,56 @@
             android:orientation="horizontal">
 
 
-            <Button
+            <TextView
                 android:id="@+id/bt_send"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/load_shadow_color"
                 android:text="@string/status_attente"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="10sp"/>
+                android:textColor="@color/load_shadow_color"
+                android:textSize="@dimen/font_14"
+                android:textStyle="bold"/>
 
-            <Button
+            <TextView
                 android:id="@+id/bt_accept"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@android:color/white"
                 android:text="@string/status_Accepté"
                 android:textAllCaps="false"
-                android:textSize="10sp"/>
+                android:textSize="12sp"
+                android:textStyle="italic"/>
 
-            <Button
+            <TextView
                 android:id="@+id/bt_ready"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@android:color/white"
                 android:text="@string/status_ready"
                 android:textAllCaps="false"
-                android:textSize="10sp"/>
+                android:textSize="12sp"
+                android:textStyle="italic"/>
 
-            <Button
+            <TextView
                 android:id="@+id/bt_delivery"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@android:color/white"
                 android:text="@string/status_livre"
                 android:textAllCaps="false"
-                android:textSize="10sp"/>
+                android:textSize="12sp"
+                android:textStyle="italic"/>
 
-            <Button
+            <TextView
                 android:id="@+id/bt_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@android:color/white"
                 android:text="@string/status_cancel"
                 android:textAllCaps="false"
-                android:textSize="10sp"/>
+                android:textSize="12sp"
+                android:textStyle="italic"/>
         </LinearLayout>
 
         <LinearLayout

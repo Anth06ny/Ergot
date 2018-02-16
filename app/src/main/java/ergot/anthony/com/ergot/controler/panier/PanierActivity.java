@@ -14,7 +14,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -42,14 +41,14 @@ import ergot.anthony.com.ergot.controler.commander.MotherActivity;
 import ergot.anthony.com.ergot.controler.historique.HstoriqueCommandActivity;
 import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
-import ergot.anthony.com.ergot.model.bean.ProductBean;
-import ergot.anthony.com.ergot.model.bean.SuppBean;
+import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
 import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
 
 public class PanierActivity extends MotherActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, CommandeAdapter.OnCommandListener {
 
     private static final int REQUEST_CODE_EMAIL = 1;
+    public static final String COMMANDE_EXTRA = "COMMANDE_EXTRA";
 
     //Composants graphique
     private TextView tv_time;
@@ -58,10 +57,11 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     private RecyclerView rv;
     private EditText etPhone;
     private TextView tvEmail;
-    private CardView cvIdentification, cvIdentifier;
+    private CardView cvIdentification, cvIdentifier, cv_when;
     private Button btIdentifier;
     private ImageView iv_logout;
     private View rl_root;
+    private ProgressDialog progressDialog;
 
     //Gestion de la date
     private Calendar calendar;
@@ -71,6 +71,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     //Data
     private CommandeBean commandeBean;
     private String tokenEmail;
+    private boolean isCurrentCommand;//Est ce qu'on est en mode commande en cours, ou en mode afficher une ancienne commande
 
     private CommandeAdapter commandeAdapter;
 
@@ -91,8 +92,20 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         btIdentifier = findViewById(R.id.btIdentifier);
         iv_logout = findViewById(R.id.iv_logout);
         rl_root = findViewById(R.id.rl_root);
+        cv_when = findViewById(R.id.cv_when);
 
-        commandeBean = MyApplication.getCommandeBean();
+        //Est ce qu'on recoit une commande à afficher, donc on est en mode affichage histoiriue commande
+        commandeBean = (CommandeBean) getIntent().getSerializableExtra(COMMANDE_EXTRA);
+        if (commandeBean != null) {
+            isCurrentCommand = false;
+            et_rem.setEnabled(false);
+            hideFoot();
+        }
+        else {
+            //Sinon on affiche la commande en cours
+            commandeBean = MyApplication.getCommandeBean();
+            isCurrentCommand = true;
+        }
 
         bt_modifier.setOnClickListener(this);
         btIdentifier.setOnClickListener(this);
@@ -103,7 +116,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
 
-        commandeAdapter = new CommandeAdapter(commandeBean.getProductList(), this);
+        commandeAdapter = new CommandeAdapter(commandeBean.getCompositionCommande(), this, isCurrentCommand);
         rv.setAdapter(commandeAdapter);
 
         calendar = Calendar.getInstance();
@@ -123,6 +136,14 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     protected void onPause() {
         super.onPause();
         commandeBean.setRemarque(et_rem.getText().toString());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override
@@ -161,7 +182,6 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         }
     }
 
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             tokenEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
@@ -169,6 +189,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
             refreshScreen();
         }
     }
+
 
 
 
@@ -198,9 +219,9 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     }
 
     @Override
-    public void onRemoveProductClic(Pair<ProductBean, SuppBean> produitAndSupp) {
-        int position = commandeBean.getProductList().indexOf(produitAndSupp);
-        commandeBean.getProductList().remove(produitAndSupp);
+    public void onRemoveProductClic(SelectProductBean selectProductBean) {
+        int position = commandeBean.getCompositionCommande().indexOf(selectProductBean);
+        commandeBean.getCompositionCommande().remove(selectProductBean);
         commandeAdapter.notifyItemRemoved(position);
 
         refreshScreen();
@@ -212,28 +233,37 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     // -------------------------------- */
     private void refreshScreen() {
         Date date = new Date();
-        if (StringUtils.isBlank(tokenEmail)) {
-            cvIdentification.setVisibility(View.VISIBLE);
-            cvIdentifier.setVisibility(View.GONE);
-        }
-        else {
-            cvIdentification.setVisibility(View.GONE);
-            cvIdentifier.setVisibility(View.VISIBLE);
-        }
-        tvEmail.setText(tokenEmail);
 
-        //Si c'est dans moins de 30min c'est au plus tôt
-        {
-            if (calendar.getTimeInMillis() - date.getTime() < 1800000) {
-                tv_time.setText(R.string.au_plus_tot);
-            }
-            //Si c'est aujourd'hui
-            else if (DateUtils.isSameDay(calendar.getTime(), date)) {
-                tv_time.setText("Aujourd'hui à " + formatheure.format(calendar.getTime()));
+        if (isCurrentCommand) {
+            if (StringUtils.isBlank(tokenEmail)) {
+                cvIdentification.setVisibility(View.VISIBLE);
+                cvIdentifier.setVisibility(View.GONE);
             }
             else {
-                tv_time.setText(formatCompl.format(calendar.getTime()));
+                cvIdentification.setVisibility(View.GONE);
+                cvIdentifier.setVisibility(View.VISIBLE);
             }
+            tvEmail.setText(tokenEmail);
+
+            //Si c'est dans moins de 30min c'est au plus tôt
+            {
+                if (calendar.getTimeInMillis() - date.getTime() < 1800000) {
+                    tv_time.setText(R.string.au_plus_tot);
+                }
+                //Si c'est aujourd'hui
+                else if (DateUtils.isSameDay(calendar.getTime(), date)) {
+                    tv_time.setText("Aujourd'hui à " + formatheure.format(calendar.getTime()));
+                }
+                else {
+                    tv_time.setText(formatCompl.format(calendar.getTime()));
+                }
+            }
+        }
+        else {
+            //Mode historique commande on n'affiche que le detail
+            cv_when.setVisibility(View.GONE);
+            cvIdentification.setVisibility(View.GONE);
+            cvIdentifier.setVisibility(View.GONE);
         }
     }
 
@@ -245,7 +275,6 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
 
         private ArrayList<CommandeBean> result = null;
         private TechnicalException technicalException;
-        ProgressDialog progressDialog;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -278,10 +307,13 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
                 snackbar.show();
             }
             else {
+                //La commande a été validé, on la supprime de la commande en cours
+                MyApplication.newCommande();
                 //On redirige sur l'écran d'Historique
                 Intent intent = new Intent(PanierActivity.this, HstoriqueCommandActivity.class);
                 intent.putExtra(HstoriqueCommandActivity.LIST_COMMANDE_EXTRA, new Gson().toJson(result));
                 startActivity(intent);
+                finish();
             }
         }
     }

@@ -8,7 +8,8 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -17,11 +18,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import ergot.anthony.com.ergot.MainActivity;
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.panier.PanierActivity;
-import ergot.anthony.com.ergot.model.bean.ProductBean;
-import ergot.anthony.com.ergot.model.bean.SuppBean;
+import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
 import ergot.anthony.com.ergot.utils.Utils;
 
 /**
@@ -30,11 +31,14 @@ import ergot.anthony.com.ergot.utils.Utils;
 
 public class MotherActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int HOME_MENU_ID = 3;
+
     protected TextView tvNbArticle, tv_price;
     protected Button bt_commande;
     protected boolean panierVersion;
     protected ImageView tvPlusUn;
     protected View shadow;
+    private View foot;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         tv_price = findViewById(R.id.tv_price);
         tvPlusUn = findViewById(R.id.tvPlusUn);
         shadow = findViewById(R.id.shadow);
+        foot = findViewById(R.id.foot);
 
         if (tvPlusUn != null) {
             tvPlusUn.setVisibility(View.INVISIBLE);
@@ -75,12 +80,55 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         refreshFoot();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, HOME_MENU_ID, 0, "Acceuil").setIcon(R.mipmap.ic_home).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == HOME_MENU_ID) {
+            Intent a = new Intent(this, MainActivity.class);
+            a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(a);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /* ---------------------------------
+    // Protected
+    // -------------------------------- */
+
+    protected void hideFoot() {
+        shadow.setVisibility(View.GONE);
+        foot.setVisibility(View.GONE);
+    }
+
     protected void refreshFoot() {
 
-        tvNbArticle.setText(MyApplication.getCommandeBean().getProductList().size() + "");
+        tvNbArticle.setText(MyApplication.getCommandeBean().getCompositionCommande().size() + "");
         tv_price.setText(Utils.longToStringPrice(MyApplication.getCommandeBean().getTotalPrice()));
     }
 
+    public void addProduct(SelectProductBean selection, int[] clicOnScreen) {
+        MyApplication.getCommandeBean().getCompositionCommande().add(selection);
+        if (tvPlusUn != null) {
+            animAteFromeClicToFoot(clicOnScreen);
+        }
+        else {
+            refreshFoot();
+        }
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        v.vibrate(500);
+    }
+
+    /* ---------------------------------
+    // Click
+    // -------------------------------- */
     @Override
     public void onClick(View v) {
         if (v == bt_commande) {
@@ -93,19 +141,10 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public void addProduct(Pair<ProductBean, SuppBean> product, int[] clicOnScreen) {
-        MyApplication.getCommandeBean().getProductList().add(product);
-        if (tvPlusUn != null) {
-            animAteFromeClicToFoot(clicOnScreen);
-        }
-        else {
-            refreshFoot();
-        }
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 500 milliseconds
-        v.vibrate(500);
-    }
+       /* ---------------------------------
+       // private
+       // -------------------------------- */
 
     private void animAteFromeClicToFoot(int[] clicOnScreen) {
         int originalPos[] = new int[2];

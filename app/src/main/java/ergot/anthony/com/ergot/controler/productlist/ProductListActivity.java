@@ -5,7 +5,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Pair;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +16,7 @@ import ergot.anthony.com.ergot.controler.commander.MotherActivity;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
 import ergot.anthony.com.ergot.model.bean.SuppBean;
+import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
 import ergot.anthony.com.ergot.utils.AlertDialogUtils;
 import ergot.anthony.com.ergot.utils.GlideApp;
 
@@ -89,13 +89,13 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
 
         if (suppBeanList == null || suppBeanList.isEmpty()) {
             // Pas de supplement
-            addProduct(new Pair<ProductBean, SuppBean>(productBean, null), clicOnScreen);
+            addProduct(new SelectProductBean(productBean, null), clicOnScreen);
         }
         else {
             AlertDialogUtils.showSelectSuppDialog(this, suppBeanList, new AlertDialogUtils.RadioAlertDialogCB() {
                 @Override
                 public void onSupplementSelected(SuppBean supp) {
-                    addProduct(new Pair<ProductBean, SuppBean>(productBean, supp), clicOnScreen);
+                    addProduct(new SelectProductBean(productBean, supp), clicOnScreen);
                 }
             });
         }

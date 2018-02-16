@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.productlist.ProductListActivity;
-import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.exception.TechnicalException;
+import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
 
 public class CommanderActivity extends MotherActivity implements View.OnClickListener, CategoryAdapter.OnCategoryClicListener {
@@ -149,6 +149,7 @@ public class CommanderActivity extends MotherActivity implements View.OnClickLis
 
             if (technicalException != null) {
                 erreur = technicalException;
+                erreur.printStackTrace();
             }
             else {
                 erreur = null;

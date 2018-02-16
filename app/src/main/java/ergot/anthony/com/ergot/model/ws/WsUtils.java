@@ -19,7 +19,10 @@ import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
+import ergot.anthony.com.ergot.model.bean.Status;
+import ergot.anthony.com.ergot.model.bean.sendbean.CancelCommandeBean;
 import ergot.anthony.com.ergot.model.bean.sendbean.UserBean;
+import ergot.anthony.com.ergot.utils.Logger;
 import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -38,7 +41,8 @@ public class WsUtils {
     private static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);// "http://192.168.20.10:8000/";
     private static final String URL_GET_CATALOGUE = URL_SERVEUR + "getCatalogue";
     private static final String URL_SEND_COMMAND = URL_SERVEUR + "setCommande";
-    private static final String URL_GET_HISTORY = URL_SERVEUR + "getHistory";
+    private static final String URL_GET_HISTORY = URL_SERVEUR + "getHistorique";
+    private static final String URL_CANCEL_COMMAND = URL_SERVEUR + "cancelCommande";
 
     private static final Gson gson = new Gson();
 
@@ -68,28 +72,41 @@ public class WsUtils {
         }
         catch (IOException e) {
             //On test si google répond pour différencier si c'est internet ou le serveur le probleme
-            testInternetConnexionOnGoogle(e);
+            throw testInternetConnexionOnGoogle(e);
         }
 
         //Analyse du code retour
         if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
-            throw new TechnicalException("Réponse du serveur incorrect : " + response.code(), R.string.generic_error);
+            throw new TechnicalException("Réponse du serveur incorrect : " + response.code() + "\nErreur:" + response.message(), R.string.generic_error);
         }
         else {
 
-            InputStreamReader inputStreamReader = new InputStreamReader(response.body().byteStream());
+            try {
+                ArrayList<CategoryBean> catalogue;
+                if (MyApplication.isDebugMode()) {
+                    //Résultat de la requete.
 
-            //JSON -> Java (Parser une ArrayList typée)
-            ArrayList<CategoryBean> catalogue = gson.fromJson(inputStreamReader,
-                    new TypeToken<ArrayList<CategoryBean>>() {
+                    String jsonRecu = response.body().string();
+                    Logger.logJson("TAG_JSON_RECU", jsonRecu);
+                    catalogue = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CategoryBean>>() {
                     }.getType());
-
-            return catalogue;
+                }
+                else {
+                    //JSON -> Java (Parser une ArrayList typée)
+                    catalogue = gson.fromJson(new InputStreamReader(response.body().byteStream()),
+                            new TypeToken<ArrayList<CategoryBean>>() {
+                            }.getType());
+                }
+                return catalogue;
+            }
+            catch (Exception e) {
+                throw new TechnicalException(e, "Erreur lors du parsing de la requete");
+            }
         }
     }
 
     /**
-     * Récupère la liste des commande de l'utilisateur
+     * Récupère la liste des commande de l'utilisateur.. Envoie email et token du téléphone
      *
      * @return
      * @throws TechnicalException
@@ -101,7 +118,8 @@ public class WsUtils {
         userBean.setDeviceToken(SharedPreferenceUtils.getUniqueToken());
 
         String json = gson.toJson(userBean);
-        Log.w("TAG_URL", URL_GET_HISTORY + "\nJson : " + json);
+        Log.w("TAG_URL", URL_GET_HISTORY);
+        Logger.logJson("TAG_JSON_ENVOYER", json);
         //Création de la requete
         Request request = new Request.Builder().url(URL_GET_HISTORY).post(RequestBody.create(JSON, json)).build();
 
@@ -112,30 +130,35 @@ public class WsUtils {
         }
         catch (IOException e) {
             //On test si google répond pour différencier si c'est internet ou le serveur le probleme
-            testInternetConnexionOnGoogle(e);
+            throw testInternetConnexionOnGoogle(e);
         }
 
         //Analyse du code retour si non copmris entre 200 et 299
         if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
-            throw new TechnicalException("Réponse du serveur incorrect : " + response.code(), R.string.generic_error);
+            throw new TechnicalException("Réponse du serveur incorrect : " + response.code() + "\nErreur:" + response.message(), R.string.generic_error);
         }
         else {
 
-            //Résultat de la requete.
-            try {
-                Log.w("TAG_REQ", "Reponse json : " + response.body().string());
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+            ArrayList<CommandeBean> historique;
 
-            //Résultat de la requete.
-            InputStreamReader inputStreamReader = new InputStreamReader(response.body().byteStream());
-
-            //JSON -> Java (Parser une ArrayList typée)
-            ArrayList<CommandeBean> historique = gson.fromJson(inputStreamReader,
-                    new TypeToken<ArrayList<CategoryBean>>() {
+            if (MyApplication.isDebugMode()) {
+                //Résultat de la requete.
+                try {
+                    String jsonRecu = response.body().string();
+                    Log.w("TAG_JSON_RECU", "json=" + jsonRecu);
+                    historique = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CommandeBean>>() {
                     }.getType());
+                }
+                catch (Exception e) {
+                    throw new TechnicalException(e, "Erreur lors du .string dans la requete");
+                }
+            }
+            else {
+                //JSON -> Java (Parser une ArrayList typée)
+                historique = gson.fromJson(new InputStreamReader(response.body().byteStream()),
+                        new TypeToken<ArrayList<CommandeBean>>() {
+                        }.getType());
+            }
 
             return historique;
         }
@@ -150,15 +173,18 @@ public class WsUtils {
     // -------------------------------- */
 
     /**
-     * Envoyer une commande
+     * Envoyer une commande   , recoit la liste des commandes de l'utilisateur
      *
      * @param commandeBean
      * @return l'historique des commandes
      */
     public static ArrayList<CommandeBean> sendCommande(CommandeBean commandeBean) throws TechnicalException {
 
+        //ON ajoute le token du téléphone
+        commandeBean.setDeviceToken(SharedPreferenceUtils.getUniqueToken());
         String json = gson.toJson(commandeBean);
-        Log.w("TAG_URL", URL_SEND_COMMAND + "\nJson : " + json);
+        Log.w("TAG_REQ", URL_SEND_COMMAND);
+        Logger.logJson("TAG_JSON_ENVOYER", json);
         //Création de la requete
 
         Request request = new Request.Builder().url(URL_SEND_COMMAND).post(RequestBody.create(JSON, json)).build();
@@ -170,24 +196,70 @@ public class WsUtils {
         }
         catch (IOException e) {
             //On test si google répond pour différencier si c'est internet ou le serveur le probleme
-            testInternetConnexionOnGoogle(e);
+            throw testInternetConnexionOnGoogle(e);
         }
 
         //Analyse du code retour si non copmris entre 200 et 299
         if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
-            throw new TechnicalException("Réponse du serveur incorrect : " + response.code(), R.string.generic_error);
+            throw new TechnicalException("Réponse du serveur incorrect : " + response.code() + "\nErreur:" + response.message(), R.string
+                    .generic_error);
         }
         else {
+            try {
+                ArrayList<CommandeBean> historique;
+                if (MyApplication.isDebugMode()) {
+                    //Résultat de la requete.
 
-            //Résultat de la requete.
-            InputStreamReader inputStreamReader = new InputStreamReader(response.body().byteStream());
-
-            //JSON -> Java (Parser une ArrayList typée)
-            ArrayList<CommandeBean> historique = gson.fromJson(inputStreamReader,
-                    new TypeToken<ArrayList<CategoryBean>>() {
+                    String jsonRecu = response.body().string();
+                    Log.w("TAG_JSON_RECU", "json=" + json);
+                    historique = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CommandeBean>>() {
                     }.getType());
+                }
+                else {
+                    //JSON -> Java (Parser une ArrayList typée)
+                    historique = gson.fromJson(new InputStreamReader(response.body().byteStream()),
+                            new TypeToken<ArrayList<CommandeBean>>() {
+                            }.getType());
+                }
+                return historique;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                //La requete s'est bien passé mais on a une erreur sur le parsing. On ne fait pas planter l'envoie pour autant
+                return new ArrayList<>();
+            }
+        }
+    }
 
-            return historique;
+    /**
+     * EAnnuler la commande
+     */
+    public static void cancelCommande(CommandeBean commandeBean) throws TechnicalException {
+
+        CancelCommandeBean cancelCommandeBean = new CancelCommandeBean(commandeBean.getId(), commandeBean.getEmail(), SharedPreferenceUtils.getUniqueToken());
+
+        String json = gson.toJson(cancelCommandeBean);
+        Log.w("TAG_REQ", URL_CANCEL_COMMAND);
+        Logger.logJson("TAG_JSON_ENVOYER", json);
+        //Création de la requete
+
+        Request request = new Request.Builder().url(URL_CANCEL_COMMAND).post(RequestBody.create(JSON, json)).build();
+
+        //Execution de la requête
+        Response response = null;
+        try {
+            response = getOkHttpClient().newCall(request).execute();
+            //Ca a fonctionné on passe la commande à annulé
+            commandeBean.setStatut(Status.STATUS_CANCEL);
+            //Analyse du code retour si non copmris entre 200 et 299
+            if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
+                throw new TechnicalException("Réponse du serveur incorrect : " + response.code() + "\nErreur:" + response.message(), R.string
+                        .generic_error);
+            }
+        }
+        catch (IOException e) {
+            //On test si google répond pour différencier si c'est internet ou le serveur le probleme
+            throw testInternetConnexionOnGoogle(e);
         }
     }
 
@@ -195,18 +267,18 @@ public class WsUtils {
     // private
     // -------------------------------- */
 
-    private static void testInternetConnexionOnGoogle(IOException e) throws TechnicalException {
+    private static TechnicalException testInternetConnexionOnGoogle(IOException e) {
         //On test si google répond pour différencier si c'est internet ou le serveur le probleme
         Request request = request = new Request.Builder().url(PING_GOOGLE).build();
         try {
 
             new OkHttpClient.Builder().connectTimeout(2, TimeUnit.SECONDS).build().newCall(request).execute();
             //Ca marche -> C'est le serveur le probleme
-            throw new TechnicalException("Le serveur ne répond pas.", e, R.string.server_error);
+            return new TechnicalException("Le serveur ne répond pas.", e, R.string.server_error);
         }
         catch (IOException e1) {
             //Ca crash encore -> problème d'internet
-            throw new TechnicalException("Le serveur ne répond pas.", R.string.bad_internet_connexion_error);
+            return new TechnicalException("Le serveur ne répond pas.", R.string.bad_internet_connexion_error);
         }
     }
 

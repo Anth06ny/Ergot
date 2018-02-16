@@ -46,7 +46,7 @@ public class SharedPreferenceUtils {
     public static String getUniqueToken() {
 
         String uniqueToken = getSharedPreference().getString(TOKEN_KEY, "");
-        if (StringUtils.isNotBlank(uniqueToken)) {
+        if (StringUtils.isBlank(uniqueToken)) {
             uniqueToken = UUID.randomUUID().toString();
             getSharedPreference().edit().putString(TOKEN_KEY, uniqueToken).apply();
         }

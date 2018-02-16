@@ -4,8 +4,6 @@ import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -16,13 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.AccountPicker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,15 +26,14 @@ import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.commander.MotherActivity;
+import ergot.anthony.com.ergot.controler.panier.PanierActivity;
 import ergot.anthony.com.ergot.exception.TechnicalException;
-import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
-import ergot.anthony.com.ergot.utils.GlideApp;
 import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
 
 public class HstoriqueCommandActivity extends MotherActivity implements View.OnClickListener, CommandeAdapter.OnComandeClicListener {
@@ -49,13 +44,14 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
 
     //Composant graphique
     private TextView tv_email, tv_error;
-    private CircleImageView profile_image;
     private Button btIdentifier;
     private RecyclerView rv;
     private Button bt_refresh;
     private View ll_error;
     private TextView tv_wait;
+    private TextView tv_info, tv_no_commande;
     private View ll_connected;
+    private ImageView iv_logout;
 
     //View
     private CommandeAdapter commandeAdapter;
@@ -67,7 +63,7 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
     private String tokenEmail;
 
     //Outils
-    private WSAsyncTask wsAsyncTask;
+    private AsyncTask<Void, Void, Void> asyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +71,14 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
         setContentView(R.layout.activity_hstorique_command);
 
         tv_email = findViewById(R.id.tv_email);
-        profile_image = findViewById(R.id.profile_image);
         btIdentifier = findViewById(R.id.btIdentifier);
         tv_error = findViewById(R.id.tv_error);
         bt_refresh = findViewById(R.id.bt_refresh);
         ll_error = findViewById(R.id.ll_error);
         tv_wait = findViewById(R.id.tv_wait);
+        tv_info = findViewById(R.id.tv_info);
+        iv_logout = findViewById(R.id.iv_logout);
+        tv_no_commande = findViewById(R.id.tv_no_commande);
         ll_connected = findViewById(R.id.ll_connected);
         rv = findViewById(R.id.rv);
 
@@ -89,19 +87,23 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
         rv.setItemAnimator(new DefaultItemAnimator());
         bt_refresh.setOnClickListener(this);
         btIdentifier.setOnClickListener(this);
+        iv_logout.setOnClickListener(this);
 
         ll_error.setVisibility(View.GONE);
 
-
+        commandeBeanArrayList = new ArrayList<>();
+        commandeAdapter = new CommandeAdapter(commandeBeanArrayList, this);
+        rv.setAdapter(commandeAdapter);
 
         tokenEmail = SharedPreferenceUtils.getSaveEmail();
 
-        //Lance l'ASyncTask qui ensuite rafraichira l'écran
+        //Est ce qu'on a rejoint l'écran avec une liste de commande à afficher ?
         //On regarde si on a une liste de commande
-        if (getIntent() != null) {
-            String json = getIntent().getStringExtra(LIST_COMMANDE_EXTRA);
-            commandeBeanArrayList = new Gson().fromJson(json, new TypeToken<ArrayList<CategoryBean>>() {
-            }.getType());
+        String json = getIntent().getStringExtra(LIST_COMMANDE_EXTRA);
+        if (StringUtils.isNotBlank(json)) {
+
+            commandeBeanArrayList.addAll((Collection<? extends CommandeBean>) new Gson().fromJson(json, new TypeToken<ArrayList<CommandeBean>>() {
+            }.getType()));
 
             //On indique que la commande à été ajouté
             Snackbar snackbar = Snackbar.make(findViewById(R.id.root), R.string.order_sucess, Snackbar.LENGTH_LONG);
@@ -110,32 +112,8 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
 
             refreshScreen();
         }
-        if (commandeBeanArrayList == null) {
-            commandeBeanArrayList = new ArrayList<>();
-        }
 
-        commandeAdapter = new CommandeAdapter(commandeBeanArrayList, this);
-        rv.setAdapter(commandeAdapter);
-
-
-        //Récupérer la photo
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null && acct.getPhotoUrl() != null) {
-
-            int color = getResources().getColor(R.color.colorPrimary);
-            Drawable waitIcon = getResources().getDrawable(R.drawable.ic_hourglass_empty_black_48dp);
-            waitIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-
-            color = getResources().getColor(R.color.error_color);
-            Drawable error_icon = getResources().getDrawable(R.drawable.ic_highlight_off_black_48dp);
-            error_icon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            GlideApp.with(this).load(acct.getPhotoUrl()).placeholder(waitIcon).error(error_icon).fitCenter().diskCacheStrategy(DiskCacheStrategy.RESOURCE).into
-                    (profile_image);
-        }
-        else {
-            profile_image.setVisibility(View.INVISIBLE);
-        }
-
+        //Si on n'a pas recu de liste de commande en arrivant sur l'écran on lance la requete de recup commande
         if (commandeBeanArrayList.isEmpty()) {
             refreshData();
         }
@@ -146,7 +124,7 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
         if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             tokenEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
             SharedPreferenceUtils.saveEmail(tokenEmail);
-            refreshScreen();
+            refreshData();
         }
     }
 
@@ -159,7 +137,7 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == MENU_REFRESH) {
-
+            refreshData();
         }
 
         return super.onOptionsItemSelected(item);
@@ -180,6 +158,15 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
                 Toast.makeText(this, R.string.identification_impossible, Toast.LENGTH_SHORT).show();
             }
         }
+        else if (v == bt_refresh) {
+            refreshData();
+        }
+        else if (v == iv_logout) {
+            //On supprime l'email sauvegarder
+            tokenEmail = null;
+            SharedPreferenceUtils.saveEmail("");
+            refreshData();
+        }
     }
 
       /* ---------------------------------
@@ -188,13 +175,29 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
 
     @Override
     public void showDetailCommand(CommandeBean commandeBean) {
-
+        Intent intent = new Intent(this, PanierActivity.class);
+        intent.putExtra(PanierActivity.COMMANDE_EXTRA, commandeBean);
+        startActivity(intent);
     }
 
     @Override
     public void cancelCommand(CommandeBean commandeBean) {
 
+        if (asyncTask == null || asyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            commandeBean.setEmail(tokenEmail);
+            asyncTask = new WSCancelCommande(commandeBean);
+            asyncTask.execute();
+        }
+        else {
+            Toast.makeText(this, R.string.reqEnCours, Toast.LENGTH_SHORT).show();
+        }
     }
+
+
+     /* ---------------------------------
+    // public
+    // -------------------------------- */
+
 
     /* ---------------------------------
     // private
@@ -202,25 +205,38 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
 
     private void refreshScreen() {
 
+        //Identification
         if (StringUtils.isBlank(tokenEmail)) {
             btIdentifier.setVisibility(View.VISIBLE);
             ll_connected.setVisibility(View.GONE);
+            tv_info.setVisibility(View.VISIBLE);
         }
         else {
             btIdentifier.setVisibility(View.GONE);
             ll_connected.setVisibility(View.VISIBLE);
             tv_email.setText(tokenEmail);
+            tv_info.setVisibility(View.GONE);
         }
 
+        //Message d'erreur
         tv_wait.setVisibility(View.GONE);
         ll_error.setVisibility(View.GONE);
-
         if (showWaitingMessage) {
             tv_wait.setVisibility(View.VISIBLE);
         }
         else if (erreur != null) {
             ll_error.setVisibility(View.VISIBLE);
             tv_error.setText(erreur.getUserMessage());
+        }
+
+        //RecyclerView ou texte , liste vide
+        if (commandeBeanArrayList.isEmpty()) {
+            tv_no_commande.setVisibility(View.VISIBLE);
+            rv.setVisibility(View.GONE);
+        }
+        else {
+            tv_no_commande.setVisibility(View.GONE);
+            rv.setVisibility(View.VISIBLE);
         }
     }
 
@@ -229,17 +245,22 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
      */
     private void refreshData() {
 
-        if (wsAsyncTask == null || wsAsyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            wsAsyncTask = new WSAsyncTask();
-            wsAsyncTask.execute();
+        if (asyncTask == null || asyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            asyncTask = new WSGetHistory();
+            asyncTask.execute();
+        }
+        else {
+            Toast.makeText(this, R.string.reqEnCours, Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
      /* ---------------------------------
     //      AsyncTask
     // -------------------------------- */
 
-    public class WSAsyncTask extends AsyncTask<Void, Void, Void> {
+    public class WSGetHistory extends AsyncTask<Void, Void, Void> {
 
         private ArrayList<CommandeBean> result = null;
         private TechnicalException technicalException;
@@ -276,6 +297,54 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
                 commandeBeanArrayList.clear();
                 commandeBeanArrayList.addAll(result);
                 commandeAdapter.notifyDataSetChanged();
+            }
+
+            refreshScreen();
+        }
+    }
+
+    /**
+     * Envoie la demande d'annulation d'une commande
+     */
+    public class WSCancelCommande extends AsyncTask<Void, Void, Void> {
+
+        private TechnicalException technicalException;
+        private CommandeBean commandeBean;
+
+        public WSCancelCommande(CommandeBean commandeBean) {
+            this.commandeBean = commandeBean;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                WsUtils.cancelCommande(commandeBean);
+            }
+            catch (TechnicalException e) {
+                this.technicalException = e;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showWaitingMessage = true;
+            refreshScreen();
+        }
+
+        @Override
+        protected void onPostExecute(Void le) {
+            showWaitingMessage = false;
+
+            if (technicalException != null) {
+                erreur = technicalException;
+                erreur.printStackTrace();
+            }
+            else {
+                erreur = null;
+                commandeAdapter.notifyItemChanged(commandeBeanArrayList.indexOf(commandeBean));
             }
 
             refreshScreen();

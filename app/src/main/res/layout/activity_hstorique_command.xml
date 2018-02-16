@@ -58,13 +58,12 @@
         android:layout_marginTop="@dimen/margin_10"
         android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/email_title"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="@dimen/margin_40"
-            android:layout_height="@dimen/margin_40"
-            android:src="@drawable/burger"
-            />
 
         <TextView
             android:id="@+id/tv_email"
@@ -79,7 +78,7 @@
             android:textStyle="bold"/>
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/iv_logout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/ic_logout"/>
@@ -96,6 +95,7 @@
         android:textColor="@android:color/white"/>
 
     <TextView
+        android:id="@+id/tv_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
@@ -116,7 +116,18 @@
         android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_10"
         android:layout_weight="1"
+        android:visibility="visible"
         tools:listitem="@layout/row_history"/>
+
+    <TextView
+        android:id="@+id/tv_no_commande"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/no_commande"
+        android:textSize="@dimen/font_25"
+        android:textStyle="bold"/>
 
     <View
         android:layout_width="match_parent"

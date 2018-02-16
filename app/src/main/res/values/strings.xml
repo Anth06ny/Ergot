@@ -23,14 +23,17 @@
 
     <!-- PanierActivity -->
     <string name="order_sucess">Votre commande a été envoyée</string>
+    <string name="panier_title">Ma commande</string>
 
     <!-- History -->
     <string name="time_expected">Heure estimée : </string>
-    <string name="status">Status</string>
+    <string name="statut">Status</string>
     <string name="bt_detail">Détail</string>
     <string name="bt_masque">Masquer</string>
     <string name="bt_annuler_com">Annuler la\ncommande</string>
     <string name="dialog_supp_commande">Etes vous sur de vouloir annuler la commande ?</string>
+    <string name="history_title">Mes Commandes</string>
+    <string name="no_commande">Aucune commande disponible</string>
 
     <!-- Status commande-->
     <string name="status_attente">Envoyé</string>
@@ -47,5 +50,7 @@
     <string name="identify">S\'identifier</string>
     <string name="commande_no_identify">Les commandes non identifiées seront préparées à votre arrivée</string>
     <string name="identification_impossible">Identification impossible avec votre appareil</string>
+    <string name="reqEnCours">Une  instruction est déjà en attente</string>
+    <string name="email_title">email :</string>
 
 </resources>

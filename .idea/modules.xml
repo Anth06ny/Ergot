@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Ergot.iml" filepath="$PROJECT_DIR$/Ergot.iml" />
-      <module fileurl="file://C:\workspace_studio\Ergot\Ergot.iml" filepath="C:\workspace_studio\Ergot\Ergot.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\workspace_studio\Ergot\app\app.iml" filepath="C:\workspace_studio\Ergot\app\app.iml" />
     </modules>
   </component>
 </project>

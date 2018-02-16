@@ -1,14 +1,13 @@
 package ergot.anthony.com.ergot.controler.historique;
 
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.os.Build;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -32,7 +31,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
 
     //Gestion de la date
     private SimpleDateFormat formatCompl = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    private SimpleDateFormat formatheure = new SimpleDateFormat("HH`hmm");
+    private SimpleDateFormat formatheure = new SimpleDateFormat("HH'h'mm");
 
     public CommandeAdapter(List<CommandeBean> commandeBeanList, OnComandeClicListener onComandeClicListener) {
         this.commandeBeanList = commandeBeanList;
@@ -51,54 +50,62 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         final CommandeBean commandeBean = commandeBeanList.get(position);
 
         int selectColor = MyApplication.getMyApplication().getResources().getColor(R.color.load_shadow_color);
+        int selectedTextSize = holder.bt_cancel.getResources().getDimensionPixelSize(R.dimen.font_14);
+        int unSelectedTextSize = holder.bt_cancel.getResources().getDimensionPixelSize(R.dimen.font_12);
 
         holder.tv_date.setText(formatCompl.format(commandeBean.getDateCommande()));
         holder.tv_price.setText(Utils.longToStringPrice(commandeBean.getTotalPrice()));
-        holder.tv_time_expected.setText(formatheure.format(commandeBean.getDatePrevision()));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            holder.bt_accept.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-            holder.bt_accept.setTextColor(Color.BLACK);
-            holder.bt_send.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-            holder.bt_send.setTextColor(Color.BLACK);
-            holder.bt_ready.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-            holder.bt_ready.setTextColor(Color.BLACK);
-            holder.bt_delivery.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-            holder.bt_delivery.setTextColor(Color.BLACK);
-            holder.bt_cancel.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-            holder.bt_cancel.setTextColor(Color.BLACK);
+        if (commandeBean.getDatePrevision() > 0) {
+            holder.tv_time_expected.setText(formatheure.format(commandeBean.getDatePrevision()));
         }
+        else {
+            holder.tv_time_expected.setText(" - ");
+        }
+        holder.bt_cancel_order.setVisibility(View.VISIBLE);
 
-        switch (commandeBean.getStatus()) {
+        holder.bt_accept.setTextColor(Color.BLACK);
+        holder.bt_accept.setTypeface(null, Typeface.ITALIC);
+        holder.bt_accept.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
+        holder.bt_send.setTextColor(Color.BLACK);
+        holder.bt_send.setTypeface(null, Typeface.ITALIC);
+        holder.bt_send.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
+        holder.bt_ready.setTextColor(Color.BLACK);
+        holder.bt_ready.setTypeface(null, Typeface.ITALIC);
+        holder.bt_ready.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
+        holder.bt_delivery.setTextColor(Color.BLACK);
+        holder.bt_delivery.setTypeface(null, Typeface.ITALIC);
+        holder.bt_delivery.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
+        holder.bt_cancel.setTextColor(Color.BLACK);
+        holder.bt_cancel.setTypeface(null, Typeface.ITALIC);
+        holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
+
+        switch (commandeBean.getStatut()) {
             case Status.STATUS_SEND:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.bt_send.setBackgroundTintList(ColorStateList.valueOf(selectColor));
-                }
-                holder.bt_send.setTextColor(Color.WHITE);
+                holder.bt_send.setTypeface(null, Typeface.BOLD);
+                holder.bt_send.setTextColor(selectColor);
+                holder.bt_send.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
             case Status.STATUS_SENDACCEPTED:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.bt_send.setBackgroundTintList(ColorStateList.valueOf(selectColor));
-                }
-                holder.bt_send.setTextColor(Color.WHITE);
+                holder.bt_accept.setTypeface(null, Typeface.BOLD);
+                holder.bt_accept.setTextColor(selectColor);
+                holder.bt_accept.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
             case Status.STATUS_READY:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.bt_send.setBackgroundTintList(ColorStateList.valueOf(selectColor));
-                }
-                holder.bt_send.setTextColor(Color.WHITE);
+                holder.bt_ready.setTypeface(null, Typeface.BOLD);
+                holder.bt_ready.setTextColor(Color.GREEN);
+                holder.bt_ready.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
             case Status.STATUS_DELIVERY:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.bt_send.setBackgroundTintList(ColorStateList.valueOf(selectColor));
-                }
-                holder.bt_send.setTextColor(Color.WHITE);
+                holder.bt_delivery.setTypeface(null, Typeface.BOLD);
+                holder.bt_delivery.setTextColor(Color.GREEN);
+                holder.bt_delivery.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
+                holder.bt_cancel_order.setVisibility(View.GONE);//On affiche pas le bouton si la commande est déja annulé ou livré
                 break;
             case Status.STATUS_CANCEL:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.bt_send.setBackgroundTintList(ColorStateList.valueOf(selectColor));
-                }
-                holder.bt_send.setTextColor(Color.WHITE);
+                holder.bt_cancel.setTypeface(null, Typeface.BOLD);
+                holder.bt_cancel.setTextColor(Color.RED);
+                holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
+                holder.bt_cancel_order.setVisibility(View.GONE);//On affiche pas le bouton si la commande est déja annulé ou livré
                 break;
         }
 
@@ -130,7 +137,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return 0;
+        return commandeBeanList.size();
     }
 
     //------------------
@@ -140,11 +147,11 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         public TextView tv_date;
         public TextView tv_time_expected;
         public TextView tv_price;
-        public Button bt_send;
-        public Button bt_accept;
-        public Button bt_ready;
-        public Button bt_delivery;
-        public Button bt_cancel;
+        public TextView bt_send;
+        public TextView bt_accept;
+        public TextView bt_ready;
+        public TextView bt_delivery;
+        public TextView bt_cancel;
         public TextView bt_show_detail;
         public TextView bt_cancel_order;
         private View root;

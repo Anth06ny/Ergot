@@ -1,43 +1,66 @@
 package ergot.anthony.com.ergot.model.bean;
 
-import android.util.Pair;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import ergot.anthony.com.ergot.MyApplication;
+import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
 
 /**
  * Created by Anthony on 25/10/2017.
  */
 
-public class CommandeBean {
+public class CommandeBean implements Serializable {
 
     //Liste de produit ainsi que son ArrayList de supplement. En transient pour en pas l'envoyer
-    private ArrayList<Pair<ProductBean, SuppBean>> productList;
+    private ArrayList<SelectProductBean> compositionCommande;
     private long dateCommande;
     private long datePrevision;
-    private int status;
+    private int statut;
     private String remarque;
     private String telephone;
     private String email;
+    private String deviceToken;
+    private long id;
 
     public CommandeBean() {
-        productList = new ArrayList<>();
+        compositionCommande = new ArrayList<>();
+    }
+
+
+
+    /* ---------------------------------
+    // GETTER /SETTER
+    // -------------------------------- */
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getTotalPrice() {
         int totalPrice = 0;
-        if (productList != null) {
-            for (Pair<ProductBean, SuppBean> selection : MyApplication.getCommandeBean().getProductList()) {
-                ProductBean productBean = selection.first;
+        if (compositionCommande != null) {
+            for (SelectProductBean selection : compositionCommande) {
+                ProductBean productBean = selection.getProduct();
                 totalPrice += productBean.getPrice();
                 //on regarde s'il y a des suppléments dans les produits séléctionnés
-                if (selection.second != null) {
-                    totalPrice += selection.second.getNewPrice();
+                if (selection.getSupplement() != null) {
+                    totalPrice += selection.getSupplement().getNewPrice();
                 }
             }
         }
         return totalPrice;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 
     public long getDatePrevision() {
@@ -48,12 +71,12 @@ public class CommandeBean {
         this.datePrevision = datePrevision;
     }
 
-    public int getStatus() {
-        return status;
+    public int getStatut() {
+        return statut;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatut(int statut) {
+        this.statut = statut;
     }
 
     public String getTelephone() {
@@ -88,11 +111,11 @@ public class CommandeBean {
         this.remarque = remarque;
     }
 
-    public ArrayList<Pair<ProductBean, SuppBean>> getProductList() {
-        return productList;
+    public ArrayList<SelectProductBean> getCompositionCommande() {
+        return compositionCommande;
     }
 
-    public void setProductList(ArrayList<Pair<ProductBean, SuppBean>> productList) {
-        this.productList = productList;
+    public void setCompositionCommande(ArrayList<SelectProductBean> compositionCommande) {
+        this.compositionCommande = compositionCommande;
     }
 }
