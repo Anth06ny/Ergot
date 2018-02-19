@@ -21,6 +21,7 @@ public class MyApplication extends Application {
     private static CommandeBean commandeBean;
     private static MyApplication myApplication;
     private static boolean debugMode;
+    private static boolean adminMode;
 
     @Override
     public void onCreate() {
@@ -30,6 +31,7 @@ public class MyApplication extends Application {
         commandeBean = new CommandeBean();
 
         debugMode = getResources().getBoolean(R.bool.debug);
+        adminMode = getResources().getBoolean(R.bool.adminMode);
     }
 
     public static void newCommande() {

@@ -153,7 +153,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/status_Accepté"
+                android:text="@string/status_Accepte"
                 android:textAllCaps="false"
                 android:textSize="12sp"
                 android:textStyle="italic"/>

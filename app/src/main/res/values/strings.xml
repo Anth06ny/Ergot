@@ -42,7 +42,7 @@
     <!-- Status commande-->
     <string name="status_attente">Envoyé</string>
     <string name="status_aattente_admin">Attente</string>
-    <string name="status_Accepté">Accepté</string>
+    <string name="status_Accepte">Accepté</string>
     <string name="status_ready">Prêt</string>
     <string name="status_livre">Livré</string>
     <string name="status_cancel">Annulé</string>
