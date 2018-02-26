@@ -13,9 +13,9 @@ public class MyApplication extends Application {
     /***
      * AFaire
      *
-     * -Continuer l'historique coté admin. L'xml est fait row_history_admin. Modifier l'adapter pour prendre en comtpe si on est coté admin
      *
-     * -
+     * - Tester  la gestion commande coté admin.
+     * - Tester l'annulation commande coté utilisateur
      */
 
     private static CommandeBean commandeBean;
@@ -32,6 +32,10 @@ public class MyApplication extends Application {
 
         debugMode = getResources().getBoolean(R.bool.debug);
         adminMode = getResources().getBoolean(R.bool.adminMode);
+    }
+
+    public static boolean isAdminMode() {
+        return adminMode;
     }
 
     public static void newCommande() {

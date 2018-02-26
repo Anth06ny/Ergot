@@ -155,6 +155,7 @@
                 android:layout_weight="1"
                 android:text="@string/status_Accepte"
                 android:textAllCaps="false"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="italic"/>
 
@@ -165,6 +166,7 @@
                 android:layout_weight="1"
                 android:text="@string/status_ready"
                 android:textAllCaps="false"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="italic"/>
 
@@ -175,6 +177,7 @@
                 android:layout_weight="1"
                 android:text="@string/status_livre"
                 android:textAllCaps="false"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="italic"/>
 
@@ -184,6 +187,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/status_cancel"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="italic"/>
         </LinearLayout>

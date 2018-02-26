@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ergot.anthony.com.ergot.controler.admin.GestionCommandeActivity">
+
+    <TextView
+        android:id="@+id/tv_wait"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/load_shadow_color"
+        android:gravity="center"
+        android:padding="@dimen/margin_10"
+        android:text="@string/ws_load_message"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/font_16"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:id="@+id/ll_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/error_shadow_color"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_10">
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/generic_error"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_14"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/bt_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bt_actualiser"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_weight="1"
+        android:visibility="visible"
+        tools:listitem="@layout/row_history"/>
+
+    <TextView
+        android:id="@+id/tv_no_commande"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/no_commande"
+        android:textSize="@dimen/font_25"
+        android:textStyle="bold"/>
+
+</LinearLayout>

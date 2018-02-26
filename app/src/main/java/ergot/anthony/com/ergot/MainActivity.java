@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
+import ergot.anthony.com.ergot.controler.admin.GestionCommandeActivity;
 import ergot.anthony.com.ergot.controler.commander.CommanderActivity;
 import ergot.anthony.com.ergot.controler.historique.HstoriqueCommandActivity;
 
@@ -42,7 +43,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(browserIntent);
         }
         else if (bthisto == v) {
-            startActivity(new Intent(this, HstoriqueCommandActivity.class));
+            if (MyApplication.isAdminMode()) {
+                startActivity(new Intent(this, GestionCommandeActivity.class));
+            }
+            else {
+                startActivity(new Intent(this, HstoriqueCommandActivity.class));
+            }
         }
     }
 }

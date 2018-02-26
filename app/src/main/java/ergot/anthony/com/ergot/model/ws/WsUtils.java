@@ -36,17 +36,17 @@ import okhttp3.Response;
 
 public class WsUtils {
 
-    private static final String PING_GOOGLE = "http://www.google.fr";
+    static final String PING_GOOGLE = "http://www.google.fr";
 
-    private static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);// "http://192.168.20.10:8000/";
+    static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);// "http://192.168.20.10:8000/";
     private static final String URL_GET_CATALOGUE = URL_SERVEUR + "getCatalogue";
     private static final String URL_SEND_COMMAND = URL_SERVEUR + "setCommande";
     private static final String URL_GET_HISTORY = URL_SERVEUR + "getHistorique";
     private static final String URL_CANCEL_COMMAND = URL_SERVEUR + "cancelCommande";
 
-    private static final Gson gson = new Gson();
+    static final Gson gson = new Gson();
 
-    public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     /* ---------------------------------
     // GET
@@ -263,11 +263,14 @@ public class WsUtils {
         }
     }
 
+
+
+
     /* ---------------------------------
     // private
     // -------------------------------- */
 
-    private static TechnicalException testInternetConnexionOnGoogle(IOException e) {
+    static TechnicalException testInternetConnexionOnGoogle(IOException e) {
         //On test si google répond pour différencier si c'est internet ou le serveur le probleme
         Request request = request = new Request.Builder().url(PING_GOOGLE).build();
         try {
@@ -278,11 +281,11 @@ public class WsUtils {
         }
         catch (IOException e1) {
             //Ca crash encore -> problème d'internet
-            return new TechnicalException("Le serveur ne répond pas.", R.string.bad_internet_connexion_error);
+            return new TechnicalException("Le serveur ne répond pas.", e1, R.string.bad_internet_connexion_error);
         }
     }
 
-    private static OkHttpClient getOkHttpClient() throws TechnicalException {
+    static OkHttpClient getOkHttpClient() throws TechnicalException {
         //On test la connexion à un réseau
         if (!isNetworkAvailable()) {
             throw new TechnicalException("Non connecté à un réseau.", R.string.no_internet_error);

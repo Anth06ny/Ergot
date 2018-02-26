@@ -56,7 +56,8 @@
     <string name="identify">S\'identifier</string>
     <string name="commande_no_identify">Les commandes non identifiées seront préparées à votre arrivée</string>
     <string name="identification_impossible">Identification impossible avec votre appareil</string>
-    <string name="reqEnCours">Une  instruction est déjà en attente</string>
+    <string name="reqEnCours">Une instruction est déjà en attente</string>
     <string name="email_title">email :</string>
+    <string name="comande_ready_in">La commande sera prête dans environ :</string>
 
 </resources>
