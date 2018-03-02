@@ -156,6 +156,10 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         }
         else if (v == bt_commande) {
 
+            if(MyApplication.getCommandeBean().getCompositionCommande().isEmpty()) {
+                Toast.makeText(this, R.string.no_produit_to_send, Toast.LENGTH_SHORT).show();
+            }
+
             MyApplication.getCommandeBean().setEmail(tvEmail.getText().toString());
             MyApplication.getCommandeBean().setTelephone(etPhone.getText().toString());
             MyApplication.getCommandeBean().setRemarque(et_rem.getText().toString());

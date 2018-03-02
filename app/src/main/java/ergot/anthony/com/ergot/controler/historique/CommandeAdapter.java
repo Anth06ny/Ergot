@@ -3,11 +3,15 @@ package ergot.anthony.com.ergot.controler.historique;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -78,26 +82,25 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         holder.tv_date.setText(formatCompl.format(commandeBean.getDateCommande()));
         holder.tv_price.setText(Utils.longToStringPrice(commandeBean.getTotalPrice()));
 
-        holder.bt_cancel_order.setVisibility(View.VISIBLE);
-
         //Par defaut bouton
-        holder.bt_accept.setTextColor(Color.BLACK);
+
         holder.bt_accept.setTypeface(null, Typeface.ITALIC);
         holder.bt_accept.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
         if (holder.bt_send != null) {
             holder.bt_send.setTextColor(Color.BLACK);
             holder.bt_send.setTypeface(null, Typeface.ITALIC);
+            holder.bt_send.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
         }
-        holder.bt_send.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
-        holder.bt_ready.setTextColor(Color.BLACK);
+
         holder.bt_ready.setTypeface(null, Typeface.ITALIC);
         holder.bt_ready.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
-        holder.bt_delivery.setTextColor(Color.BLACK);
+
         holder.bt_delivery.setTypeface(null, Typeface.ITALIC);
         holder.bt_delivery.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
-        holder.bt_cancel.setTextColor(Color.BLACK);
+
         holder.bt_cancel.setTypeface(null, Typeface.ITALIC);
         holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, unSelectedTextSize);
+
         holder.ll_expected_time.setVisibility(View.VISIBLE);
 
         //defaut datePrevision
@@ -146,30 +149,38 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         //Téléphone
         StringUtils.defaultIfBlank(commandeBean.getTelephone(), "-");
 
+        changeBtBackGroundTint((Button) holder.bt_accept, R.color.colorPrimaryDark);
+        changeBtBackGroundTint((Button) holder.bt_ready, R.color.colorPrimaryDark);
+        changeBtBackGroundTint((Button) holder.bt_delivery, R.color.colorPrimaryDark);
+        changeBtBackGroundTint((Button) holder.bt_cancel, R.color.colorPrimaryDark);
+
         //Pour le moment invisible tout le temps
         holder.iv_warning.setVisibility(View.INVISIBLE);
+        holder.iv_new.setVisibility(View.INVISIBLE);
 
         switch (commandeBean.getStatut()) {
             case Status.STATUS_SEND:
-
+                holder.iv_new.setVisibility(View.VISIBLE);
                 break;
             case Status.STATUS_SENDACCEPTED:
                 holder.bt_accept.setTypeface(null, Typeface.BOLD);
-                holder.bt_accept.setTextColor(selectColor);
+                changeBtBackGroundTint((Button) holder.bt_accept, R.color.load_shadow_color);
                 holder.bt_accept.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
             case Status.STATUS_READY:
+                changeBtBackGroundTint((Button) holder.bt_ready, R.color.green);
                 holder.bt_ready.setTypeface(null, Typeface.BOLD);
-                holder.bt_ready.setTextColor(Color.GREEN);
                 holder.bt_ready.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 holder.ll_expected_time.setVisibility(View.GONE);
                 break;
             case Status.STATUS_DELIVERY:
+                changeBtBackGroundTint((Button) holder.bt_delivery, R.color.green);
                 holder.bt_delivery.setTypeface(null, Typeface.BOLD);
                 holder.bt_delivery.setTextColor(Color.GREEN);
                 holder.bt_delivery.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
             case Status.STATUS_CANCEL:
+                changeBtBackGroundTint((Button) holder.bt_cancel, R.color.error_color);
                 holder.bt_cancel.setTypeface(null, Typeface.BOLD);
                 holder.bt_cancel.setTextColor(Color.RED);
                 holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
@@ -190,7 +201,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
             }
         });
 
-        holder.bt_send.setOnClickListener(new View.OnClickListener() {
+        holder.bt_delivery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onComandeClicListenerAdmin.onSendCommandClick(commandeBean);
@@ -206,6 +217,14 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
     }
 
     private void onBindViewHolderClient(final ViewHolder holder, final CommandeBean commandeBean) {
+
+        holder.bt_cancel_order.setVisibility(View.VISIBLE);
+
+        holder.bt_ready.setTextColor(Color.BLACK);
+        holder.bt_delivery.setTextColor(Color.BLACK);
+        holder.bt_cancel.setTextColor(Color.BLACK);
+        holder.bt_accept.setTextColor(Color.BLACK);
+
         switch (commandeBean.getStatut()) {
             case Status.STATUS_SEND:
                 holder.bt_send.setTypeface(null, Typeface.BOLD);
@@ -255,6 +274,15 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         });
     }
 
+    private static void changeBtBackGroundTint(Button bt, @ColorRes int colorId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            bt.setBackgroundTintList(ContextCompat.getColorStateList(bt.getContext(), colorId));
+        }
+        else {
+            bt.setBackgroundResource(colorId);
+        }
+    }
+
     /* ---------------------------------
     //      View Holder
     // -------------------------------- */
@@ -279,6 +307,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         public TextView tv_client;
         public TextView tv_telephone;
         public ImageView iv_warning;
+        public ImageView iv_new;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -296,6 +325,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
             tv_client = itemView.findViewById(R.id.tv_client);
             tv_telephone = itemView.findViewById(R.id.tv_telephone);
             iv_warning = itemView.findViewById(R.id.iv_warning);
+            iv_new = itemView.findViewById(R.id.iv_new);
 
             root = itemView.findViewById(R.id.root);
         }

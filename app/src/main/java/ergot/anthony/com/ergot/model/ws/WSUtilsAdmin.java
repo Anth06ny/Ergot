@@ -27,6 +27,8 @@ import static ergot.anthony.com.ergot.model.ws.WsUtils.testInternetConnexionOnGo
 
 public class WSUtilsAdmin {
 
+    public static final String ADMIN_PASS = "adminPass";
+
     //ADMIN
     private static final String URL_UPDATE_COMMAND = URL_SERVEUR + "updateCommande";
 
@@ -47,7 +49,7 @@ public class WSUtilsAdmin {
         Logger.logJson("TAG_JSON_ENVOYER", json);
         //Création de la requete
 
-        Request request = new Request.Builder().url(URL_UPDATE_COMMAND).post(RequestBody.create(JSON, json)).build();
+        Request request = new Request.Builder().url(URL_UPDATE_COMMAND).header(ADMIN_PASS, MyApplication.getMyApplication().getResources().getString(R.string.adminPass)).post(RequestBody.create(JSON, json)).build();
 
         //Execution de la requête
         Response response = null;

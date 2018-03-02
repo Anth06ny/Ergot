@@ -49,7 +49,10 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyAppTheme">
         </activity>
-        <activity android:name=".controler.admin.GestionCommandeActivity">
+        <activity
+            android:name=".controler.admin.GestionCommandeActivity"
+            android:label="@string/gestion_commande_title"
+            android:theme="@style/MyAppTheme">
         </activity>
     </application>
 

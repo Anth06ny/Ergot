@@ -30,6 +30,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static ergot.anthony.com.ergot.model.ws.WSUtilsAdmin.ADMIN_PASS;
+
 /**
  * Created by Anthony on 04/05/2017.
  */
@@ -63,7 +65,8 @@ public class WsUtils {
         Log.w("TAG_URL", URL_GET_CATALOGUE);
 
         //Création de la requete
-        Request request = new Request.Builder().url(URL_GET_CATALOGUE).build();
+        Request request = new Request.Builder().url(URL_GET_CATALOGUE)
+                .build();
 
         //Execution de la requête
         Response response = null;
@@ -121,7 +124,7 @@ public class WsUtils {
         Log.w("TAG_URL", URL_GET_HISTORY);
         Logger.logJson("TAG_JSON_ENVOYER", json);
         //Création de la requete
-        Request request = new Request.Builder().url(URL_GET_HISTORY).post(RequestBody.create(JSON, json)).build();
+        Request request = new Request.Builder().url(URL_GET_HISTORY).header(ADMIN_PASS, MyApplication.getMyApplication().getResources().getString(R.string.adminPass)).post(RequestBody.create(JSON, json)).build();
 
         //Execution de la requête
         Response response = null;

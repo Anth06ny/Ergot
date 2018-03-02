@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -26,8 +27,9 @@ import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.Status;
 import ergot.anthony.com.ergot.model.ws.WSUtilsAdmin;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
+import ergot.anthony.com.ergot.utils.Utils;
 
-public class GestionCommandeActivity extends AppCompatActivity implements CommandeAdapter.OnComandeClicListenerAdmin {
+public class GestionCommandeActivity extends AppCompatActivity implements CommandeAdapter.OnComandeClicListenerAdmin, View.OnClickListener {
 
     private static final int MENU_REFRESH = 2;
     private static final int REFRESH_TIME = 30000;
@@ -38,6 +40,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
     private View ll_error;
     private TextView tv_wait;
     private TextView tv_no_commande;
+    private Button bt_refresh;
 
     //View
     private CommandeAdapter commandeAdapter;
@@ -46,6 +49,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
 
     //Data
     private ArrayList<CommandeBean> commandeBeanArrayList;
+    private boolean firstCall; // Permet d'identifier le1er chargement ,pour ne mettre le son que pour les ajout ulterieur
 
     //Outils
     private AsyncTask<Void, Void, Void> asyncTask, updateCommandAT;
@@ -59,8 +63,13 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
         tv_error = findViewById(R.id.tv_error);
         ll_error = findViewById(R.id.ll_error);
         tv_wait = findViewById(R.id.tv_wait);
+        bt_refresh = findViewById(R.id.bt_refresh);
         tv_no_commande = findViewById(R.id.tv_no_commande);
         rv = findViewById(R.id.rv);
+
+        bt_refresh.setOnClickListener(this);
+
+        firstCall = true;
 
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -68,7 +77,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
 
         ll_error.setVisibility(View.GONE);
 
-        handler = tv_error.getHandler();
+        handler = new Handler();
 
         commandeBeanArrayList = new ArrayList<>();
         commandeAdapter = new CommandeAdapter(commandeBeanArrayList, this);
@@ -102,6 +111,17 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
         super.onStop();
         //En quittant l'écran on retire la relance de rafraichissement
         handler.removeCallbacksAndMessages(null);
+    }
+
+    /* ---------------------------------
+    // Click
+    // -------------------------------- */
+
+    @Override
+    public void onClick(View v) {
+        if (v == bt_refresh) {
+            refreshData();
+        }
     }
 
     /* ---------------------------------
@@ -205,6 +225,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
      * @param result
      */
     private void updateList(ArrayList<CommandeBean> result) {
+
         //On a une liste vide
         if (commandeBeanArrayList.isEmpty()) {
             commandeBeanArrayList.addAll(result);
@@ -232,12 +253,19 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
                 commandeAdapter.notifyItemInserted(iAppli);
                 iAppli++;
                 iServeur++;
+                //ON indique qu'une commande est arrivée
+                if (!firstCall) {
+                    Utils.vibrate();
+                    Utils.sound();
+                }
             }
             //Date de la comande du serveur inferieur, on continue le parcours
             else {
                 iAppli++;
             }
         }
+
+        firstCall = false;
     }
 
       /* ---------------------------------

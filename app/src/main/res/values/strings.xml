@@ -39,6 +39,10 @@
     <string name="client">Client : </string>
     <string name="telephone">Téléphone : </string>
 
+    <!-- Gestion Commande -->
+    <string name="gestion_commande_title">Gestion commandes</string>
+
+
     <!-- Status commande-->
     <string name="status_attente">Envoyé</string>
     <string name="status_aattente_admin">Attente</string>
@@ -59,5 +63,6 @@
     <string name="reqEnCours">Une instruction est déjà en attente</string>
     <string name="email_title">email :</string>
     <string name="comande_ready_in">La commande sera prête dans environ :</string>
+    <string name="no_produit_to_send">Votre commande ne contient aucun produit</string>
 
 </resources>

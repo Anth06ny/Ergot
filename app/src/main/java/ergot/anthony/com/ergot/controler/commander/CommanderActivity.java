@@ -129,6 +129,9 @@ public class CommanderActivity extends MotherActivity implements View.OnClickLis
 
             try {
                 result = WsUtils.getCatalogue();
+                if (result == null) {
+                    throw new TechnicalException("Le catalogue est nulle");
+                }
             }
             catch (TechnicalException e) {
                 this.technicalException = e;

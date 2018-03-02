@@ -28,6 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btYAller = findViewById(R.id.btYAller);
         bthisto = findViewById(R.id.bthisto);
 
+        if (MyApplication.isAdminMode()) {
+            btCommander.setVisibility(View.GONE);
+        }
+
         btYAller.setOnClickListener(this);
         btCommander.setOnClickListener(this);
         bthisto.setOnClickListener(this);

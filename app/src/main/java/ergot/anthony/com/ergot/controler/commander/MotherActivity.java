@@ -1,9 +1,7 @@
 package ergot.anthony.com.ergot.controler.commander;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -121,9 +119,7 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
             refreshFoot();
         }
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 500 milliseconds
-        v.vibrate(500);
+        Utils.vibrate();
     }
 
     /* ---------------------------------

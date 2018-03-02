@@ -161,6 +161,9 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
             SharedPreferenceUtils.saveEmail("");
             refreshData();
         }
+        else {
+            super.onClick(v);
+        }
     }
 
       /* ---------------------------------
