@@ -126,6 +126,13 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        //Si jamais on a modifier la comamnde dans le panier
+        commandeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_REFRESH, 0, "").setIcon(R.mipmap.ic_refresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
@@ -177,18 +184,6 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
         startActivity(intent);
     }
 
-    @Override
-    public void cancelCommandClick(CommandeBean commandeBean) {
-
-        if (asyncTask == null || asyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            commandeBean.setEmail(tokenEmail);
-            asyncTask = new WSCancelCommande(commandeBean);
-            asyncTask.execute();
-        }
-        else {
-            Toast.makeText(this, R.string.reqEnCours, Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
      /* ---------------------------------
@@ -294,54 +289,6 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
                 commandeBeanArrayList.clear();
                 commandeBeanArrayList.addAll(result);
                 commandeAdapter.notifyDataSetChanged();
-            }
-
-            refreshScreen();
-        }
-    }
-
-    /**
-     * Envoie la demande d'annulation d'une commande
-     */
-    public class WSCancelCommande extends AsyncTask<Void, Void, Void> {
-
-        private TechnicalException technicalException;
-        private CommandeBean commandeBean;
-
-        public WSCancelCommande(CommandeBean commandeBean) {
-            this.commandeBean = commandeBean;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                WsUtils.cancelCommande(commandeBean);
-            }
-            catch (TechnicalException e) {
-                this.technicalException = e;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showWaitingMessage = true;
-            refreshScreen();
-        }
-
-        @Override
-        protected void onPostExecute(Void le) {
-            showWaitingMessage = false;
-
-            if (technicalException != null) {
-                erreur = technicalException;
-                erreur.printStackTrace();
-            }
-            else {
-                erreur = null;
-                commandeAdapter.notifyItemChanged(commandeBeanArrayList.indexOf(commandeBean));
             }
 
             refreshScreen();

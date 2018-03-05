@@ -8,6 +8,7 @@
     <string name="bt_envoyer">Envoyer</string>
     <string name="ws_load_message">Chargement en cours…</string>
     <string name="bt_cancel">Annuler</string>
+    <string name="bt_no">non</string>
     <string name="bt_cancel_order">Annuler la commande</string>
 
     <string name="bt_actualiser">Actualiser</string>
@@ -20,17 +21,21 @@
     <string name="email">E-mail</string>
     <string name="phone">Téléphone</string>
     <string name="nophone_or_email">Veuillez saisir un téléphone ou un e-mail</string>
+    <string name="gestion_command">Gestion commandes</string>
 
     <!-- PanierActivity -->
     <string name="order_sucess">Votre commande a été envoyée</string>
     <string name="panier_title">Ma commande</string>
+    <string name="tv_number_permission_exp">Pour pré remplir le numéro de téléphone</string>
+    <string name="bt_annuler_com">Annuler la\ncommande</string>
+    <string name="tv_command_canceled">La commande a été annulée</string>
+    <string name="cancel_reason_lib">Raison de l\'annulation :</string>
 
     <!-- History -->
     <string name="time_expected">Heure estimée : </string>
     <string name="statut">Statut</string>
     <string name="bt_detail">Détail</string>
     <string name="bt_masque">Masquer</string>
-    <string name="bt_annuler_com">Annuler la\ncommande</string>
     <string name="bt_valider_com">Valider la\ncommande</string>
     <string name="bt_refuser">Refuser</string>
     <string name="dialog_supp_commande">Etes vous sur de vouloir annuler la commande ?</string>
@@ -41,9 +46,10 @@
 
     <!-- Gestion Commande -->
     <string name="gestion_commande_title">Gestion commandes</string>
+    <string name="tv_commande_lib">Commande : </string>
 
 
-    <!-- Status commande-->
+    <!--Statut commande-->
     <string name="status_attente">Envoyé</string>
     <string name="status_aattente_admin">Attente</string>
     <string name="status_Accepte">Accepté</string>
@@ -51,6 +57,12 @@
     <string name="status_livre">Livré</string>
     <string name="status_cancel">Annulé</string>
 
+
+    <!--Statut annulation-->
+    <string name="status_ann_admin">Admin</string>
+    <string name="status_ann_client">Client</string>
+    <string name="status_ann_client_cmd_ready">Client, commande prête</string>
+    <string name="status_ann_client_never_come">Client jamais venu</string>
 
     <!-- Erreur -->
     <string name="generic_error">Une erreur est survenue</string>
@@ -64,5 +76,7 @@
     <string name="email_title">email :</string>
     <string name="comande_ready_in">La commande sera prête dans environ :</string>
     <string name="no_produit_to_send">Votre commande ne contient aucun produit</string>
+
+
 
 </resources>

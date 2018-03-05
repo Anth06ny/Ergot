@@ -1,6 +1,5 @@
 package ergot.anthony.com.ergot.controler.historique;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -23,8 +22,7 @@ import java.util.List;
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
-import ergot.anthony.com.ergot.model.bean.Status;
-import ergot.anthony.com.ergot.utils.AlertDialogUtils;
+import ergot.anthony.com.ergot.model.bean.Statut;
 import ergot.anthony.com.ergot.utils.Utils;
 
 /**
@@ -76,6 +74,11 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
     }
 
     @Override
+    public int getItemCount() {
+        return commandeBeanList.size();
+    }
+
+    @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final CommandeBean commandeBean = commandeBeanList.get(position);
 
@@ -103,6 +106,8 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
 
         holder.ll_expected_time.setVisibility(View.VISIBLE);
 
+        holder.tv_num_commande.setText(commandeBean.getId() + "");
+
         //defaut datePrevision
         if (commandeBean.getDatePrevision() == 0) {
             holder.tv_time_expected.setText(" - ");
@@ -118,8 +123,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
             onBindViewHolderClient(holder, commandeBean);
         }
 
-        //Show detail
-        holder.bt_show_detail.setOnClickListener(new View.OnClickListener() {
+        holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onComandeClicListener != null) {
@@ -129,25 +133,23 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return commandeBeanList.size();
-    }
-
     /* ---------------------------------
     // Private
     // -------------------------------- */
     private void onBindViewHolderAdmin(final ViewHolder holder, final CommandeBean commandeBean) {
         //Email
-        if (StringUtils.isBlank(commandeBean.getEmail())) {
-            holder.tv_client.setText(commandeBean.getEmail());
+        if (StringUtils.isNotBlank(commandeBean.getUser().getEmail())) {
+            holder.tv_client.setText(commandeBean.getUser().getEmail());
+        }
+        else if (StringUtils.isNotBlank(commandeBean.getUser().getToken())) {
+            holder.tv_client.setText(StringUtils.abbreviate(commandeBean.getUser().getToken(), 8));
         }
         else {
-            holder.tv_client.setText(commandeBean.getDeviceToken());
+            holder.tv_client.setText(" - ");
         }
 
         //Téléphone
-        StringUtils.defaultIfBlank(commandeBean.getTelephone(), "-");
+        holder.tv_telephone.setText(StringUtils.defaultIfBlank(commandeBean.getUser().getTelephone(), "-"));
 
         changeBtBackGroundTint((Button) holder.bt_accept, R.color.colorPrimaryDark);
         changeBtBackGroundTint((Button) holder.bt_ready, R.color.colorPrimaryDark);
@@ -158,31 +160,30 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         holder.iv_warning.setVisibility(View.INVISIBLE);
         holder.iv_new.setVisibility(View.INVISIBLE);
 
+        //if(co)
+
         switch (commandeBean.getStatut()) {
-            case Status.STATUS_SEND:
+            case Statut.STATUS_SEND:
                 holder.iv_new.setVisibility(View.VISIBLE);
                 break;
-            case Status.STATUS_SENDACCEPTED:
+            case Statut.STATUS_SENDACCEPTED:
                 holder.bt_accept.setTypeface(null, Typeface.BOLD);
                 changeBtBackGroundTint((Button) holder.bt_accept, R.color.load_shadow_color);
                 holder.bt_accept.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
-            case Status.STATUS_READY:
+            case Statut.STATUS_READY:
                 changeBtBackGroundTint((Button) holder.bt_ready, R.color.green);
                 holder.bt_ready.setTypeface(null, Typeface.BOLD);
                 holder.bt_ready.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
-                holder.ll_expected_time.setVisibility(View.GONE);
                 break;
-            case Status.STATUS_DELIVERY:
+            case Statut.STATUS_DELIVERY:
                 changeBtBackGroundTint((Button) holder.bt_delivery, R.color.green);
                 holder.bt_delivery.setTypeface(null, Typeface.BOLD);
-                holder.bt_delivery.setTextColor(Color.GREEN);
                 holder.bt_delivery.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
-            case Status.STATUS_CANCEL:
+            case Statut.STATUS_CANCEL:
                 changeBtBackGroundTint((Button) holder.bt_cancel, R.color.error_color);
                 holder.bt_cancel.setTypeface(null, Typeface.BOLD);
-                holder.bt_cancel.setTextColor(Color.RED);
                 holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
         }
@@ -218,60 +219,41 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
 
     private void onBindViewHolderClient(final ViewHolder holder, final CommandeBean commandeBean) {
 
-        holder.bt_cancel_order.setVisibility(View.VISIBLE);
-
         holder.bt_ready.setTextColor(Color.BLACK);
         holder.bt_delivery.setTextColor(Color.BLACK);
         holder.bt_cancel.setTextColor(Color.BLACK);
         holder.bt_accept.setTextColor(Color.BLACK);
 
         switch (commandeBean.getStatut()) {
-            case Status.STATUS_SEND:
+            case Statut.STATUS_SEND:
                 holder.bt_send.setTypeface(null, Typeface.BOLD);
                 holder.bt_send.setTextColor(selectColor);
                 holder.bt_send.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
-            case Status.STATUS_SENDACCEPTED:
+            case Statut.STATUS_SENDACCEPTED:
                 holder.bt_accept.setTypeface(null, Typeface.BOLD);
                 holder.bt_accept.setTextColor(selectColor);
                 holder.bt_accept.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
-            case Status.STATUS_READY:
+            case Statut.STATUS_READY:
                 holder.bt_ready.setTypeface(null, Typeface.BOLD);
                 holder.bt_ready.setTextColor(Color.GREEN);
                 holder.bt_ready.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 holder.ll_expected_time.setVisibility(View.GONE);
                 break;
-            case Status.STATUS_DELIVERY:
+            case Statut.STATUS_DELIVERY:
                 holder.bt_delivery.setTypeface(null, Typeface.BOLD);
                 holder.bt_delivery.setTextColor(Color.GREEN);
                 holder.bt_delivery.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
-                holder.bt_cancel_order.setVisibility(View.GONE);//On affiche pas le bouton si la commande est déja annulé ou livré
                 holder.ll_expected_time.setVisibility(View.GONE);
                 break;
-            case Status.STATUS_CANCEL:
+            case Statut.STATUS_CANCEL:
                 holder.bt_cancel.setTypeface(null, Typeface.BOLD);
                 holder.bt_cancel.setTextColor(Color.RED);
                 holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
-                holder.bt_cancel_order.setVisibility(View.GONE);//On affiche pas le bouton si la commande est déja annulé ou livré
                 holder.ll_expected_time.setVisibility(View.GONE);
                 break;
         }
-
-        //Annulation Comande
-        holder.bt_cancel_order.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialogUtils.showConfirmDialog(holder.tv_date.getContext(), R.string.dialog_supp_commande, R.string.bt_cancel_order, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (onComandeClicListener != null) {
-                            onComandeClicListener.cancelCommandClick(commandeBean);
-                        }
-                    }
-                });
-            }
-        });
     }
 
     private static void changeBtBackGroundTint(Button bt, @ColorRes int colorId) {
@@ -294,14 +276,13 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         public TextView bt_ready;
         public TextView bt_delivery;
         public TextView bt_cancel;
-        public TextView bt_show_detail;
+        public TextView tv_num_commande;
         public View ll_expected_time;
         private View root;
 
         //Client
         public TextView bt_send;
         public TextView tv_time_expected;
-        public TextView bt_cancel_order;
 
         //Admin
         public TextView tv_client;
@@ -319,13 +300,12 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
             bt_ready = itemView.findViewById(R.id.bt_ready);
             bt_delivery = itemView.findViewById(R.id.bt_delivery);
             bt_cancel = itemView.findViewById(R.id.bt_cancel);
-            bt_show_detail = itemView.findViewById(R.id.bt_show_detail);
-            bt_cancel_order = itemView.findViewById(R.id.bt_cancel_order);
             ll_expected_time = itemView.findViewById(R.id.ll_expected_time);
             tv_client = itemView.findViewById(R.id.tv_client);
             tv_telephone = itemView.findViewById(R.id.tv_telephone);
             iv_warning = itemView.findViewById(R.id.iv_warning);
             iv_new = itemView.findViewById(R.id.iv_new);
+            tv_num_commande = itemView.findViewById(R.id.tv_num_commande);
 
             root = itemView.findViewById(R.id.root);
         }
@@ -337,11 +317,12 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
 
     public interface OnComandeClicListener {
         void showDetailCommandClick(CommandeBean commandeBean);
-
-        void cancelCommandClick(CommandeBean commandeBean);
     }
 
     public interface OnComandeClicListenerAdmin extends OnComandeClicListener {
+
+        void cancelCommandClick(CommandeBean commandeBean);
+
         void onAcceptCommand(CommandeBean commandeBean);
 
         void onReadyCommand(CommandeBean commandeBean);

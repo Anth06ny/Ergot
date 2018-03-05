@@ -30,20 +30,24 @@ public class WSUtilsAdmin {
     public static final String ADMIN_PASS = "adminPass";
 
     //ADMIN
-    private static final String URL_UPDATE_COMMAND = URL_SERVEUR + "updateCommande";
+    private static final String URL_SERVER_ADMIN = URL_SERVEUR + "admin/";
+    private static final String URL_UPDATE_COMMAND = URL_SERVER_ADMIN + "updateCommande";
 
-    public static CommandeBean updateCommandStatut(CommandeBean commandeBean, int newStatut, long datePrevision) throws TechnicalException {
+    public static CommandeBean updateCommandStatut(CommandeBean commandeBean, int newStatut, long datePrevision, int statutAnnulation) throws TechnicalException {
         //ON garde l'ancien statut en cas d'erreur
         int oldStatut = commandeBean.getStatut();
         long oldPrevisionDate = commandeBean.getDatePrevision();
+        long oldStatutAnnulaton = commandeBean.getDatePrevision();
 
         commandeBean.setStatut(newStatut);
         commandeBean.setDatePrevision(datePrevision);
+        commandeBean.setStatutAnnulation(statutAnnulation);
 
         String json = gson.toJson(commandeBean);
         //On remet l'ancien, le serveur devra normalement retourner la comande avec le staut actualisé
         commandeBean.setStatut(oldStatut);
         commandeBean.setDatePrevision(oldPrevisionDate);
+        commandeBean.setStatutAnnulation(oldStatutAnnulaton);
 
         Log.w("TAG_REQ", URL_UPDATE_COMMAND);
         Logger.logJson("TAG_JSON_ENVOYER", json);
@@ -73,7 +77,8 @@ public class WSUtilsAdmin {
                     //Résultat de la requete.
 
                     String jsonRecu = response.body().string();
-                    Log.w("TAG_JSON_RECU", "json=" + json);
+                    Logger.logJson("TAG_JSON_RECU", json);
+
                     returnCommand = gson.fromJson(jsonRecu, CommandeBean.class);
                 }
                 else {

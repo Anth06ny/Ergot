@@ -65,11 +65,9 @@ public class Logger {
 
     private static void format(String tag, Object source) {
         tag = " " + tag + " ";
-        log(" ", " ");
-        log(" ", getSplitter(50) + tag + getSplitter(50));
-        log(" ", "" + source);
-        log(" ", getSplitter(100 + tag.length()));
-        log(" ", " ");
+        log("-", getSplitter(50) + tag + getSplitter(50));
+        log("-", "" + source);
+        log("-", getSplitter(100 + tag.length()));
     }
 
     private static String getCurrentMethodName() {
@@ -91,7 +89,7 @@ public class Logger {
         catch (JSONException ex) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    o = new JSONArray(test);
+                    o = new JSONArray(test.toString());
                 }
             }
             catch (JSONException ex1) {

@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
+import ergot.anthony.com.ergot.model.bean.StatutAnnulation;
 import ergot.anthony.com.ergot.model.bean.SuppBean;
 
 /**
@@ -16,7 +17,18 @@ import ergot.anthony.com.ergot.model.bean.SuppBean;
 
 public class AlertDialogUtils {
 
-    public static void showSelectSuppDialog(final Context context, final ArrayList<SuppBean> list, final RadioAlertDialogCB radioAlertDialogCB) {
+    public interface SelectSuppDialogListener {
+        void onSupplementSelected(SuppBean suppBean);
+    }
+
+    /**
+     * Dialog pour séléctionner un supplément
+     *
+     * @param context
+     * @param list
+     * @param selectSuppDialogListener
+     */
+    public static void showSelectSuppDialog(final Context context, final ArrayList<SuppBean> list, final SelectSuppDialogListener selectSuppDialogListener) {
         ArrayList<String> strings = new ArrayList<>();
 
         for (SuppBean p : list) {
@@ -36,8 +48,8 @@ public class AlertDialogUtils {
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 dialog.dismiss();// dismiss the alertbox after chose option
-                if (radioAlertDialogCB != null) {
-                    radioAlertDialogCB.onSupplementSelected(list.get(item));
+                if (selectSuppDialogListener != null) {
+                    selectSuppDialogListener.onSupplementSelected(list.get(item));
                 }
             }
         });
@@ -46,18 +58,35 @@ public class AlertDialogUtils {
         alert.show();
     }
 
-
-
-    public interface RadioAlertDialogCB {
-        void onSupplementSelected(SuppBean suppBean);
+    public interface SelectCancelReasonListener {
+        void onCancelReasonSelected(StatutAnnulation statutAnnulation);
     }
 
-    public static void showConfirmDialog(final Context context, @StringRes int question, @StringRes int positiveText, DialogInterface.OnClickListener positiveButton) {
+    /**
+     * Dialog pour séléctionner une raison d'annulation
+     */
+    public static void showSelectCancelReasonDialog(final Context context, final SelectCancelReasonListener cancelReasonListener) {
+
+        final AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
+        alt_bld.setTitle(R.string.cancel_reason_lib);
+        alt_bld.setSingleChoiceItems(StatutAnnulation.getValues(), StatutAnnulation.ADMIN.getValue(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                cancelReasonListener.onCancelReasonSelected(StatutAnnulation.values()[which]);
+            }
+        });
+        alt_bld.setCancelable(true);
+        AlertDialog alert = alt_bld.create();
+        alert.show();
+    }
+
+    public static void showConfirmCancelCommandDialog(final Context context, @StringRes int question, @StringRes int positiveText, DialogInterface.OnClickListener positiveButton) {
 
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
         alt_bld.setMessage(question);
         alt_bld.setPositiveButton(positiveText, positiveButton);
-        alt_bld.setNegativeButton(R.string.bt_cancel, null);
+        alt_bld.setNegativeButton(R.string.bt_no, null);
         alt_bld.setCancelable(true);
         alt_bld.create().show();
     }

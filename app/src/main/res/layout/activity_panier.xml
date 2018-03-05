@@ -266,6 +266,18 @@
 
     </ScrollView>
 
+    <Button
+        android:id="@+id/bt_annuler_commande"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/margin_15"
+        android:backgroundTint="@color/error_color"
+        android:text="@string/bt_annuler_com"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
+
     <View
         android:id="@+id/shadow"
         android:layout_width="match_parent"

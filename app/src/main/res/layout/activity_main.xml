@@ -32,7 +32,7 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btCommander"
             android:layout_width="0dp"
-            android:layout_height="@dimen/margin_50"
+            android:layout_height="@dimen/margin_60"
             android:layout_weight="3"
 
             android:text="@string/bt_commander"
@@ -64,7 +64,7 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btYAller"
             android:layout_width="0dp"
-            android:layout_height="@dimen/margin_50"
+            android:layout_height="@dimen/margin_60"
             android:layout_weight="3"
             android:text="@string/bt_y_aller"
             android:textColor="@android:color/white"
@@ -93,7 +93,7 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/bthisto"
             android:layout_width="0dp"
-            android:layout_height="@dimen/margin_50"
+            android:layout_height="@dimen/margin_60"
             android:layout_weight="3"
             android:text="@string/bt_histo"
             android:textColor="@android:color/white"

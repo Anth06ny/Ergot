@@ -6,15 +6,15 @@ package ergot.anthony.com.ergot.model.bean.sendbean;
 
 public class UserBean {
 
-    private String deviceToken;
+    private String token;
     private String email;
 
-    public String getDeviceToken() {
-        return deviceToken;
+    public String getToken() {
+        return token;
     }
 
-    public void setDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getEmail() {

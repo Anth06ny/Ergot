@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (MyApplication.isAdminMode()) {
             btCommander.setVisibility(View.GONE);
+            bthisto.setText(R.string.gestion_command);
         }
 
         btYAller.setOnClickListener(this);

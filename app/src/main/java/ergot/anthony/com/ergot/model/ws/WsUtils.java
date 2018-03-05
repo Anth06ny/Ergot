@@ -19,8 +19,6 @@ import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
-import ergot.anthony.com.ergot.model.bean.Status;
-import ergot.anthony.com.ergot.model.bean.sendbean.CancelCommandeBean;
 import ergot.anthony.com.ergot.model.bean.sendbean.UserBean;
 import ergot.anthony.com.ergot.utils.Logger;
 import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
@@ -118,7 +116,7 @@ public class WsUtils {
 
         UserBean userBean = new UserBean();
         userBean.setEmail(SharedPreferenceUtils.getSaveEmail());
-        userBean.setDeviceToken(SharedPreferenceUtils.getUniqueToken());
+        userBean.setToken(SharedPreferenceUtils.getUniqueToken());
 
         String json = gson.toJson(userBean);
         Log.w("TAG_URL", URL_GET_HISTORY);
@@ -148,7 +146,7 @@ public class WsUtils {
                 //Résultat de la requete.
                 try {
                     String jsonRecu = response.body().string();
-                    Log.w("TAG_JSON_RECU", "json=" + jsonRecu);
+                    Logger.logJson("TAG_JSON_RECU", jsonRecu);
                     historique = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CommandeBean>>() {
                     }.getType());
                 }
@@ -184,7 +182,7 @@ public class WsUtils {
     public static ArrayList<CommandeBean> sendCommande(CommandeBean commandeBean) throws TechnicalException {
 
         //ON ajoute le token du téléphone
-        commandeBean.setDeviceToken(SharedPreferenceUtils.getUniqueToken());
+        commandeBean.getUser().setToken(SharedPreferenceUtils.getUniqueToken());
         String json = gson.toJson(commandeBean);
         Log.w("TAG_REQ", URL_SEND_COMMAND);
         Logger.logJson("TAG_JSON_ENVOYER", json);
@@ -214,7 +212,7 @@ public class WsUtils {
                     //Résultat de la requete.
 
                     String jsonRecu = response.body().string();
-                    Log.w("TAG_JSON_RECU", "json=" + json);
+                    Logger.logJson("TAG_JSON_RECU", json);
                     historique = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CommandeBean>>() {
                     }.getType());
                 }
@@ -234,37 +232,7 @@ public class WsUtils {
         }
     }
 
-    /**
-     * EAnnuler la commande
-     */
-    public static void cancelCommande(CommandeBean commandeBean) throws TechnicalException {
 
-        CancelCommandeBean cancelCommandeBean = new CancelCommandeBean(commandeBean.getId(), commandeBean.getEmail(), SharedPreferenceUtils.getUniqueToken());
-
-        String json = gson.toJson(cancelCommandeBean);
-        Log.w("TAG_REQ", URL_CANCEL_COMMAND);
-        Logger.logJson("TAG_JSON_ENVOYER", json);
-        //Création de la requete
-
-        Request request = new Request.Builder().url(URL_CANCEL_COMMAND).post(RequestBody.create(JSON, json)).build();
-
-        //Execution de la requête
-        Response response = null;
-        try {
-            response = getOkHttpClient().newCall(request).execute();
-            //Ca a fonctionné on passe la commande à annulé
-            commandeBean.setStatut(Status.STATUS_CANCEL);
-            //Analyse du code retour si non copmris entre 200 et 299
-            if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
-                throw new TechnicalException("Réponse du serveur incorrect : " + response.code() + "\nErreur:" + response.message(), R.string
-                        .generic_error);
-            }
-        }
-        catch (IOException e) {
-            //On test si google répond pour différencier si c'est internet ou le serveur le probleme
-            throw testInternetConnexionOnGoogle(e);
-        }
-    }
 
 
 

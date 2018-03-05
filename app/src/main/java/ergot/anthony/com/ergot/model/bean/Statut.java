@@ -4,7 +4,7 @@ package ergot.anthony.com.ergot.model.bean;
  * Created by Utilisateur on 12/02/2018.
  */
 
-public class Status {
+public class Statut {
 
     public static final int STATUS_SEND = 0 ;
     public static final int STATUS_SENDACCEPTED = 1 ;

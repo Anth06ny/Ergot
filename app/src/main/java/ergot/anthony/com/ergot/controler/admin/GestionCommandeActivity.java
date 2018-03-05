@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -24,9 +25,11 @@ import ergot.anthony.com.ergot.controler.historique.CommandeAdapter;
 import ergot.anthony.com.ergot.controler.panier.PanierActivity;
 import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
-import ergot.anthony.com.ergot.model.bean.Status;
+import ergot.anthony.com.ergot.model.bean.Statut;
+import ergot.anthony.com.ergot.model.bean.StatutAnnulation;
 import ergot.anthony.com.ergot.model.ws.WSUtilsAdmin;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
+import ergot.anthony.com.ergot.utils.AlertDialogUtils;
 import ergot.anthony.com.ergot.utils.Utils;
 
 public class GestionCommandeActivity extends AppCompatActivity implements CommandeAdapter.OnComandeClicListenerAdmin, View.OnClickListener {
@@ -38,7 +41,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
     private TextView tv_error;
     private RecyclerView rv;
     private View ll_error;
-    private TextView tv_wait;
+    private ProgressBar tv_wait;
     private TextView tv_no_commande;
     private Button bt_refresh;
 
@@ -136,18 +139,25 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
     }
 
     @Override
-    public void cancelCommandClick(CommandeBean commandeBean) {
-
+    public void cancelCommandClick(final CommandeBean commandeBean) {
+        //L'admin annule une comamnde
+        AlertDialogUtils.showSelectCancelReasonDialog(this, new AlertDialogUtils.SelectCancelReasonListener() {
+            @Override
+            public void onCancelReasonSelected(StatutAnnulation statutAnnulation) {
+                new WSUpdateCommande(commandeBean, Statut.STATUS_CANCEL, 0, statutAnnulation.getValue()).execute();
+            }
+        });
     }
 
     @Override
     public void onAcceptCommand(final CommandeBean commandeBean) {
+        Toast.makeText(this, R.string.comande_ready_in, Toast.LENGTH_SHORT).show();
         //Annulation Comande
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 //ICI on envoie l'ecart en milliseconde, c'est le serveur qui calculera la date de prevision
-                updateCommande(commandeBean, Status.STATUS_SENDACCEPTED, hourOfDay * 3600000 + minute * 60000);
+                updateCommande(commandeBean, Statut.STATUS_SENDACCEPTED, hourOfDay * 3600000 + minute * 60000, 0);
             }
         }, 0, 20, true);
         timePickerDialog.setTitle(getString(R.string.comande_ready_in));
@@ -156,12 +166,12 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
 
     @Override
     public void onReadyCommand(CommandeBean commandeBean) {
-        updateCommande(commandeBean, Status.STATUS_READY, -1);
+        updateCommande(commandeBean, Statut.STATUS_READY, -1, 0);
     }
 
     @Override
     public void onSendCommandClick(CommandeBean commandeBean) {
-        updateCommande(commandeBean, Status.STATUS_DELIVERY, -1);
+        updateCommande(commandeBean, Statut.STATUS_DELIVERY, -1, 0);
     }
 
       /* ---------------------------------
@@ -208,10 +218,10 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
         }
     }
 
-    private synchronized void updateCommande(CommandeBean send, int newStatut, long datePrevision) {
+    private synchronized void updateCommande(CommandeBean send, int newStatut, long datePrevision, int statutAnnulation) {
         if (updateCommandAT == null || updateCommandAT.getStatus() == AsyncTask.Status.FINISHED) {
             //On retire les eventuelles message
-            updateCommandAT = new WSUpdateCommande(send, newStatut, datePrevision);
+            updateCommandAT = new WSUpdateCommande(send, newStatut, datePrevision, statutAnnulation);
             updateCommandAT.execute();
         }
         else {
@@ -224,12 +234,12 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
      *
      * @param result
      */
-    private void updateList(ArrayList<CommandeBean> result) {
+    private synchronized void updateList(ArrayList<CommandeBean> result) {
 
         //On a une liste vide
         if (commandeBeanArrayList.isEmpty()) {
             commandeBeanArrayList.addAll(result);
-            commandeAdapter.notifyItemRangeInserted(0, result.size());
+            commandeAdapter.notifyDataSetChanged();
             return;
         }
 
@@ -328,21 +338,23 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
 
         private int newStatut;
         private long datePrevision;
+        private int statutAnnulation;
         private CommandeBean send;
         private CommandeBean result = null;
         private TechnicalException technicalException;
 
-        public WSUpdateCommande(CommandeBean send, int newStatut, long datePrevision) {
+        public WSUpdateCommande(CommandeBean send, int newStatut, long datePrevision, int statutAnnulation) {
             this.newStatut = newStatut;
             this.send = send;
             this.datePrevision = datePrevision;
+            this.statutAnnulation = statutAnnulation;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
 
             try {
-                result = WSUtilsAdmin.updateCommandStatut(send, newStatut, datePrevision);
+                result = WSUtilsAdmin.updateCommandStatut(send, newStatut, datePrevision, statutAnnulation);
             }
             catch (TechnicalException e) {
                 this.technicalException = e;
@@ -354,6 +366,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
         protected void onPreExecute() {
             super.onPreExecute();
             showWaitingMessage = true;
+            handler.removeCallbacksAndMessages(null);
             refreshScreen();
         }
 
@@ -370,11 +383,10 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
                 //On acutalise la commande avec celle recu
                 int index = commandeBeanArrayList.indexOf(send);
                 commandeBeanArrayList.remove(index);
-                commandeBeanArrayList.add(result);
+                commandeBeanArrayList.add(index, result);
                 commandeAdapter.notifyItemChanged(index);
+                refreshData();
             }
-
-            refreshScreen();
         }
     }
 }

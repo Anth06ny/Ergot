@@ -15,6 +15,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ergot.anthony.com.ergot.MainActivity;
 import ergot.anthony.com.ergot.MyApplication;
@@ -129,10 +130,15 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         if (v == bt_commande) {
             if (panierVersion) {
-
+                //gerer dans panierActivity
             }
             else {
-                startActivity(new Intent(this, PanierActivity.class));
+                if (MyApplication.getCommandeBean().getCompositionCommande().isEmpty()) {
+                    Toast.makeText(this, R.string.no_produit_to_send, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    startActivity(new Intent(this, PanierActivity.class));
+                }
             }
         }
     }

@@ -17,13 +17,13 @@ public class CommandeBean implements Serializable {
     private long datePrevision;
     private int statut;
     private String remarque;
-    private String telephone;
-    private String email;
-    private String deviceToken;
     private long id;
+    private long statutAnnulation;
+    private UserBean user;
 
     public CommandeBean() {
         compositionCommande = new ArrayList<>();
+        user = new UserBean();
     }
 
     @Override
@@ -72,14 +72,6 @@ public class CommandeBean implements Serializable {
         return totalPrice;
     }
 
-    public String getDeviceToken() {
-        return deviceToken;
-    }
-
-    public void setDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
-    }
-
     public long getDatePrevision() {
         return datePrevision;
     }
@@ -94,22 +86,6 @@ public class CommandeBean implements Serializable {
 
     public void setStatut(int statut) {
         this.statut = statut;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setDateCommande(long dateCommande) {
@@ -134,5 +110,21 @@ public class CommandeBean implements Serializable {
 
     public void setCompositionCommande(ArrayList<SelectProductBean> compositionCommande) {
         this.compositionCommande = compositionCommande;
+    }
+
+    public UserBean getUser() {
+        return user;
+    }
+
+    public void setUser(UserBean user) {
+        this.user = user;
+    }
+
+    public long getStatutAnnulation() {
+        return statutAnnulation;
+    }
+
+    public void setStatutAnnulation(long statutAnnulation) {
+        this.statutAnnulation = statutAnnulation;
     }
 }

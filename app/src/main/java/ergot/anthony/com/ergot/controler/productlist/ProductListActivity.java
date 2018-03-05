@@ -92,7 +92,7 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
             addProduct(new SelectProductBean(productBean, null), clicOnScreen);
         }
         else {
-            AlertDialogUtils.showSelectSuppDialog(this, suppBeanList, new AlertDialogUtils.RadioAlertDialogCB() {
+            AlertDialogUtils.showSelectSuppDialog(this, suppBeanList, new AlertDialogUtils.SelectSuppDialogListener() {
                 @Override
                 public void onSupplementSelected(SuppBean supp) {
                     addProduct(new SelectProductBean(productBean, supp), clicOnScreen);

@@ -8,14 +8,14 @@ public class CancelCommandeBean {
 
     private long idCommande;
     private String userEmail;
-    private String deviceToken;
+    private String token;
 
 
 
-    public CancelCommandeBean(long idCommande, String userEmail, String deviceToken) {
+    public CancelCommandeBean(long idCommande, String userEmail, String token) {
         this.idCommande = idCommande;
         this.userEmail = userEmail;
-        this.deviceToken = deviceToken;
+        this.token = token;
     }
 
     public long getIdCommande() {
@@ -34,11 +34,11 @@ public class CancelCommandeBean {
         this.userEmail = userEmail;
     }
 
-    public String getDeviceToken() {
-        return deviceToken;
+    public String getToken() {
+        return token;
     }
 
-    public void setDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 }
