@@ -36,6 +36,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btYAller.setOnClickListener(this);
         btCommander.setOnClickListener(this);
         bthisto.setOnClickListener(this);
+
+        if (MyApplication.isAdminMode()) {
+            btCommander.setVisibility(View.GONE);
+            bthisto.setText(R.string.bt_gestion_commande);
+        }
     }
 
     @Override

@@ -63,8 +63,7 @@ public class WsUtils {
         Log.w("TAG_URL", URL_GET_CATALOGUE);
 
         //Création de la requete
-        Request request = new Request.Builder().url(URL_GET_CATALOGUE)
-                .build();
+        Request request = new Request.Builder().url(URL_GET_CATALOGUE).build();
 
         //Execution de la requête
         Response response = null;

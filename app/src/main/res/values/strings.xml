@@ -10,6 +10,7 @@
     <string name="bt_cancel">Annuler</string>
     <string name="bt_no">non</string>
     <string name="bt_cancel_order">Annuler la commande</string>
+    <string name="bt_gestion_commande">Gestion des commandes</string>
 
     <string name="bt_actualiser">Actualiser</string>
     <string name="title_activity_product_list">ProductListActivity</string>
@@ -30,6 +31,9 @@
     <string name="bt_annuler_com">Annuler la\ncommande</string>
     <string name="tv_command_canceled">La commande a été annulée</string>
     <string name="cancel_reason_lib">Raison de l\'annulation :</string>
+
+    <!-- GestionCommandeActivity -->
+    <string name="gestion_commande_title">Gestion des commandes</string>
 
     <!-- History -->
     <string name="time_expected">Heure estimée : </string>

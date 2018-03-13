@@ -28,6 +28,7 @@ public class MyApplication extends Application {
         super.onCreate();
 
         myApplication = this;
+        newCommande();
         commandeBean = new CommandeBean();
 
         debugMode = getResources().getBoolean(R.bool.debug);
@@ -40,6 +41,8 @@ public class MyApplication extends Application {
 
     public static void newCommande() {
         commandeBean = new CommandeBean();
+        //par defaut on met la date de la commande à -1
+        commandeBean.setDateCommande(-1);
     }
 
     public static CommandeBean getCommandeBean() {
