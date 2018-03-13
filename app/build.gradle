@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
@@ -20,6 +21,7 @@ android {
 }
 
 dependencies {
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -41,5 +43,14 @@ dependencies {
     //Image arrondi
     compile 'de.hdodenhof:circleimageview:2.2.0'
 
+    //Authentification
     compile 'com.google.android.gms:play-services-auth:11.8.0'
+
+    //firebase
+    compile 'com.google.firebase:firebase-messaging:11.8.0'
+    compile 'com.google.firebase:firebase-core:11.8.0'
+
+
 }
+apply plugin: 'com.google.gms.google-services'
+

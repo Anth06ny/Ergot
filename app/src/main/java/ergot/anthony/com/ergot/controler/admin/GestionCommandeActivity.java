@@ -340,7 +340,6 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
         private long datePrevision;
         private int statutAnnulation;
         private CommandeBean send;
-        private CommandeBean result = null;
         private TechnicalException technicalException;
 
         public WSUpdateCommande(CommandeBean send, int newStatut, long datePrevision, int statutAnnulation) {
@@ -354,7 +353,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
         protected Void doInBackground(Void... params) {
 
             try {
-                result = WSUtilsAdmin.updateCommandStatut(send, newStatut, datePrevision, statutAnnulation);
+                WSUtilsAdmin.updateCommandStatut(send, newStatut, datePrevision, statutAnnulation);
             }
             catch (TechnicalException e) {
                 this.technicalException = e;
@@ -382,10 +381,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
                 erreur = null;
                 //On acutalise la commande avec celle recu
                 int index = commandeBeanArrayList.indexOf(send);
-                commandeBeanArrayList.remove(index);
-                commandeBeanArrayList.add(index, result);
                 commandeAdapter.notifyItemChanged(index);
-                refreshData();
             }
         }
     }

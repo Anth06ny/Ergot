@@ -19,7 +19,7 @@ import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
-import ergot.anthony.com.ergot.model.bean.sendbean.UserBean;
+import ergot.anthony.com.ergot.model.bean.UserBean;
 import ergot.anthony.com.ergot.utils.Logger;
 import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
 import okhttp3.MediaType;
@@ -116,6 +116,7 @@ public class WsUtils {
         UserBean userBean = new UserBean();
         userBean.setEmail(SharedPreferenceUtils.getSaveEmail());
         userBean.setToken(SharedPreferenceUtils.getUniqueToken());
+        userBean.setFirebaseToken(SharedPreferenceUtils.getFireBaseToken());
 
         String json = gson.toJson(userBean);
         Log.w("TAG_URL", URL_GET_HISTORY);
@@ -182,6 +183,7 @@ public class WsUtils {
 
         //ON ajoute le token du téléphone
         commandeBean.getUser().setToken(SharedPreferenceUtils.getUniqueToken());
+
         String json = gson.toJson(commandeBean);
         Log.w("TAG_REQ", URL_SEND_COMMAND);
         Logger.logJson("TAG_JSON_ENVOYER", json);

@@ -45,6 +45,7 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
     //Composant graphique
     private TextView tv_email, tv_error;
     private Button btIdentifier;
+    private Button bt_refresh;
     private RecyclerView rv;
     private View ll_error;
     private TextView tv_wait;
@@ -60,6 +61,7 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
     //Data
     private ArrayList<CommandeBean> commandeBeanArrayList;
     private String tokenEmail;
+    boolean startWithData = false; //est ce qu'on charge la page avec des données dans l'extra
 
     //Outils
     private AsyncTask<Void, Void, Void> asyncTask;
@@ -78,12 +80,14 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
         iv_logout = findViewById(R.id.iv_logout);
         tv_no_commande = findViewById(R.id.tv_no_commande);
         ll_connected = findViewById(R.id.ll_connected);
+        bt_refresh = findViewById(R.id.bt_refresh);
         rv = findViewById(R.id.rv);
 
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
         btIdentifier.setOnClickListener(this);
+        bt_refresh.setOnClickListener(this);
         iv_logout.setOnClickListener(this);
 
         ll_error.setVisibility(View.GONE);
@@ -98,7 +102,7 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
         //On regarde si on a une liste de commande
         String json = getIntent().getStringExtra(LIST_COMMANDE_EXTRA);
         if (StringUtils.isNotBlank(json)) {
-
+            startWithData = true;
             commandeBeanArrayList.addAll((Collection<? extends CommandeBean>) new Gson().fromJson(json, new TypeToken<ArrayList<CommandeBean>>() {
             }.getType()));
 
@@ -106,13 +110,7 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
             Snackbar snackbar = Snackbar.make(findViewById(R.id.root), R.string.order_sucess, Snackbar.LENGTH_LONG);
             snackbar.setActionTextColor(Color.GREEN);
             snackbar.show();
-
             refreshScreen();
-        }
-
-        //Si on n'a pas recu de liste de commande en arrivant sur l'écran on lance la requete de recup commande
-        if (commandeBeanArrayList.isEmpty()) {
-            refreshData();
         }
     }
 
@@ -128,8 +126,12 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
     @Override
     protected void onStart() {
         super.onStart();
+        //Si on n'a pas recu de liste de commande en arrivant sur l'écran on lance la requete de recup commande
         //Si jamais on a modifier la comamnde dans le panier
-        commandeAdapter.notifyDataSetChanged();
+        if (!startWithData) {
+            refreshData();
+        }
+        startWithData = false;
     }
 
     @Override
@@ -166,6 +168,9 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
             //On supprime l'email sauvegarder
             tokenEmail = null;
             SharedPreferenceUtils.saveEmail("");
+            refreshData();
+        }
+        else if (v == bt_refresh) {
             refreshData();
         }
         else {

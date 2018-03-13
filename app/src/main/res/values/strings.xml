@@ -34,6 +34,7 @@
 
     <!-- GestionCommandeActivity -->
     <string name="gestion_commande_title">Gestion des commandes</string>
+    <string name="tv_commande_lib">Commande : </string>
 
     <!-- History -->
     <string name="time_expected">Heure estimée : </string>
@@ -47,10 +48,6 @@
     <string name="no_commande">Aucune commande disponible</string>
     <string name="client">Client : </string>
     <string name="telephone">Téléphone : </string>
-
-    <!-- Gestion Commande -->
-    <string name="gestion_commande_title">Gestion commandes</string>
-    <string name="tv_commande_lib">Commande : </string>
 
 
     <!--Statut commande-->
@@ -80,7 +77,6 @@
     <string name="email_title">email :</string>
     <string name="comande_ready_in">La commande sera prête dans environ :</string>
     <string name="no_produit_to_send">Votre commande ne contient aucun produit</string>
-
 
 
 </resources>

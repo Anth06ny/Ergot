@@ -33,7 +33,7 @@ public class WSUtilsAdmin {
     private static final String URL_SERVER_ADMIN = URL_SERVEUR + "admin/";
     private static final String URL_UPDATE_COMMAND = URL_SERVER_ADMIN + "updateCommande";
 
-    public static CommandeBean updateCommandStatut(CommandeBean commandeBean, int newStatut, long datePrevision, int statutAnnulation) throws TechnicalException {
+    public static void updateCommandStatut(CommandeBean commandeBean, int newStatut, long datePrevision, int statutAnnulation) throws TechnicalException {
         //ON garde l'ancien statut en cas d'erreur
         int oldStatut = commandeBean.getStatut();
         long oldPrevisionDate = commandeBean.getDatePrevision();
@@ -85,7 +85,8 @@ public class WSUtilsAdmin {
                     //JSON -> Java (Parser une ArrayList typée)
                     returnCommand = gson.fromJson(new InputStreamReader(response.body().byteStream()), CommandeBean.class);
                 }
-                return returnCommand;
+                //On applique les changements
+                commandeBean.update(returnCommand);
             }
             catch (Exception e) {
                 e.printStackTrace();

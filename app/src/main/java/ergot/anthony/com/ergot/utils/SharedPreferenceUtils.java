@@ -34,7 +34,7 @@ public class SharedPreferenceUtils {
     }
 
     /* ---------------------------------
-   //Gestion Token
+   //Gestion Token   : Token du téléphone
    // -------------------------------- */
     private static final String TOKEN_KEY = "TOKEN_KEY";
 
@@ -52,5 +52,18 @@ public class SharedPreferenceUtils {
         }
 
         return uniqueToken;
+    }
+
+    /* ---------------------------------
+  //Gestion FireBAseToken
+  // -------------------------------- */
+    private static final String FIREBASE_TOKEN_KEY = "FIREBASE_TOKEN_KEY";
+
+    public static String getFireBaseToken() {
+        return getSharedPreference().getString(FIREBASE_TOKEN_KEY, "");
+    }
+
+    public static void saveFireBaseToken(String token) {
+        getSharedPreference().edit().putString(FIREBASE_TOKEN_KEY, token).apply();
     }
 }

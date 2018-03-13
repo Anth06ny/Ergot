@@ -144,13 +144,15 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         }
 
         //Le numéro de téléphone de l'appareil  + permission
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_NUMBERS}, 1);
-            Toast.makeText(this, R.string.tv_number_permission_exp, Toast.LENGTH_LONG).show();
-        }
-        else {
-            TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            etPhone.setText(tMgr.getLine1Number());
+        if (isCurrentCommand) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_NUMBERS}, 1);
+                Toast.makeText(this, R.string.tv_number_permission_exp, Toast.LENGTH_LONG).show();
+            }
+            else {
+                TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                etPhone.setText(tMgr.getLine1Number());
+            }
         }
 
         //Remarque

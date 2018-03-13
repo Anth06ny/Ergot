@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "588942610965",
+    "project_id": "firebase-lergot"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588942610965:android:bec0be7a8ee9be65",
+        "android_client_info": {
+          "package_name": "ergot.anthony.com.ergot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588942610965-vd84tmtl039hdlnbihaktpjk25flf964.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZPlyNygLVs1d1O6WflEvc66GRv81bqOU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

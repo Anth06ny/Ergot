@@ -26,6 +26,20 @@ public class CommandeBean implements Serializable {
         user = new UserBean();
     }
 
+    /**
+     * MEthode pour mettre à jour une commande à partir de celle reçu par le serveur
+     *
+     * @param commandeBean
+     */
+    public void update(CommandeBean commandeBean) {
+        this.compositionCommande = commandeBean.getCompositionCommande();
+        this.dateCommande = commandeBean.getDateCommande();
+        this.datePrevision = commandeBean.getDatePrevision();
+        this.statut = commandeBean.getStatut();
+        this.statutAnnulation = commandeBean.getStatutAnnulation();
+        this.user = commandeBean.getUser();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -44,6 +58,8 @@ public class CommandeBean implements Serializable {
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
     }
+
+
 
 /* ---------------------------------
     // GETTER /SETTER

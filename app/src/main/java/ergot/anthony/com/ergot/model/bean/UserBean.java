@@ -11,6 +11,7 @@ public class UserBean implements Serializable {
     private String telephone;
     private String token;
     private String email;
+    private String firebaseToken;
 
     private int nbCmdOk; //Nombre de commande en succes       (Statut non cancel)
     private int nbCmdCancel; //Nombre de commande en cancel Client
@@ -71,5 +72,13 @@ public class UserBean implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFirebaseToken() {
+        return firebaseToken;
+    }
+
+    public void setFirebaseToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
     }
 }
