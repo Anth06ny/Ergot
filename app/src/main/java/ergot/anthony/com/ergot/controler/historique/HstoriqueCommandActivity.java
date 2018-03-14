@@ -112,6 +112,14 @@ public class HstoriqueCommandActivity extends MotherActivity implements View.OnC
             snackbar.show();
             refreshScreen();
         }
+
+        CommandeBean commandeBean = (CommandeBean) getIntent().getSerializableExtra(PanierActivity.COMMANDE_EXTRA);
+        if (commandeBean != null) {
+            Intent intent = new Intent(this, PanierActivity.class);
+            intent.putExtra(PanierActivity.COMMANDE_EXTRA, commandeBean);
+            //On redirige sur PanierActivity
+            startActivity(intent);
+        }
     }
 
     @Override

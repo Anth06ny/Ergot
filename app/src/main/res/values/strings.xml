@@ -38,7 +38,7 @@
 
     <!-- History -->
     <string name="time_expected">Heure estimée : </string>
-    <string name="statut">Statut</string>
+    <string name="statut">Statut : </string>
     <string name="bt_detail">Détail</string>
     <string name="bt_masque">Masquer</string>
     <string name="bt_valider_com">Valider la\ncommande</string>

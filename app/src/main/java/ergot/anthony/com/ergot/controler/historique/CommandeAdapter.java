@@ -36,8 +36,8 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
     private OnComandeClicListenerAdmin onComandeClicListenerAdmin;//Pointera sur le meme que onCommandClic, c'est juste pour eviter de faire les cast à chaque fois
 
     //Gestion de la date
-    private SimpleDateFormat formatCompl = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    private SimpleDateFormat formatheure = new SimpleDateFormat("HH'h'mm");
+    public static SimpleDateFormat formatCompl = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    public static SimpleDateFormat formatheure = new SimpleDateFormat("HH'h'mm");
 
     //Ressource
     private int selectColor, selectedTextSize, unSelectedTextSize;

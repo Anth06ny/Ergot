@@ -44,9 +44,9 @@ public class WsUtils {
     private static final String URL_GET_HISTORY = URL_SERVEUR + "getHistorique";
     private static final String URL_CANCEL_COMMAND = URL_SERVEUR + "cancelCommande";
 
-    static final Gson gson = new Gson();
+    public static final Gson gson = new Gson();
 
-    static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     /* ---------------------------------
     // GET

@@ -5,6 +5,14 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.apache.commons.lang3.StringUtils;
+
+import ergot.anthony.com.ergot.MyApplication;
+import ergot.anthony.com.ergot.exception.TechnicalException;
+import ergot.anthony.com.ergot.model.bean.CommandeBean;
+import ergot.anthony.com.ergot.model.ws.WsUtils;
+import ergot.anthony.com.ergot.utils.NotificationUtils;
+
 /*
   url : https://fcm.googleapis.com/fcm/send
 
@@ -27,9 +35,12 @@ import com.google.firebase.messaging.RemoteMessage;
  */
 public class FireBaseNotificationService extends FirebaseMessagingService {
 
+
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
+        //Si on decommente, affichera la notification si on ne le fait pas nous
+        //super.onMessageReceived(remoteMessage);
 
         Log.w("TAG_FIREBASE", "from" + remoteMessage.getFrom());
 
@@ -39,8 +50,26 @@ public class FireBaseNotificationService extends FirebaseMessagingService {
         }
 
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
+        if (remoteMessage.getNotification() != null && StringUtils.isNotBlank(remoteMessage.getNotification().getBody())) {
             Log.w("TAG_FIREBASE", "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            try {
+                CommandeBean commandeBean = WsUtils.gson.fromJson(remoteMessage.getNotification().getBody(), CommandeBean.class);
+                if (commandeBean == null || commandeBean.getId() == 0) {
+                    throw new TechnicalException("Le json reçu n'est pas une commande");
+                }
+                else {
+                    //On rcréer ou met à jour la notification
+                    NotificationUtils.updateNotificationStatut(MyApplication.getMyApplication(), commandeBean);
+                    //On la poste dans le bus
+                    MyApplication.getBus().post(commandeBean);
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Log.w("TAG_FIREBASE", "Body vide");
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM

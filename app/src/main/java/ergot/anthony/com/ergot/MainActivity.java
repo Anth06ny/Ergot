@@ -10,6 +10,8 @@ import android.view.View;
 import ergot.anthony.com.ergot.controler.admin.GestionCommandeActivity;
 import ergot.anthony.com.ergot.controler.commander.CommanderActivity;
 import ergot.anthony.com.ergot.controler.historique.HstoriqueCommandActivity;
+import ergot.anthony.com.ergot.controler.panier.PanierActivity;
+import ergot.anthony.com.ergot.model.bean.CommandeBean;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,6 +25,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        CommandeBean commandeBean = (CommandeBean) getIntent().getSerializableExtra(PanierActivity.COMMANDE_EXTRA);
+        if (commandeBean != null) {
+            Intent intent = new Intent(this, HstoriqueCommandActivity.class);
+            // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra(PanierActivity.COMMANDE_EXTRA, commandeBean);
+            //On redirige sur PanierActivity
+            startActivity(intent);
+            return;
+        }
 
         btCommander = findViewById(R.id.btCommander);
         btYAller = findViewById(R.id.btYAller);

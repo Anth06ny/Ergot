@@ -21,6 +21,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -118,6 +119,8 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
                 bt_annuler_commande.setVisibility(View.VISIBLE);
             }
             hideFoot();
+
+            Log.w("TAG_TEMP", new Gson().toJson(commandeBean));
         }
         else {
             //Sinon on affiche la commande en cours

@@ -1,5 +1,7 @@
 package ergot.anthony.com.ergot.model.firebase;
 
+import android.util.Log;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -23,6 +25,7 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.w("TAG_FIREBASE", "firebaseToken=" + refreshedToken);
         SharedPreferenceUtils.saveFireBaseToken(refreshedToken);
     }
 }
