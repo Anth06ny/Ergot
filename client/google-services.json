@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "768869615979",
+    "firebase_url": "https://ergotclient.firebaseio.com",
+    "project_id": "ergotclient",
+    "storage_bucket": "ergotclient.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768869615979:android:54bd6450bc8740e5",
+        "android_client_info": {
+          "package_name": "anthony.ergot.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768869615979-c52vlsoi8qgmnck65idnoci6qq5ipfm3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "anthony.ergot.client",
+            "certificate_hash": "d9c060dfa4532581540197dc0e79a6fce0ceead9"
+          }
+        },
+        {
+          "client_id": "768869615979-jtpu172as7gog6v1j590j8ec4abv4enb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZTlpg1Nrl2CuIUYceqiVwroggMnI-I7c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768869615979-jtpu172as7gog6v1j590j8ec4abv4enb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
