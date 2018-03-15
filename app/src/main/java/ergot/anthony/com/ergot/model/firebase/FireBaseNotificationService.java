@@ -13,7 +13,7 @@ import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
 import ergot.anthony.com.ergot.utils.NotificationUtils;
 
-/*
+/* Attention si pas dans data ca ne sera pas captéé par firebase et affichera une notif par defaut si l'application est en background
   url : https://fcm.googleapis.com/fcm/send
 
   HEADER
@@ -26,7 +26,7 @@ import ergot.anthony.com.ergot.utils.NotificationUtils;
   BODY
  {
    "to":"cCDUOK_IPZs:APA91bG57f3p6_rnleA3hmjE3I3i1vOwpxO0AYfX1EARy416cJj1x1RqbNCfUoCthQvIgbabzFeiLOW8RkGOXPgfwgOq3CIlTmTUyD6_1qJ8cX8ORFAavFu6LJ9kPMgBZjkFhlZxQD5S",
-   "notification" : {
+   "data" : {
      "body" : "This is an FCM notification message!",
      "title" : "FCM Message"
    }
@@ -34,8 +34,6 @@ import ergot.anthony.com.ergot.utils.NotificationUtils;
 
  */
 public class FireBaseNotificationService extends FirebaseMessagingService {
-
-
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -46,14 +44,9 @@ public class FireBaseNotificationService extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.w("TAG_FIREBASE", "Message data payload: " + remoteMessage.getData());
-        }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null && StringUtils.isNotBlank(remoteMessage.getNotification().getBody())) {
-            Log.w("TAG_FIREBASE", "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.w("TAG_FIREBASE", "Message body payload: " + remoteMessage.getData());
             try {
-                CommandeBean commandeBean = WsUtils.gson.fromJson(remoteMessage.getNotification().getBody(), CommandeBean.class);
+                CommandeBean commandeBean = WsUtils.gson.fromJson(remoteMessage.getData().get("body"), CommandeBean.class);
                 if (commandeBean == null || commandeBean.getId() == 0) {
                     throw new TechnicalException("Le json reçu n'est pas une commande");
                 }
@@ -69,7 +62,12 @@ public class FireBaseNotificationService extends FirebaseMessagingService {
             }
         }
         else {
-            Log.w("TAG_FIREBASE", "Body vide");
+            Log.w("TAG_FIREBASE", "getData vide");
+        }
+
+        // Check if message contains a notification payload.
+        if (remoteMessage.getNotification() != null && StringUtils.isNotBlank(remoteMessage.getNotification().getBody())) {
+            Log.w("TAG_FIREBASE", "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM

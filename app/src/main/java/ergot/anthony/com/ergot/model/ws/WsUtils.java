@@ -192,7 +192,7 @@ public class WsUtils {
         Request request = new Request.Builder().url(URL_SEND_COMMAND).post(RequestBody.create(JSON, json)).build();
 
         //Execution de la requête
-        Response response = null;
+        Response response;
         try {
             response = getOkHttpClient().newCall(request).execute();
         }

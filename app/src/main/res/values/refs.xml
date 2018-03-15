@@ -7,4 +7,6 @@
 
     <!-- Mot de passe pour les envoies admin -->
     <string name="adminPass"/>
+
+    <string name="chanelId">commandeChannel</string>
 </resources>

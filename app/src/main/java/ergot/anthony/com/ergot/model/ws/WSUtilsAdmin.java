@@ -30,8 +30,7 @@ public class WSUtilsAdmin {
     public static final String ADMIN_PASS = "adminPass";
 
     //ADMIN
-    private static final String URL_SERVER_ADMIN = URL_SERVEUR + "admin/";
-    private static final String URL_UPDATE_COMMAND = URL_SERVER_ADMIN + "updateCommande";
+    private static final String URL_UPDATE_COMMAND = URL_SERVEUR + "updateCommande";
 
     public static void updateCommandStatut(CommandeBean commandeBean, int newStatut, long datePrevision, int statutAnnulation) throws TechnicalException {
         //ON garde l'ancien statut en cas d'erreur

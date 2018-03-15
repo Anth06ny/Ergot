@@ -383,6 +383,7 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
                 int index = commandeBeanArrayList.indexOf(send);
                 commandeAdapter.notifyItemChanged(index);
             }
+            refreshScreen();
         }
     }
 }

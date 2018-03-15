@@ -27,7 +27,7 @@ import ergot.anthony.com.ergot.model.bean.Statut;
 
 public class NotificationUtils {
 
-    private static final String CHANNEL_ID = "commandeChannel";
+    private static final String CHANNEL_ID = MyApplication.getMyApplication().getString(R.string.chanelId);
     private static final CharSequence CHANNEL_NAME = "Commandes";
 
     /**
@@ -79,8 +79,6 @@ public class NotificationUtils {
         //Action quand on clique sur la notification
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(PanierActivity.COMMANDE_EXTRA, commandeBean);
-        //On vide la stack d'activity
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Image de droite sur la notification
