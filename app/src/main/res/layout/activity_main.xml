@@ -37,7 +37,7 @@
 
             android:text="@string/bt_commander"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/font_16"/>
+            android:textSize="@dimen/font_14"/>
 
         <View
             android:layout_width="1dp"
@@ -68,7 +68,7 @@
             android:layout_weight="3"
             android:text="@string/bt_y_aller"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/font_16"/>
+            android:textSize="@dimen/font_14"/>
 
         <View
             android:layout_width="1dp"
@@ -97,7 +97,7 @@
             android:layout_weight="3"
             android:text="@string/bt_histo"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/font_16"/>
+            android:textSize="@dimen/font_14"/>
 
         <View
             android:layout_width="1dp"

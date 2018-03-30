@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
+import ergot.anthony.com.ergot.transverse.utils.SharedPreferenceUtils;
 
 /**
  * Created by Utilisateur on 13/03/2018.

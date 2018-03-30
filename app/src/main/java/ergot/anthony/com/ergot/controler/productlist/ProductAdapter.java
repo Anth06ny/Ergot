@@ -13,7 +13,7 @@ import java.util.List;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
-import ergot.anthony.com.ergot.utils.Utils;
+import ergot.anthony.com.ergot.transverse.utils.Utils;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 

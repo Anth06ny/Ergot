@@ -8,10 +8,10 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.apache.commons.lang3.StringUtils;
 
 import ergot.anthony.com.ergot.MyApplication;
-import ergot.anthony.com.ergot.exception.TechnicalException;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
-import ergot.anthony.com.ergot.utils.NotificationUtils;
+import ergot.anthony.com.ergot.transverse.utils.NotificationUtils;
 
 /* Attention si pas dans data ca ne sera pas captéé par firebase et affichera une notif par defaut si l'application est en background
   url : https://fcm.googleapis.com/fcm/send

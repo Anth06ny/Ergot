@@ -23,14 +23,14 @@ import java.util.ArrayList;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.historique.CommandeAdapter;
 import ergot.anthony.com.ergot.controler.panier.PanierActivity;
-import ergot.anthony.com.ergot.exception.TechnicalException;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.Statut;
 import ergot.anthony.com.ergot.model.bean.StatutAnnulation;
 import ergot.anthony.com.ergot.model.ws.WSUtilsAdmin;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
-import ergot.anthony.com.ergot.utils.AlertDialogUtils;
-import ergot.anthony.com.ergot.utils.Utils;
+import ergot.anthony.com.ergot.transverse.utils.AlertDialogUtils;
+import ergot.anthony.com.ergot.transverse.utils.Utils;
 
 public class GestionCommandeActivity extends AppCompatActivity implements CommandeAdapter.OnComandeClicListenerAdmin, View.OnClickListener {
 

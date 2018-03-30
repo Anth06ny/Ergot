@@ -16,12 +16,11 @@ import java.util.concurrent.TimeUnit;
 
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
-import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.UserBean;
-import ergot.anthony.com.ergot.utils.Logger;
-import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
+import ergot.anthony.com.ergot.transverse.utils.Logger;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,13 +35,15 @@ import static ergot.anthony.com.ergot.model.ws.WSUtilsAdmin.ADMIN_PASS;
 
 public class WsUtils {
 
-    static final String PING_GOOGLE = "http://www.google.fr";
+    private static final String PING_GOOGLE = "http://www.google.fr";
 
-    static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);// "http://192.168.20.10:8000/";
-    private static final String URL_GET_CATALOGUE = URL_SERVEUR + "getCatalogue";
-    private static final String URL_SEND_COMMAND = URL_SERVEUR + "setCommande";
-    private static final String URL_GET_HISTORY = URL_SERVEUR + "getHistorique";
-    private static final String URL_CANCEL_COMMAND = URL_SERVEUR + "cancelCommande";
+    public static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);
+    public static final String URL_SERVEUR_WS = URL_SERVEUR + "app_dev.php/";
+
+    private static final String URL_GET_CATALOGUE = URL_SERVEUR_WS + "getCatalogue";
+    private static final String URL_SEND_COMMAND = URL_SERVEUR_WS + "setCommande";
+    private static final String URL_GET_HISTORY = URL_SERVEUR_WS + "getHistorique";
+    private static final String URL_CANCEL_COMMAND = URL_SERVEUR_WS + "cancelCommande";
 
     public static final Gson gson = new Gson();
 
@@ -97,6 +98,12 @@ public class WsUtils {
                             new TypeToken<ArrayList<CategoryBean>>() {
                             }.getType());
                 }
+
+                //On met le lien complet pour chaque image
+                for (CategoryBean categoryBean : catalogue) {
+                    categoryBean.setUrl_image(URL_SERVEUR + categoryBean.getUrl_image());
+                }
+
                 return catalogue;
             }
             catch (Exception e) {
@@ -114,9 +121,7 @@ public class WsUtils {
     public static ArrayList<CommandeBean> getHistory() throws TechnicalException {
 
         UserBean userBean = new UserBean();
-        userBean.setEmail(SharedPreferenceUtils.getSaveEmail());
-        userBean.setToken(SharedPreferenceUtils.getUniqueToken());
-        userBean.setFirebaseToken(SharedPreferenceUtils.getFireBaseToken());
+        userBean.fillUserToken();
 
         String json = gson.toJson(userBean);
         Log.w("TAG_URL", URL_GET_HISTORY);
@@ -182,7 +187,7 @@ public class WsUtils {
     public static ArrayList<CommandeBean> sendCommande(CommandeBean commandeBean) throws TechnicalException {
 
         //ON ajoute le token du téléphone
-        commandeBean.getUser().setToken(SharedPreferenceUtils.getUniqueToken());
+        commandeBean.getUser().fillUserToken();
 
         String json = gson.toJson(commandeBean);
         Log.w("TAG_REQ", URL_SEND_COMMAND);

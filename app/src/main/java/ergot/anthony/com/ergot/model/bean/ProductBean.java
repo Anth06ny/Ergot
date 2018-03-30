@@ -17,7 +17,6 @@ public class ProductBean implements Serializable, Cloneable {
     private boolean is_supp;
     private ArrayList<SuppBean> supplements;
 
-
     public ProductBean() {
     }
 

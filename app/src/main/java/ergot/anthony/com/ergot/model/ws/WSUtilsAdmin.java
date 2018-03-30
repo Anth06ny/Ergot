@@ -8,15 +8,15 @@ import java.net.HttpURLConnection;
 
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
-import ergot.anthony.com.ergot.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
-import ergot.anthony.com.ergot.utils.Logger;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
+import ergot.anthony.com.ergot.transverse.utils.Logger;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static ergot.anthony.com.ergot.model.ws.WsUtils.JSON;
-import static ergot.anthony.com.ergot.model.ws.WsUtils.URL_SERVEUR;
+import static ergot.anthony.com.ergot.model.ws.WsUtils.URL_SERVEUR_WS;
 import static ergot.anthony.com.ergot.model.ws.WsUtils.getOkHttpClient;
 import static ergot.anthony.com.ergot.model.ws.WsUtils.gson;
 import static ergot.anthony.com.ergot.model.ws.WsUtils.testInternetConnexionOnGoogle;
@@ -30,7 +30,7 @@ public class WSUtilsAdmin {
     public static final String ADMIN_PASS = "adminPass";
 
     //ADMIN
-    private static final String URL_UPDATE_COMMAND = URL_SERVEUR + "updateCommande";
+    private static final String URL_UPDATE_COMMAND = URL_SERVEUR_WS + "updateCommande";
 
     public static void updateCommandStatut(CommandeBean commandeBean, int newStatut, long datePrevision, int statutAnnulation) throws TechnicalException {
         //ON garde l'ancien statut en cas d'erreur

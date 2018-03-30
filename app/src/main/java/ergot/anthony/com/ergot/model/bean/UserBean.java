@@ -2,6 +2,8 @@ package ergot.anthony.com.ergot.model.bean;
 
 import java.io.Serializable;
 
+import ergot.anthony.com.ergot.transverse.utils.SharedPreferenceUtils;
+
 /**
  * Created by Anthony on 05/03/2018.
  */
@@ -17,6 +19,13 @@ public class UserBean implements Serializable {
     private int nbCmdCancel; //Nombre de commande en cancel Client
     private int nbCmdReadyCancel; //Nombre de commande en cancel Client commande prete
     private int nbCmdNverCome;   //Nombre de commande en client jamais venu
+
+    public void fillUserToken() {
+        //ON ajoute le token du téléphone
+        token = SharedPreferenceUtils.getUniqueToken();
+        firebaseToken = SharedPreferenceUtils.getFireBaseToken();
+        email = SharedPreferenceUtils.getSaveEmail();
+    }
 
     public int getNbCmdOk() {
         return nbCmdOk;

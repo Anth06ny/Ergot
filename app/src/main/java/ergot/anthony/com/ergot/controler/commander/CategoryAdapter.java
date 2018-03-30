@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import java.util.List;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
-import ergot.anthony.com.ergot.utils.GlideApp;
+import ergot.anthony.com.ergot.transverse.utils.GlideApp;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
@@ -48,9 +49,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         final CategoryBean categoryBean = categoryBeanList.get(position);
 
         holder.rc_tv.setText(categoryBean.getName());
-        //GlideApp.with(holder.rc_tv.getContext()).load(categoryBean.getUrl()).placeholder(waitIcon).error(error_icon).fitCenter().into(holder.rc_iv);
-
-        GlideApp.with(holder.rc_tv.getContext()).load(R.drawable.burger).placeholder(waitIcon).error(error_icon).fitCenter().diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(holder.rc_iv);
+        Log.w("TAG_IMAGE", categoryBean.getUrl_image());
+        GlideApp.with(holder.rc_tv.getContext()).load(categoryBean.getUrl_image()).placeholder(waitIcon).error(error_icon).fitCenter().diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(holder.rc_iv);
 
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,7 +22,7 @@ import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.panier.PanierActivity;
 import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
-import ergot.anthony.com.ergot.utils.Utils;
+import ergot.anthony.com.ergot.transverse.utils.Utils;
 
 /**
  * Created by Anthony on 24/10/2017.

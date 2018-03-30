@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.productlist.ProductListActivity;
-import ergot.anthony.com.ergot.exception.TechnicalException;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
 

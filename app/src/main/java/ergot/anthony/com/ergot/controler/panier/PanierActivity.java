@@ -47,15 +47,15 @@ import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.commander.MotherActivity;
 import ergot.anthony.com.ergot.controler.historique.HstoriqueCommandActivity;
-import ergot.anthony.com.ergot.exception.TechnicalException;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.Statut;
 import ergot.anthony.com.ergot.model.bean.StatutAnnulation;
 import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
 import ergot.anthony.com.ergot.model.ws.WSUtilsAdmin;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
-import ergot.anthony.com.ergot.utils.AlertDialogUtils;
-import ergot.anthony.com.ergot.utils.SharedPreferenceUtils;
+import ergot.anthony.com.ergot.transverse.utils.AlertDialogUtils;
+import ergot.anthony.com.ergot.transverse.utils.SharedPreferenceUtils;
 
 public class PanierActivity extends MotherActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, CommandeAdapter.OnCommandListener {
 
@@ -195,7 +195,6 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
                     return;
                 }
 
-                MyApplication.getCommandeBean().getUser().setEmail(tvEmail.getText().toString());
                 MyApplication.getCommandeBean().getUser().setTelephone(etPhone.getText().toString());
                 MyApplication.getCommandeBean().setRemarque(et_rem.getText().toString());
                 //Tout est on on lance la validation

@@ -52,8 +52,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+
         if (btCommander == v) {
             startActivity(new Intent(this, CommanderActivity.class));
+            //throw new RuntimeException("This is a crash");
         }
         else if (btYAller == v) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL_ERGOT));

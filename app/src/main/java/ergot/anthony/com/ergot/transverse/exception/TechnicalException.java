@@ -1,4 +1,4 @@
-package ergot.anthony.com.ergot.exception;
+package ergot.anthony.com.ergot.transverse.exception;
 
 import android.support.annotation.StringRes;
 

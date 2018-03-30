@@ -1,5 +1,7 @@
 package ergot.anthony.com.ergot.controler.productlist;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
@@ -17,8 +21,8 @@ import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
 import ergot.anthony.com.ergot.model.bean.SuppBean;
 import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
-import ergot.anthony.com.ergot.utils.AlertDialogUtils;
-import ergot.anthony.com.ergot.utils.GlideApp;
+import ergot.anthony.com.ergot.transverse.utils.AlertDialogUtils;
+import ergot.anthony.com.ergot.transverse.utils.GlideApp;
 
 public class ProductListActivity extends MotherActivity implements ProductAdapter.OnProductClicListener {
 
@@ -57,7 +61,17 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tv_title.setText(categoryBean.getName());
-        GlideApp.with(this).load(R.drawable.burger).into(civ);
+
+        //Image
+        int color = getResources().getColor(R.color.colorPrimary);
+        Drawable waitIcon = getResources().getDrawable(R.drawable.ic_hourglass_empty_black_48dp);
+        waitIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+        color = getResources().getColor(R.color.error_color);
+        Drawable error_icon = getResources().getDrawable(R.drawable.ic_highlight_off_black_48dp);
+        error_icon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        GlideApp.with(this).load(categoryBean.getUrl_image()).placeholder(waitIcon).error(error_icon).fitCenter().diskCacheStrategy(DiskCacheStrategy.RESOURCE).into
+                (civ);
     }
 
     /**

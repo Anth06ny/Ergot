@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
-import ergot.anthony.com.ergot.utils.Utils;
+import ergot.anthony.com.ergot.transverse.utils.Utils;
 
 public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHolder> {
 

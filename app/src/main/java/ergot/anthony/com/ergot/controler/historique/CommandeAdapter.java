@@ -23,7 +23,7 @@ import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.Statut;
-import ergot.anthony.com.ergot.utils.Utils;
+import ergot.anthony.com.ergot.transverse.utils.Utils;
 
 /**
  * Created by Utilisateur on 12/02/2018.

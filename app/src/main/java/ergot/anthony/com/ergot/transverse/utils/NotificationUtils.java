@@ -1,4 +1,4 @@
-package ergot.anthony.com.ergot.utils;
+package ergot.anthony.com.ergot.transverse.utils;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
