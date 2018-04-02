@@ -32,9 +32,11 @@
     <string name="tv_command_canceled">La commande a été annulée</string>
     <string name="cancel_reason_lib">Raison de l\'annulation :</string>
 
+
     <!-- GestionCommandeActivity -->
     <string name="gestion_commande_title">Gestion des commandes</string>
     <string name="tv_commande_lib">Commande : </string>
+    <string name="rupture">Rupture</string>
 
     <!-- History -->
     <string name="time_expected">Heure estimée : </string>
@@ -77,6 +79,7 @@
     <string name="email_title">email :</string>
     <string name="comande_ready_in">La commande sera prête dans environ :</string>
     <string name="no_produit_to_send">Votre commande ne contient aucun produit</string>
+    <string name="product_disable">Produit momentanément indisponible</string>
 
 
 </resources>

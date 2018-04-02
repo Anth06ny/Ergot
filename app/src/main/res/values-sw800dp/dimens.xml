@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
 
 
-    <!-- dimension du text * 2 -->
+    <!-- dimension du text * 2
     <dimen name="font_10">30sp</dimen>
     <dimen name="font_11">33sp</dimen>
     <dimen name="font_12">36sp</dimen>
@@ -18,7 +18,7 @@
     <dimen name="font_30">90sp</dimen>
     <dimen name="font_40">120sp</dimen>
     <dimen name="font_50">150sp</dimen>
-
+          -->
     <!-- Margin *2 -->
     <dimen name="margin_1">2dp</dimen>
     <dimen name="margin_2">6dp</dimen>

@@ -1,11 +1,13 @@
 package ergot.anthony.com.ergot;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Bus;
 
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
+import ergot.anthony.com.ergot.transverse.utils.SharedPreferenceUtils;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -18,8 +20,6 @@ public class MyApplication extends Application {
      * AFaire
      *
      *
-     * Trouver comment faire en sorte que le push fonctionne même en bg
-     * Gerer le clic sur la notification retourne bien MainActivity(plusieurs clcik ) et qu'il efface bien la stack trace ancienne
      */
 
     private static CommandeBean commandeBean;
@@ -37,6 +37,7 @@ public class MyApplication extends Application {
         myApplication = this;
         newCommande();
         bus = new Bus();
+        Log.w("TAG_FIREBASE", "firebaseToken=" + SharedPreferenceUtils.getFireBaseToken());
 
         debugMode = getResources().getBoolean(R.bool.debug);
         adminMode = getResources().getBoolean(R.bool.adminMode);

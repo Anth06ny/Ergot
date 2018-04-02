@@ -24,11 +24,21 @@
 
             <TextView
                 android:id="@+id/tv_title"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Burger Spécial"
                 android:textColor="@android:color/black"
+                android:textSize="@dimen/font_16"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_rupture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="@string/rupture"
+                android:textColor="@color/error_color"
                 android:textSize="@dimen/font_16"
                 android:textStyle="bold"/>
 

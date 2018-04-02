@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +38,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.tv_title.setText(productBean.getName());
         holder.tv_price.setText(Utils.longToStringPrice(productBean.getPrice()));
 
+        holder.tv_rupture.setVisibility(productBean.isRupture() ? View.VISIBLE : View.INVISIBLE);
+
         if (StringUtils.isBlank(productBean.getDescription())) {
             holder.tv_description.setVisibility(View.GONE);
         }
@@ -50,6 +51,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (onCategoryClicListener != null) {
                     int[] clicOnScreen = new int[2];
                     holder.tv_price.getLocationOnScreen(clicOnScreen);
@@ -68,8 +70,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     // View Holder
     //------------------
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tv_title, tv_description, tv_price;
-        public ImageView rc_iv;
+        public TextView tv_title, tv_description, tv_price, tv_rupture;
         public View root;
 
         public ViewHolder(View itemView) {
@@ -77,6 +78,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_description = itemView.findViewById(R.id.tv_description);
             tv_price = itemView.findViewById(R.id.tv_price);
+            tv_rupture = itemView.findViewById(R.id.tv_rupture);
             root = itemView.findViewById(R.id.root);
         }
     }

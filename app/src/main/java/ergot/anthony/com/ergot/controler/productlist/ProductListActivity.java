@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -96,8 +97,17 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
     // Callback
     // -------------------------------- */
 
+    /**
+     * @param productBean
+     * @param clicOnScreen Position du clic à l'ecran pour l'animation
+     */
     @Override
     public void onProductClick(final ProductBean productBean, final int[] clicOnScreen) {
+
+        if (productBean.isRupture()) {
+            Toast.makeText(this, R.string.product_disable, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         ArrayList<SuppBean> suppBeanList = productBean.getSupplements();
 

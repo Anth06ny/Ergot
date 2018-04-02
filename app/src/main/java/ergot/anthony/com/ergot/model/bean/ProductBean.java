@@ -15,9 +15,18 @@ public class ProductBean implements Serializable, Cloneable {
     private String description;
     private long price;
     private boolean is_supp;
+    private boolean rupture;
     private ArrayList<SuppBean> supplements;
 
     public ProductBean() {
+    }
+
+    public boolean isRupture() {
+        return rupture;
+    }
+
+    public void setRupture(boolean rupture) {
+        this.rupture = rupture;
     }
 
     public long getId() {
