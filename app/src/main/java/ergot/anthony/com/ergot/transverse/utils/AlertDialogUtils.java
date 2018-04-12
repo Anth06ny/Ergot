@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
+import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.StatutAnnulation;
 import ergot.anthony.com.ergot.model.bean.SuppBean;
 
@@ -87,6 +91,37 @@ public class AlertDialogUtils {
         alt_bld.setMessage(question);
         alt_bld.setPositiveButton(positiveText, positiveButton);
         alt_bld.setNegativeButton(R.string.bt_no, null);
+        alt_bld.setCancelable(true);
+        alt_bld.create().show();
+    }
+
+    /**
+     * Affiche une fenetre avec la liste des derniere commande de l'utilisateur et de leur succes
+     *
+     * @param context
+     */
+    public static void showHistoCommandUser(final Context context, CommandeBean commandeBean) {
+
+        AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.alert_history_user, null);
+
+        TextView tvNbReussi = view.findViewById(R.id.tvNbReussi);
+        TextView tvNbAnnulee = view.findViewById(R.id.tvNbAnnulee);
+        TextView tvNbPreparerAnnulee = view.findViewById(R.id.tvNbPreparerAnnulee);
+        TextView tvNbPreparerNonChercher = view.findViewById(R.id.tvNbPreparerNonChercher);
+
+        tvNbReussi.setText(commandeBean.getUser().getNbCmdOk() + "");
+        tvNbAnnulee.setText(commandeBean.getUser().getNbCmdCancel() + "");
+        tvNbPreparerAnnulee.setText(commandeBean.getUser().getNbCmdReadyCancel() + "");
+        tvNbPreparerNonChercher.setText(commandeBean.getUser().getNbCmdNverCome() + "");
+
+        alt_bld.setView(view);
+        alt_bld.setPositiveButton(R.string.bt_fermer, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         alt_bld.setCancelable(true);
         alt_bld.create().show();
     }

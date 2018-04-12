@@ -158,10 +158,10 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
 
         //Pour le moment invisible tout le temps
         holder.iv_warning.setVisibility(View.INVISIBLE);
+        holder.iv_warning.clearColorFilter();
         holder.iv_new.setVisibility(View.INVISIBLE);
 
         //if(co)
-
         switch (commandeBean.getStatut()) {
             case Statut.STATUS_SEND:
                 holder.iv_new.setVisibility(View.VISIBLE);
@@ -186,6 +186,14 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
                 holder.bt_cancel.setTypeface(null, Typeface.BOLD);
                 holder.bt_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize);
                 break;
+        }
+
+        if (commandeBean.getUser().getNbCmdNverCome() > 0) {
+            holder.iv_warning.setVisibility(View.VISIBLE);
+        }
+        else if (commandeBean.getUser().getNbCmdCancel() > 0 || commandeBean.getUser().getNbCmdReadyCancel() > 0) {
+            holder.iv_warning.setVisibility(View.VISIBLE);
+            holder.iv_warning.setColorFilter(MyApplication.getMyApplication().getResources().getColor(R.color.orange));
         }
 
         holder.bt_accept.setOnClickListener(new View.OnClickListener() {
@@ -213,6 +221,13 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 onComandeClicListenerAdmin.cancelCommandClick(commandeBean);
+            }
+        });
+
+        holder.iv_warning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onComandeClicListenerAdmin.onWarningCommandClick(commandeBean);
             }
         });
     }
@@ -328,5 +343,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         void onReadyCommand(CommandeBean commandeBean);
 
         void onSendCommandClick(CommandeBean commandeBean);
+
+        void onWarningCommandClick(CommandeBean commandeBean);
     }
 }

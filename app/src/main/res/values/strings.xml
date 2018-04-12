@@ -11,6 +11,7 @@
     <string name="bt_no">non</string>
     <string name="bt_cancel_order">Annuler la commande</string>
     <string name="bt_gestion_commande">Gestion des commandes</string>
+    <string name="bt_fermer">Fermer</string>
 
     <string name="bt_actualiser">Actualiser</string>
     <string name="title_activity_product_list">ProductListActivity</string>
@@ -50,6 +51,11 @@
     <string name="no_commande">Aucune commande disponible</string>
     <string name="client">Client : </string>
     <string name="telephone">Téléphone : </string>
+
+    <string name="commande_sans_probleme">Reussie(s) :</string>
+    <string name="commande_annule">Annulée(s) :</string>
+    <string name="commande_prepare_annule">Annulée après préparation : </string>
+    <string name="commande_prepare_non_chercher">Jamais venu chercher :</string>
 
 
     <!--Statut commande-->

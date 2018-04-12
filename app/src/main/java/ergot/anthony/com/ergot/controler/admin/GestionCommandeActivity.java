@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.historique.CommandeAdapter;
 import ergot.anthony.com.ergot.controler.panier.PanierActivity;
-import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.Statut;
 import ergot.anthony.com.ergot.model.bean.StatutAnnulation;
 import ergot.anthony.com.ergot.model.ws.WSUtilsAdmin;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.transverse.utils.AlertDialogUtils;
 import ergot.anthony.com.ergot.transverse.utils.Utils;
 
@@ -172,6 +172,12 @@ public class GestionCommandeActivity extends AppCompatActivity implements Comman
     @Override
     public void onSendCommandClick(CommandeBean commandeBean) {
         updateCommande(commandeBean, Statut.STATUS_DELIVERY, -1, 0);
+    }
+
+    @Override
+    public void onWarningCommandClick(CommandeBean commandeBean) {
+        //On affiche l'historique de l'utilisateur
+        AlertDialogUtils.showHistoCommandUser(this, commandeBean);
     }
 
       /* ---------------------------------

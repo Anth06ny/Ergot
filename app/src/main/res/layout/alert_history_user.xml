@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:orientation="vertical">
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/commande_sans_probleme"/>
+
+        <TextView
+            android:id="@+id/tvNbReussi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/margin_10"
+            android:text="2"
+            android:textColor="@color/add_color"
+            android:textStyle="bold"/>
+
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/commande_annule"/>
+
+        <TextView
+            android:id="@+id/tvNbAnnulee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/margin_10"
+            android:text="2"
+            android:textStyle="bold"/>
+
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/commande_prepare_annule"/>
+
+        <TextView
+            android:id="@+id/tvNbPreparerAnnulee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/margin_10"
+            android:text="2"
+            android:textColor="@color/orange"
+            android:textStyle="bold"/>
+
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/commande_prepare_non_chercher"/>
+
+        <TextView
+            android:id="@+id/tvNbPreparerNonChercher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/margin_10"
+            android:text="2"
+            android:textColor="@color/error_color"
+            android:textStyle="bold"/>
+
+
+    </TableRow>
+
+</TableLayout>
