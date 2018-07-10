@@ -109,7 +109,8 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
             return;
         }
 
-        ArrayList<SuppBean> suppBeanList = productBean.getSupplements();
+        //TODO A corriger
+        ArrayList<SuppBean> suppBeanList = null; //productBean.getSupplements();
 
         if (suppBeanList == null || suppBeanList.isEmpty()) {
             // Pas de supplement

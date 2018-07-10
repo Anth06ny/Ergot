@@ -74,6 +74,7 @@ public class NotificationUtils {
     }
 
     private static void sendCommandeNotification(Context context, CommandeBean commandeBean) {
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID);
 
         //Action quand on clique sur la notification
@@ -136,6 +137,26 @@ public class NotificationUtils {
         //On demande au système d'afficher la notification
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify((int) commandeBean.getId(), notificationBuilder.build());
+    }
+
+    private static void createInstantNotification(Context c, String message) {
+        //Ce qui se passera quand on cliquera sur la notif
+        Intent intent = new Intent(c, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 28, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        //La notification
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c, CHANNEL_ID);
+        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Le titre")
+                .setContentText(message)
+                .setContentIntent(pendingIntent)//le clic dessus
+                .build();
+
+        //Envoyer la notification
+        NotificationManagerCompat ncm = NotificationManagerCompat.from(c);
+
+        //ENVOIE
+        ncm.notify(29, notificationBuilder.build());
     }
 
     public static void removeNotification(Context context, CommandeBean commandeBean) {

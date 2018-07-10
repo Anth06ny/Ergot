@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "anthony.ergot.client"
+        applicationId "winch.client"
         minSdkVersion 18
         targetSdkVersion 26
         versionCode 1
@@ -17,8 +17,27 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
     }
     buildToolsVersion '26.0.2'
+
+    productFlavors {
+        dev {
+            applicationId "winch.client.dev"
+            flavorDimensions "default"
+        }
+        preprod {
+            applicationId "winch.client.preprod"
+            flavorDimensions "default"
+        }
+        prod {
+            applicationId "winch.client.prod"
+            flavorDimensions "default"
+        }
+    }
 }
 
 dependencies {

@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="ergot.anthony.com.ergot"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+    <manifest package="ergot.anthony.com.ergot"
+              xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+        <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+        <uses-permission android:name="android.permission.INTERNET"/>
+        <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
+        <uses-permission android:name="android.permission.VIBRATE"/>
 
-    <application
-        android:name=".MyApplication"
-        android:allowBackup="true"
-        android:configChanges="orientation|screenSize|keyboardHidden"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/MyAppThemeNoBar">
-        <activity
-            android:name=".MainActivity"
-            android:singleUser="true"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+        <application
+            android:name=".MyApplication"
+            android:allowBackup="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/MyAppThemeNoBar">
+            <activity
+                android:name=".MainActivity"
+                android:singleUser="true"
+                >
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".controler.commander.CommanderActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/MyAppTheme">
-        </activity>
-        <activity
-            android:name=".controler.productlist.ProductListActivity"
-            android:label=""
-            android:parentActivityName=".controler.commander.CommanderActivity">
+                    <category android:name="android.intent.category.LAUNCHER"/>
+                </intent-filter>
+            </activity>
+            <activity
+                android:name=".controler.commander.CommanderActivity"
+                android:parentActivityName=".MainActivity"
+                android:theme="@style/MyAppTheme">
+            </activity>
+            <activity
+                android:name=".controler.productlist.ProductListActivity"
+                android:label=""
+                android:parentActivityName=".controler.commander.CommanderActivity">
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ergot.anthony.com.ergot.controler.commander.CommanderActivity"/>
+            </activity>
+            <activity
+                android:name=".controler.panier.PanierActivity"
+                android:label="@string/panier_title"
+                android:parentActivityName=".controler.commander.CommanderActivity"
+                android:theme="@style/MyAppTheme">
+            </activity>
+            <activity
+                android:name=".controler.historique.HstoriqueCommandActivity"
+                android:label="@string/history_title"
+                android:parentActivityName=".MainActivity"
+                android:theme="@style/MyAppTheme">
+            </activity>
+            <activity
+                android:name=".controler.admin.GestionCommandeActivity"
+                android:label="@string/gestion_commande_title"
+                android:parentActivityName=".MainActivity"
+                android:theme="@style/MyAppTheme">
+            </activity>
+
+            <!-- FIREBASE -->
+
+            <service
+                android:name=".model.firebase.MyFirebaseInstanceIdService">
+                <intent-filter>
+                    <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                </intent-filter>
+            </service>
+
+            <service android:name=".model.firebase.FireBaseNotificationService">
+                <intent-filter>
+                    <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                </intent-filter>
+            </service>
+
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ergot.anthony.com.ergot.controler.commander.CommanderActivity"/>
-        </activity>
-        <activity
-            android:name=".controler.panier.PanierActivity"
-            android:label="@string/panier_title"
-            android:parentActivityName=".controler.commander.CommanderActivity"
-            android:theme="@style/MyAppTheme">
-        </activity>
-        <activity
-            android:name=".controler.historique.HstoriqueCommandActivity"
-            android:label="@string/history_title"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/MyAppTheme">
-        </activity>
-        <activity
-            android:name=".controler.admin.GestionCommandeActivity"
-            android:label="@string/gestion_commande_title"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/MyAppTheme">
-        </activity>
+                android:name="com.google.firebase.messaging.default_notification_channel_id"
+                android:value="@string/chanelId"/>
 
-        <!-- FIREBASE -->
+            <!-- CRASH LYTICS -->
+            <meta-data
+                android:name="io.fabric.ApiKey"
+                android:value="a9cda0381b4a0047c04eb2cc01bacdf698ece33d"
+                />
 
-        <service
-            android:name=".model.firebase.MyFirebaseInstanceIdService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-
-        <service android:name=".model.firebase.FireBaseNotificationService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/chanelId"/>
-
-        <!-- CRASH LYTICS -->
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="a9cda0381b4a0047c04eb2cc01bacdf698ece33d"
-            />
-
-    </application>
+        </application>
 
 
-</manifest>
+    </manifest>

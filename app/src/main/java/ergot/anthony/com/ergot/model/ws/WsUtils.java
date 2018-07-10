@@ -16,9 +16,9 @@ import java.util.concurrent.TimeUnit;
 
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
-import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.UserBean;
+import ergot.anthony.com.ergot.model.bean.sendbean.GetCatalogueBean;
 import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.transverse.utils.Logger;
 import okhttp3.MediaType;
@@ -38,9 +38,11 @@ public class WsUtils {
     private static final String PING_GOOGLE = "http://www.google.fr";
 
     public static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);
-    public static final String URL_SERVEUR_WS = URL_SERVEUR + "app_dev.php/";
+    public static final int ENSEIGNE_ID = MyApplication.getMyApplication().getResources().getInteger(R.integer.enseigne_id);
+    public static final int RESTAURANT_ID = 1;
+    public static final String URL_SERVEUR_WS = URL_SERVEUR;
 
-    private static final String URL_GET_CATALOGUE = URL_SERVEUR_WS + "getCatalogue";
+    private static final String URL_GET_CATALOGUE = URL_SERVEUR_WS + "enseignes/" + ENSEIGNE_ID + "/restaurants/" + RESTAURANT_ID + "/catalogue";
     private static final String URL_SEND_COMMAND = URL_SERVEUR_WS + "setCommande";
     private static final String URL_GET_HISTORY = URL_SERVEUR_WS + "getHistorique";
     private static final String URL_CANCEL_COMMAND = URL_SERVEUR_WS + "cancelCommande";
@@ -59,7 +61,7 @@ public class WsUtils {
      * @return
      * @throws TechnicalException
      */
-    public static ArrayList<CategoryBean> getCatalogue() throws TechnicalException {
+    public static GetCatalogueBean getCatalogue() throws TechnicalException {
 
         Log.w("TAG_URL", URL_GET_CATALOGUE);
 
@@ -83,26 +85,24 @@ public class WsUtils {
         else {
 
             try {
-                ArrayList<CategoryBean> catalogue;
+                GetCatalogueBean catalogue;
                 if (MyApplication.isDebugMode()) {
                     //Résultat de la requete.
 
                     String jsonRecu = response.body().string();
                     Logger.logJson("TAG_JSON_RECU", jsonRecu);
-                    catalogue = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CategoryBean>>() {
-                    }.getType());
+                    catalogue = gson.fromJson(jsonRecu, GetCatalogueBean.class);
                 }
                 else {
                     //JSON -> Java (Parser une ArrayList typée)
-                    catalogue = gson.fromJson(new InputStreamReader(response.body().byteStream()),
-                            new TypeToken<ArrayList<CategoryBean>>() {
-                            }.getType());
+                    catalogue = gson.fromJson(new InputStreamReader(response.body().byteStream()), GetCatalogueBean.class);
                 }
 
                 //On met le lien complet pour chaque image
-                for (CategoryBean categoryBean : catalogue) {
-                    categoryBean.setUrl_image(URL_SERVEUR + categoryBean.getUrl_image());
-                }
+                //TODO A Refaire
+                //                for (CategoryBean categoryBean : catalogue) {
+                //                    categoryBean.setUrl_image(URL_SERVEUR + categoryBean.getUrl_image());
+                //                }
 
                 return catalogue;
             }

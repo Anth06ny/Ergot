@@ -19,7 +19,8 @@
     <dimen name="font_40">120sp</dimen>
     <dimen name="font_50">150sp</dimen>
           -->
-    <!-- Margin *2 -->
+    <!-- Margin *3
+     -->
     <dimen name="margin_1">2dp</dimen>
     <dimen name="margin_2">6dp</dimen>
     <dimen name="margin_5">15dp</dimen>

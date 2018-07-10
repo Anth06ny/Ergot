@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 public class SuppBean implements Serializable {
 
+    //TODO A supprimer
+
     //Choix
     private long id;
     private ProductBean produit;

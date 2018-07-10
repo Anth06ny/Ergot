@@ -28,6 +28,8 @@ public class MyApplication extends Application {
     private static boolean adminMode;
     private static Bus bus;
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -39,7 +41,7 @@ public class MyApplication extends Application {
         bus = new Bus();
         Log.w("TAG_FIREBASE", "firebaseToken=" + SharedPreferenceUtils.getFireBaseToken());
 
-        debugMode = getResources().getBoolean(R.bool.debug);
+        debugMode = BuildConfig.DEBUG;
         adminMode = getResources().getBoolean(R.bool.adminMode);
     }
 

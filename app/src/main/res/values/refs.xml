@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<string name="url_server">http://192.168.10.213:8000/</string>-->
-    <string name="url_server">http://www.amonteiro.fr/</string>
-    <bool name="debug">true</bool>
+    <string name="url_server">http://winchdev.amonteiro.fr/</string>
+
     <bool name="adminMode">false</bool>
+    <integer name="enseigne_id">1</integer>
 
     <!-- Mot de passe pour les envoies admin -->
     <string name="adminPass"/>

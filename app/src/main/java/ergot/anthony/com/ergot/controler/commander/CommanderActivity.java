@@ -16,9 +16,10 @@ import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.productlist.ProductListActivity;
-import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
+import ergot.anthony.com.ergot.model.bean.sendbean.GetCatalogueBean;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 
 public class CommanderActivity extends MotherActivity implements View.OnClickListener, CategoryAdapter.OnCategoryClicListener {
 
@@ -121,7 +122,7 @@ public class CommanderActivity extends MotherActivity implements View.OnClickLis
 
     public class WSAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private ArrayList<CategoryBean> result = null;
+        private GetCatalogueBean result = null;
         private TechnicalException technicalException;
 
         @Override
@@ -157,7 +158,7 @@ public class CommanderActivity extends MotherActivity implements View.OnClickLis
             else {
                 erreur = null;
                 categoryList.clear();
-                categoryList.addAll(result);
+                categoryList.addAll(result.getCategories());
                 categoryAdapter.notifyDataSetChanged();
             }
 

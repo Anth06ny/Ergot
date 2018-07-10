@@ -1,5 +1,7 @@
 package ergot.anthony.com.ergot.model.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,7 +13,9 @@ public class CategoryBean implements Serializable {
 
     private long id;
     private String name;
+    @SerializedName("image")
     private String url_image;
+    @SerializedName("product")
     private ArrayList<ProductBean> products;
 
     public CategoryBean() {

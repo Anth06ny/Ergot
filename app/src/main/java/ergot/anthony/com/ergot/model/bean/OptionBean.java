@@ -1,31 +1,23 @@
 package ergot.anthony.com.ergot.model.bean;
 
-import java.io.Serializable;
+public class OptionBean {
 
-/**
- * Created by Anthony on 23/10/2017.
- */
-
-public class ProductBean implements Serializable, Cloneable {
-
-    //Base
     private long id;
     private String name;
     private String description;
     private long price;
-
-    private boolean is_supp;
     private boolean rupture;
 
-    public ProductBean() {
+    private ProductBean product;
+
+
+
+    public ProductBean getProduct() {
+        return product;
     }
 
-    public boolean isRupture() {
-        return rupture;
-    }
-
-    public void setRupture(boolean rupture) {
-        this.rupture = rupture;
+    public void setProduct(ProductBean product) {
+        this.product = product;
     }
 
     public long getId() {
@@ -60,11 +52,11 @@ public class ProductBean implements Serializable, Cloneable {
         this.price = price;
     }
 
-    public boolean isIs_supp() {
-        return is_supp;
+    public boolean isRupture() {
+        return rupture;
     }
 
-    public void setIs_supp(boolean is_supp) {
-        this.is_supp = is_supp;
+    public void setRupture(boolean rupture) {
+        this.rupture = rupture;
     }
 }

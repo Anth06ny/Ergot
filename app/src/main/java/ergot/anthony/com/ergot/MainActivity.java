@@ -6,17 +6,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.widget.TextView;
 
 import ergot.anthony.com.ergot.controler.admin.GestionCommandeActivity;
 import ergot.anthony.com.ergot.controler.commander.CommanderActivity;
 import ergot.anthony.com.ergot.controler.historique.HstoriqueCommandActivity;
 import ergot.anthony.com.ergot.controler.panier.PanierActivity;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
+import ergot.anthony.com.ergot.model.ws.WsUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Composants
     private AppCompatButton btCommander, btYAller, bthisto;
+    private TextView tvServer, tvAdmin;
 
     //Url
     private static final String URL_ERGOT = "https://www.google.com/maps/place/L'Ergot/@43.5841389,1.4282618,18.58z/data=!4m12!1m6!3m5!1s0x12aebb9943811f61:0x50fa05dc0fe6d00f!2sL'Ergot!8m2!3d43.5846299!4d1.4282615!3m4!1s0x12aebb9943811f61:0x50fa05dc0fe6d00f!8m2!3d43.5846299!4d1.4282615";
@@ -39,10 +42,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btCommander = findViewById(R.id.btCommander);
         btYAller = findViewById(R.id.btYAller);
         bthisto = findViewById(R.id.bthisto);
+        tvServer = findViewById(R.id.tvServer);
+        tvAdmin = findViewById(R.id.tvAdmin);
 
         btYAller.setOnClickListener(this);
         btCommander.setOnClickListener(this);
         bthisto.setOnClickListener(this);
+
+        if (MyApplication.isDebugMode()) {
+            tvServer.setText("Server : " + WsUtils.URL_SERVEUR);
+            tvAdmin.setText("Admin  : " + MyApplication.isAdminMode());
+        }
 
         if (MyApplication.isAdminMode()) {
             btCommander.setVisibility(View.GONE);
