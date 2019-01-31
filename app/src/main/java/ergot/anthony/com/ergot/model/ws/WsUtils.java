@@ -16,9 +16,9 @@ import java.util.concurrent.TimeUnit;
 
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
+import ergot.anthony.com.ergot.model.bean.CategoryBean;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.model.bean.UserBean;
-import ergot.anthony.com.ergot.model.bean.sendbean.GetCatalogueBean;
 import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.transverse.utils.Logger;
 import okhttp3.MediaType;
@@ -35,20 +35,16 @@ import static ergot.anthony.com.ergot.model.ws.WSUtilsAdmin.ADMIN_PASS;
 
 public class WsUtils {
 
-    private static final String PING_GOOGLE = "http://www.google.fr";
-
     public static final String URL_SERVEUR = MyApplication.getMyApplication().getString(R.string.url_server);
-    public static final int ENSEIGNE_ID = MyApplication.getMyApplication().getResources().getInteger(R.integer.enseigne_id);
-    public static final int RESTAURANT_ID = 1;
-    public static final String URL_SERVEUR_WS = URL_SERVEUR;
+    public static final String URL_IMAGE = MyApplication.getMyApplication().getString(R.string.url_image);
 
-    private static final String URL_GET_CATALOGUE = URL_SERVEUR_WS + "enseignes/" + ENSEIGNE_ID + "/restaurants/" + RESTAURANT_ID + "/catalogue";
-    private static final String URL_SEND_COMMAND = URL_SERVEUR_WS + "setCommande";
-    private static final String URL_GET_HISTORY = URL_SERVEUR_WS + "getHistorique";
-    private static final String URL_CANCEL_COMMAND = URL_SERVEUR_WS + "cancelCommande";
 
     public static final Gson gson = new Gson();
-
+    private static final String PING_GOOGLE = "http://www.google.fr";
+    private static final String URL_GET_CATALOGUE = URL_SERVEUR + "catalogue";
+    private static final String URL_SEND_COMMAND = URL_SERVEUR + "setCommande";
+    private static final String URL_GET_HISTORY = URL_SERVEUR + "getHistorique";
+    private static final String URL_CANCEL_COMMAND = URL_SERVEUR + "cancelCommande";
     public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     /* ---------------------------------
@@ -61,7 +57,7 @@ public class WsUtils {
      * @return
      * @throws TechnicalException
      */
-    public static GetCatalogueBean getCatalogue() throws TechnicalException {
+    public static ArrayList<CategoryBean> getCatalogue() throws TechnicalException {
 
         Log.w("TAG_URL", URL_GET_CATALOGUE);
 
@@ -85,24 +81,25 @@ public class WsUtils {
         else {
 
             try {
-                GetCatalogueBean catalogue;
+                ArrayList<CategoryBean> catalogue;
                 if (MyApplication.isDebugMode()) {
                     //Résultat de la requete.
 
                     String jsonRecu = response.body().string();
                     Logger.logJson("TAG_JSON_RECU", jsonRecu);
-                    catalogue = gson.fromJson(jsonRecu, GetCatalogueBean.class);
+                    catalogue = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CategoryBean>>() {
+                    }.getType());
                 }
                 else {
                     //JSON -> Java (Parser une ArrayList typée)
-                    catalogue = gson.fromJson(new InputStreamReader(response.body().byteStream()), GetCatalogueBean.class);
+                    catalogue = gson.fromJson(new InputStreamReader(response.body().byteStream()), new TypeToken<ArrayList<CategoryBean>>() {
+                    }.getType());
                 }
 
                 //On met le lien complet pour chaque image
-                //TODO A Refaire
-                //                for (CategoryBean categoryBean : catalogue) {
-                //                    categoryBean.setUrl_image(URL_SERVEUR + categoryBean.getUrl_image());
-                //                }
+                for (CategoryBean categoryBean : catalogue) {
+                    categoryBean.setUrl_image(URL_IMAGE + "categorie" + categoryBean.getId() + ".png");
+                }
 
                 return catalogue;
             }

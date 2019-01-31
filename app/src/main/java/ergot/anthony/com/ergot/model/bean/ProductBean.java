@@ -1,6 +1,7 @@
 package ergot.anthony.com.ergot.model.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Anthony on 23/10/2017.
@@ -8,14 +9,16 @@ import java.io.Serializable;
 
 public class ProductBean implements Serializable, Cloneable {
 
+    private static final long serialVersionUID = 8397614529181902717L;
+
     //Base
     private long id;
-    private String name;
+    private String nom;
     private String description;
-    private long price;
+    private long prix;
 
-    private boolean is_supp;
     private boolean rupture;
+    private ArrayList<ListcomplementBean> listcomplements;
 
     public ProductBean() {
     }
@@ -36,12 +39,12 @@ public class ProductBean implements Serializable, Cloneable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNom() {
+        return nom;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getDescription() {
@@ -52,19 +55,20 @@ public class ProductBean implements Serializable, Cloneable {
         this.description = description;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPrix() {
+        return prix;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setPrix(long prix) {
+        this.prix = prix;
     }
 
-    public boolean isIs_supp() {
-        return is_supp;
+
+    public ArrayList<ListcomplementBean> getListcomplements() {
+        return listcomplements;
     }
 
-    public void setIs_supp(boolean is_supp) {
-        this.is_supp = is_supp;
+    public void setListcomplements(ArrayList<ListcomplementBean> listcomplements) {
+        this.listcomplements = listcomplements;
     }
 }

@@ -11,6 +11,12 @@ import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
 
 public class CommandeBean implements Serializable {
 
+    private static final long serialVersionUID = 5046775210799311032L;
+
+    private ArrayList<SelectionBean> selectionList;
+
+
+    //OLD
     //Liste de produit ainsi que son ArrayList de supplement. En transient pour en pas l'envoyer
     private ArrayList<SelectProductBean> compositionCommande;
     private long dateCommande;
@@ -22,7 +28,7 @@ public class CommandeBean implements Serializable {
     private UserBean user;
 
     public CommandeBean() {
-        compositionCommande = new ArrayList<>();
+        selectionList = new ArrayList<>();
         user = new UserBean();
     }
 
@@ -32,12 +38,12 @@ public class CommandeBean implements Serializable {
      * @param commandeBean
      */
     public void update(CommandeBean commandeBean) {
-        this.compositionCommande = commandeBean.getCompositionCommande();
-        this.dateCommande = commandeBean.getDateCommande();
-        this.datePrevision = commandeBean.getDatePrevision();
-        this.statut = commandeBean.getStatut();
-        this.statutAnnulation = commandeBean.getStatutAnnulation();
-        this.user = commandeBean.getUser();
+        compositionCommande = commandeBean.getCompositionCommande();
+        dateCommande = commandeBean.getDateCommande();
+        datePrevision = commandeBean.getDatePrevision();
+        statut = commandeBean.getStatut();
+        statutAnnulation = commandeBean.getStatutAnnulation();
+        user = commandeBean.getUser();
     }
 
     @Override
@@ -59,11 +65,35 @@ public class CommandeBean implements Serializable {
         return (int) (id ^ (id >>> 32));
     }
 
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        if (selectionList != null) {
+
+            for (SelectionBean selectionBean : selectionList) {
+                ProductBean productBean = selectionBean.getProductBean();
+                totalPrice += productBean.getPrix();
+                if (selectionBean.getComplementchoixBeans() != null) {
+                    for (ComplementchoixBean c : selectionBean.getComplementchoixBeans()) {
+                        totalPrice += c.getSuppPrix();
+                    }
+                }
+            }
+        }
+        return totalPrice;
+    }
 
 
 /* ---------------------------------
     // GETTER /SETTER
     // -------------------------------- */
+
+    public ArrayList<SelectionBean> getSelectionList() {
+        return selectionList;
+    }
+
+    public void setSelectionList(ArrayList<SelectionBean> selectionList) {
+        this.selectionList = selectionList;
+    }
 
     public long getId() {
         return id;
@@ -73,20 +103,6 @@ public class CommandeBean implements Serializable {
         this.id = id;
     }
 
-    public int getTotalPrice() {
-        int totalPrice = 0;
-        if (compositionCommande != null) {
-            for (SelectProductBean selection : compositionCommande) {
-                ProductBean productBean = selection.getProduct();
-                totalPrice += productBean.getPrice();
-                //on regarde s'il y a des suppléments dans les produits séléctionnés
-                if (selection.getSupplement() != null) {
-                    totalPrice += selection.getSupplement().getNewPrice();
-                }
-            }
-        }
-        return totalPrice;
-    }
 
     public long getDatePrevision() {
         return datePrevision;
@@ -104,12 +120,12 @@ public class CommandeBean implements Serializable {
         this.statut = statut;
     }
 
-    public void setDateCommande(long dateCommande) {
-        this.dateCommande = dateCommande;
-    }
-
     public long getDateCommande() {
         return dateCommande;
+    }
+
+    public void setDateCommande(long dateCommande) {
+        this.dateCommande = dateCommande;
     }
 
     public String getRemarque() {

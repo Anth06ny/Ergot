@@ -25,7 +25,7 @@
     <string name="nophone_or_email">Veuillez saisir un téléphone ou un e-mail</string>
     <string name="gestion_command">Gestion commandes</string>
 
-    <!-- PanierActivity -->
+    <!-- Panname="" Activity -->
     <string name="order_sucess">Votre commande a été envoyée</string>
     <string name="panier_title">Ma commande</string>
     <string name="tv_number_permission_exp">Pour pré remplir le numéro de téléphone</string>

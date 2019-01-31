@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.commander.MotherActivity;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
+import ergot.anthony.com.ergot.model.bean.ComplementchoixBean;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
-import ergot.anthony.com.ergot.model.bean.SuppBean;
-import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
+import ergot.anthony.com.ergot.model.bean.SelectionBean;
 import ergot.anthony.com.ergot.transverse.utils.AlertDialogUtils;
 import ergot.anthony.com.ergot.transverse.utils.GlideApp;
 
@@ -54,14 +54,14 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
 
-        productAdapter = new ProductAdapter(categoryBean.getProducts(), this);
+        productAdapter = new ProductAdapter(categoryBean.getProduitsVisible(), this);
         rv.setAdapter(productAdapter);
 
         //Réglage toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tv_title.setText(categoryBean.getName());
+        tv_title.setText(categoryBean.getNom());
 
         //Image
         int color = getResources().getColor(R.color.colorPrimary);
@@ -108,20 +108,29 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
             Toast.makeText(this, R.string.product_disable, Toast.LENGTH_SHORT).show();
             return;
         }
+        afficherComplement(productBean, clicOnScreen, 0, new ArrayList<ComplementchoixBean>());
+    }
 
-        //TODO A corriger
-        ArrayList<SuppBean> suppBeanList = null; //productBean.getSupplements();
+    /**
+     * Methode recursive pour parcourir tout les complements.
+     * Cumule dans selectedComplement la liste des complement choisis.
+     * L'ensemble sera ajouté à la commande is on arrive au bout sans cancel.
+     */
+    private void afficherComplement(final ProductBean productBean, final int[] clicOnScreen, final int numero, final ArrayList<ComplementchoixBean> selectedComplement) {
 
-        if (suppBeanList == null || suppBeanList.isEmpty()) {
+        if (productBean.getListcomplements() == null || productBean.getListcomplements().size() <= numero) {
             // Pas de supplement
-            addProduct(new SelectProductBean(productBean, null), clicOnScreen);
+            addProduct(new SelectionBean(productBean, selectedComplement), clicOnScreen);
         }
         else {
-            AlertDialogUtils.showSelectSuppDialog(this, suppBeanList, new AlertDialogUtils.SelectSuppDialogListener() {
+            AlertDialogUtils.showSelectSuppDialog(this, productBean.getListcomplements().get(numero).getComplement(), new AlertDialogUtils.SelectComplementDialogListener() {
                 @Override
-                public void onSupplementSelected(SuppBean supp) {
-                    addProduct(new SelectProductBean(productBean, supp), clicOnScreen);
+                public void onComplementSelected(ComplementchoixBean complementchoixBean) {
+                    selectedComplement.add(complementchoixBean);
+                    afficherComplement(productBean, clicOnScreen, numero + 1, selectedComplement);
                 }
+
+
             });
         }
     }

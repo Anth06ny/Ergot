@@ -37,19 +37,19 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         final SelectProductBean produitAndSupp = commandList.get(position);
 
         //Nom du produit
-        holder.tv_title.setText(produitAndSupp.getProduct().getName());
+        holder.tv_title.setText(produitAndSupp.getProduct().getNom());
 
         //On parcourt les supp pour remplir la description et calculer le prix final avec supplement
         String description = "";
-        long price = produitAndSupp.getProduct().getPrice();
+        long price = produitAndSupp.getProduct().getPrix();
         if (produitAndSupp.getSupplement() != null) {
             price += produitAndSupp.getSupplement().getNewPrice();
 
             if (price == 0) {
-                description += produitAndSupp.getSupplement().getProduit().getName() + "  ";
+                description += produitAndSupp.getSupplement().getProduit().getNom() + "  ";
             }
             else {
-                description += produitAndSupp.getSupplement().getProduit().getName() + " (+" + Utils.longToStringPrice(price) + ")";
+                description += produitAndSupp.getSupplement().getProduit().getNom() + " (+" + Utils.longToStringPrice(price) + ")";
             }
         }
 
@@ -75,6 +75,10 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
         return commandList.size();
     }
 
+    public interface OnCommandListener {
+        void onRemoveProductClic(SelectProductBean selectProductBean);
+    }
+
     //------------------
     // View Holder
     //------------------
@@ -91,11 +95,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
             iv = itemView.findViewById(R.id.iv);
             root = itemView.findViewById(R.id.root);
 
-            iv.setColorFilter(iv.getResources().getColor(android.support.v7.appcompat.R.color.error_color_material));
+            iv.setColorFilter(iv.getResources().getColor(android.support.v7.appcompat.R.color.error_color_material_dark));
         }
-    }
-
-    public interface OnCommandListener {
-        void onRemoveProductClic(SelectProductBean selectProductBean);
     }
 }

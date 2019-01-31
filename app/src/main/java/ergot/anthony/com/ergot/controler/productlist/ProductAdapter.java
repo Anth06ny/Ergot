@@ -35,8 +35,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final ProductBean productBean = productBeanList.get(position);
 
-        holder.tv_title.setText(productBean.getName());
-        holder.tv_price.setText(Utils.longToStringPrice(productBean.getPrice()));
+        holder.tv_title.setText(productBean.getNom());
+        holder.tv_price.setText(Utils.longToStringPrice(productBean.getPrix()));
 
         holder.tv_rupture.setVisibility(productBean.isRupture() ? View.VISIBLE : View.INVISIBLE);
 
@@ -66,6 +66,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return productBeanList.size();
     }
 
+    public interface OnProductClicListener {
+        void onProductClick(ProductBean productBean, int[] clicOnScreen);
+    }
+
     //------------------
     // View Holder
     //------------------
@@ -81,9 +85,5 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             tv_rupture = itemView.findViewById(R.id.tv_rupture);
             root = itemView.findViewById(R.id.root);
         }
-    }
-
-    public interface OnProductClicListener {
-        void onProductClick(ProductBean productBean, int[] clicOnScreen);
     }
 }

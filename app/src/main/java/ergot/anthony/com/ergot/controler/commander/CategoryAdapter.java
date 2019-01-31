@@ -48,7 +48,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final CategoryBean categoryBean = categoryBeanList.get(position);
 
-        holder.rc_tv.setText(categoryBean.getName());
+        holder.rc_tv.setText(categoryBean.getNom());
         Log.w("TAG_IMAGE", "" + categoryBean.getUrl_image());
         GlideApp.with(holder.rc_tv.getContext()).load(categoryBean.getUrl_image()).placeholder(waitIcon).error(error_icon).fitCenter().diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(holder.rc_iv);
 

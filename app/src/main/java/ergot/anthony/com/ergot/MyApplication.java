@@ -18,7 +18,7 @@ public class MyApplication extends Application {
 
     /***
      * AFaire
-     *
+     * Dans ProductListActivity, sur le clic d'un produit il faut afficher la liste de popup des complements s'il y en a
      *
      */
 
@@ -27,23 +27,6 @@ public class MyApplication extends Application {
     private static boolean debugMode;
     private static boolean adminMode;
     private static Bus bus;
-
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        Fabric.with(this, new Crashlytics());
-
-        myApplication = this;
-        newCommande();
-        bus = new Bus();
-        Log.w("TAG_FIREBASE", "firebaseToken=" + SharedPreferenceUtils.getFireBaseToken());
-
-        debugMode = BuildConfig.DEBUG;
-        adminMode = getResources().getBoolean(R.bool.adminMode);
-    }
 
     public static boolean isAdminMode() {
         return adminMode;
@@ -69,5 +52,20 @@ public class MyApplication extends Application {
 
     public static MyApplication getMyApplication() {
         return myApplication;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        Fabric.with(this, new Crashlytics());
+
+        myApplication = this;
+        newCommande();
+        bus = new Bus();
+        Log.w("TAG_FIREBASE", "firebaseToken=" + SharedPreferenceUtils.getFireBaseToken());
+
+        debugMode = BuildConfig.DEBUG;
+        adminMode = getResources().getBoolean(R.bool.adminMode);
     }
 }

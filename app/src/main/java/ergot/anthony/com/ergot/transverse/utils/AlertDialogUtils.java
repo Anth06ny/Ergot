@@ -12,8 +12,9 @@ import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
+import ergot.anthony.com.ergot.model.bean.ComplementBean;
+import ergot.anthony.com.ergot.model.bean.ComplementchoixBean;
 import ergot.anthony.com.ergot.model.bean.StatutAnnulation;
-import ergot.anthony.com.ergot.model.bean.SuppBean;
 
 /**
  * Created by Anthony on 25/10/2017.
@@ -21,49 +22,42 @@ import ergot.anthony.com.ergot.model.bean.SuppBean;
 
 public class AlertDialogUtils {
 
-    public interface SelectSuppDialogListener {
-        void onSupplementSelected(SuppBean suppBean);
-    }
-
     /**
      * Dialog pour séléctionner un supplément
      *
      * @param context
-     * @param list
-     * @param selectSuppDialogListener
+     * @param selectComplementDialogListener
      */
-    public static void showSelectSuppDialog(final Context context, final ArrayList<SuppBean> list, final SelectSuppDialogListener selectSuppDialogListener) {
+    public static void showSelectSuppDialog(final Context context, final ComplementBean complementBean, final SelectComplementDialogListener selectComplementDialogListener) {
         ArrayList<String> strings = new ArrayList<>();
 
-        for (SuppBean p : list) {
 
-            if (p.getNewPrice() > 0) {
-                strings.add(p.getProduit().getName() + " (" + Utils.longToStringPrice(p.getNewPrice()) + ")");
+        for (ComplementchoixBean p : complementBean.getComplementchoixes()) {
+
+            if (p.getSuppPrix() > 0) {
+                strings.add(p.getProduit().getNom() + " (" + Utils.longToStringPrice(p.getSuppPrix()) + ")");
             }
             else {
-                strings.add(p.getProduit().getName());
+                strings.add(p.getProduit().getNom());
             }
         }
 
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
         //alt_bld.setIcon(R.drawable.icon);
-        alt_bld.setTitle("Supplément accompagnement");
+        alt_bld.setTitle(complementBean.getQuestion());
         alt_bld.setSingleChoiceItems(strings.toArray(new String[0]), -1, new DialogInterface
                 .OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int item) {
                 dialog.dismiss();// dismiss the alertbox after chose option
-                if (selectSuppDialogListener != null) {
-                    selectSuppDialogListener.onSupplementSelected(list.get(item));
+                if (selectComplementDialogListener != null) {
+                    selectComplementDialogListener.onComplementSelected(complementBean.getComplementchoixes().get(item));
                 }
             }
         });
         alt_bld.setCancelable(true);
         AlertDialog alert = alt_bld.create();
         alert.show();
-    }
-
-    public interface SelectCancelReasonListener {
-        void onCancelReasonSelected(StatutAnnulation statutAnnulation);
     }
 
     /**
@@ -124,5 +118,13 @@ public class AlertDialogUtils {
         });
         alt_bld.setCancelable(true);
         alt_bld.create().show();
+    }
+
+    public interface SelectComplementDialogListener {
+        void onComplementSelected(ComplementchoixBean complementchoixBean);
+    }
+
+    public interface SelectCancelReasonListener {
+        void onCancelReasonSelected(StatutAnnulation statutAnnulation);
     }
 }

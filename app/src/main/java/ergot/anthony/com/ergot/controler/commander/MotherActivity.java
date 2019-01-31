@@ -21,7 +21,7 @@ import ergot.anthony.com.ergot.MainActivity;
 import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.panier.PanierActivity;
-import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
+import ergot.anthony.com.ergot.model.bean.SelectionBean;
 import ergot.anthony.com.ergot.transverse.utils.Utils;
 
 /**
@@ -107,12 +107,12 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
 
     protected void refreshFoot() {
 
-        tvNbArticle.setText(MyApplication.getCommandeBean().getCompositionCommande().size() + "");
+        tvNbArticle.setText(MyApplication.getCommandeBean().getSelectionList().size() + "");
         tv_price.setText(Utils.longToStringPrice(MyApplication.getCommandeBean().getTotalPrice()));
     }
 
-    public void addProduct(SelectProductBean selection, int[] clicOnScreen) {
-        MyApplication.getCommandeBean().getCompositionCommande().add(selection);
+    public void addProduct(SelectionBean selection, int[] clicOnScreen) {
+        MyApplication.getCommandeBean().getSelectionList().add(selection);
         if (tvPlusUn != null) {
             animAteFromeClicToFoot(clicOnScreen);
         }
