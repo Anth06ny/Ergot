@@ -3,8 +3,6 @@ package ergot.anthony.com.ergot.model.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
-
 /**
  * Created by Anthony on 25/10/2017.
  */
@@ -13,12 +11,9 @@ public class CommandeBean implements Serializable {
 
     private static final long serialVersionUID = 5046775210799311032L;
 
+    //Liste de selection des produit
     private ArrayList<SelectionBean> selectionList;
 
-
-    //OLD
-    //Liste de produit ainsi que son ArrayList de supplement. En transient pour en pas l'envoyer
-    private ArrayList<SelectProductBean> compositionCommande;
     private long dateCommande;
     private long datePrevision;
     private int statut;
@@ -38,7 +33,8 @@ public class CommandeBean implements Serializable {
      * @param commandeBean
      */
     public void update(CommandeBean commandeBean) {
-        compositionCommande = commandeBean.getCompositionCommande();
+        selectionList.clear();
+        selectionList.addAll(commandeBean.getSelectionList());
         dateCommande = commandeBean.getDateCommande();
         datePrevision = commandeBean.getDatePrevision();
         statut = commandeBean.getStatut();
@@ -68,15 +64,8 @@ public class CommandeBean implements Serializable {
     public int getTotalPrice() {
         int totalPrice = 0;
         if (selectionList != null) {
-
             for (SelectionBean selectionBean : selectionList) {
-                ProductBean productBean = selectionBean.getProductBean();
-                totalPrice += productBean.getPrix();
-                if (selectionBean.getComplementchoixBeans() != null) {
-                    for (ComplementchoixBean c : selectionBean.getComplementchoixBeans()) {
-                        totalPrice += c.getSuppPrix();
-                    }
-                }
+                totalPrice += selectionBean.getPrix();
             }
         }
         return totalPrice;
@@ -136,13 +125,6 @@ public class CommandeBean implements Serializable {
         this.remarque = remarque;
     }
 
-    public ArrayList<SelectProductBean> getCompositionCommande() {
-        return compositionCommande;
-    }
-
-    public void setCompositionCommande(ArrayList<SelectProductBean> compositionCommande) {
-        this.compositionCommande = compositionCommande;
-    }
 
     public UserBean getUser() {
         return user;

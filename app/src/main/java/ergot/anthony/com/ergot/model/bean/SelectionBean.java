@@ -15,6 +15,25 @@ public class SelectionBean {
         this.complementchoixBeans = complementchoixBeans;
     }
 
+    public int getPrix() {
+        int price = 0;
+        if (productBean != null) {
+            price += productBean.getPrix();
+        }
+
+        if (complementchoixBeans != null) {
+            for (ComplementchoixBean c : complementchoixBeans) {
+                price += c.getSuppPrix();
+            }
+        }
+
+        return price;
+    }
+
+    /* -------------------
+    // Getter /Setter
+    --------------------- */
+
     public ProductBean getProductBean() {
         return productBean;
     }

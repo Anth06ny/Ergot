@@ -133,7 +133,7 @@ public class MotherActivity extends AppCompatActivity implements View.OnClickLis
                 //gerer dans panierActivity
             }
             else {
-                if (MyApplication.getCommandeBean().getCompositionCommande().isEmpty()) {
+                if (MyApplication.getCommandeBean().getSelectionList().isEmpty()) {
                     Toast.makeText(this, R.string.no_produit_to_send, Toast.LENGTH_SHORT).show();
                 }
                 else {

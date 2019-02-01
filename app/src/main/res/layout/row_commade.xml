@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_5"
     android:layout_marginLeft="@dimen/margin_10"
-    android:layout_marginRight="@dimen/margin_10"
     android:layout_marginTop="@dimen/margin_5"
+    android:layout_marginRight="@dimen/margin_10"
+    android:layout_marginBottom="@dimen/margin_5"
     app:cardBackgroundColor="@color/cardview_bg"
-    app:cardCornerRadius="@dimen/margin_5"
-    >
+    app:cardCornerRadius="@dimen/margin_5">
 
     <LinearLayout
         android:id="@+id/root"
@@ -33,7 +31,7 @@
                 android:text="Burger Spécial"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/font_13"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_description"
@@ -42,7 +40,16 @@
                 android:layout_marginTop="@dimen/margin_2"
                 android:text="Burger artisanal, sauce, tomate, salade, poulet roti"
                 android:textSize="@dimen/font_11"
-                android:textStyle="italic"/>
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tv_complement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_2"
+                android:singleLine="true"
+                android:text="Burger artisanal, sauce, tomate, salade, poulet roti"
+                android:textSize="@dimen/font_12" />
 
         </LinearLayout>
 
@@ -54,17 +61,17 @@
             android:gravity="center"
             android:text="4.95 €"
             android:textSize="@dimen/font_16"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:paddingBottom="@dimen/margin_5"
             android:paddingLeft="@dimen/margin_5"
             android:paddingTop="@dimen/margin_5"
-            app:srcCompat="@android:drawable/ic_menu_delete"/>
+            android:paddingBottom="@dimen/margin_5"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
 
 
     </LinearLayout>

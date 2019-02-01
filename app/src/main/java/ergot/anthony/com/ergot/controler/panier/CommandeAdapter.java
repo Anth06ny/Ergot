@@ -7,19 +7,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 
 import ergot.anthony.com.ergot.R;
-import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
+import ergot.anthony.com.ergot.model.bean.ComplementchoixBean;
+import ergot.anthony.com.ergot.model.bean.SelectionBean;
 import ergot.anthony.com.ergot.transverse.utils.Utils;
 
 public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHolder> {
 
-    private ArrayList<SelectProductBean> commandList;
+    private ArrayList<SelectionBean> commandList;
     private OnCommandListener onCommandListener;
     private boolean editable;
 
-    public CommandeAdapter(ArrayList<SelectProductBean> commandList, OnCommandListener onCommandListener, boolean editable) {
+    public CommandeAdapter(ArrayList<SelectionBean> commandList, OnCommandListener onCommandListener, boolean editable) {
         this.commandList = commandList;
         this.onCommandListener = onCommandListener;
         this.editable = editable;
@@ -34,29 +37,24 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        final SelectProductBean produitAndSupp = commandList.get(position);
+        final SelectionBean produitAndSupp = commandList.get(position);
 
         //Nom du produit
-        holder.tv_title.setText(produitAndSupp.getProduct().getNom());
+        holder.tv_title.setText(produitAndSupp.getProductBean().getNom());
+        holder.tv_price.setText(Utils.longToStringPrice(produitAndSupp.getProductBean().getPrix()));
+        holder.tv_description.setText(produitAndSupp.getProductBean().getDescription());
 
-        //On parcourt les supp pour remplir la description et calculer le prix final avec supplement
-        String description = "";
-        long price = produitAndSupp.getProduct().getPrix();
-        if (produitAndSupp.getSupplement() != null) {
-            price += produitAndSupp.getSupplement().getNewPrice();
-
-            if (price == 0) {
-                description += produitAndSupp.getSupplement().getProduit().getNom() + "  ";
-            }
-            else {
-                description += produitAndSupp.getSupplement().getProduit().getNom() + " (+" + Utils.longToStringPrice(price) + ")";
+        //On parcourt les supp pour remplir la description des choix
+        String complement = "";
+        if (produitAndSupp.getComplementchoixBeans() != null) {
+            for (ComplementchoixBean c : produitAndSupp.getComplementchoixBeans()) {
+                complement += c.getProduit().getNom() + " / ";
             }
         }
+        holder.tv_complement.setText(StringUtils.removeEnd(complement, " / "));
 
-        holder.tv_price.setText(Utils.longToStringPrice(price));
-        holder.tv_description.setText(description);
 
-        //Si on estr en mode éditable on affiche la possibilité de supprimer un élément
+        //Si on est en mode éditable on affiche la possibilité de supprimer un élément
         if (editable) {
             holder.iv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,14 +74,14 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
     }
 
     public interface OnCommandListener {
-        void onRemoveProductClic(SelectProductBean selectProductBean);
+        void onRemoveProductClic(SelectionBean selectProductBean);
     }
 
     //------------------
     // View Holder
     //------------------
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tv_title, tv_description, tv_price;
+        public TextView tv_title, tv_description, tv_price, tv_complement;
         public ImageView iv;
         public View root;
 
@@ -92,6 +90,7 @@ public class CommandeAdapter extends RecyclerView.Adapter<CommandeAdapter.ViewHo
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_description = itemView.findViewById(R.id.tv_description);
             tv_price = itemView.findViewById(R.id.tv_price);
+            tv_complement = itemView.findViewById(R.id.tv_complement);
             iv = itemView.findViewById(R.id.iv);
             root = itemView.findViewById(R.id.root);
 

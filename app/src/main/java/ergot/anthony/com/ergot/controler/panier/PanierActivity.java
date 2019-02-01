@@ -47,21 +47,22 @@ import ergot.anthony.com.ergot.MyApplication;
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.controler.commander.MotherActivity;
 import ergot.anthony.com.ergot.controler.historique.HstoriqueCommandActivity;
-import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
+import ergot.anthony.com.ergot.model.bean.SelectionBean;
 import ergot.anthony.com.ergot.model.bean.Statut;
 import ergot.anthony.com.ergot.model.bean.StatutAnnulation;
-import ergot.anthony.com.ergot.model.bean.sendbean.SelectProductBean;
 import ergot.anthony.com.ergot.model.ws.WSUtilsAdmin;
 import ergot.anthony.com.ergot.model.ws.WsUtils;
+import ergot.anthony.com.ergot.transverse.exception.TechnicalException;
 import ergot.anthony.com.ergot.transverse.utils.AlertDialogUtils;
 import ergot.anthony.com.ergot.transverse.utils.SharedPreferenceUtils;
 
 public class PanierActivity extends MotherActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, CommandeAdapter.OnCommandListener {
 
-    private static final int REQUEST_CODE_EMAIL = 1;
     public static final String COMMANDE_EXTRA = "COMMANDE_EXTRA";
-
+    private static final int REQUEST_CODE_EMAIL = 1;
+    private static final SimpleDateFormat formatCompl = new SimpleDateFormat("EEE d MMM 'à' HH:mm");
+    private static final SimpleDateFormat formatheure = new SimpleDateFormat("HH:mm");
     //Composants graphique
     private TextView tv_time;
     private Button bt_modifier;
@@ -75,12 +76,8 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     private View rl_root;
     private ProgressDialog progressDialog;
     private Button bt_annuler_commande;
-
     //Gestion de la date
     private Calendar calendar;
-    private SimpleDateFormat formatCompl = new SimpleDateFormat("EEE d MMM 'à' HH:mm");
-    private SimpleDateFormat formatheure = new SimpleDateFormat("HH:mm");
-
     //Data
     private CommandeBean commandeBean;
     private String tokenEmail;
@@ -138,7 +135,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
 
-        commandeAdapter = new CommandeAdapter(commandeBean.getCompositionCommande(), this, isCurrentCommand);
+        commandeAdapter = new CommandeAdapter(commandeBean.getSelectionList(), this, isCurrentCommand);
         rv.setAdapter(commandeAdapter);
 
         calendar = Calendar.getInstance();
@@ -190,7 +187,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         }
         else if (v == bt_commande) {
             if (panierVersion) {
-                if (MyApplication.getCommandeBean().getCompositionCommande().isEmpty()) {
+                if (MyApplication.getCommandeBean().getSelectionList().isEmpty()) {
                     Toast.makeText(this, R.string.no_produit_to_send, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -246,6 +243,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
         }
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             tokenEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
@@ -290,9 +288,10 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
     }
 
     @Override
-    public void onRemoveProductClic(SelectProductBean selectProductBean) {
-        int position = commandeBean.getCompositionCommande().indexOf(selectProductBean);
-        commandeBean.getCompositionCommande().remove(selectProductBean);
+    public void onRemoveProductClic(SelectionBean selectProductBean) {
+
+        int position = commandeBean.getSelectionList().indexOf(selectProductBean);
+        commandeBean.getSelectionList().remove(selectProductBean);
         commandeAdapter.notifyItemRemoved(position);
 
         refreshScreen();
@@ -354,7 +353,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
                 result = WsUtils.sendCommande(MyApplication.getCommandeBean());
             }
             catch (TechnicalException e) {
-                this.technicalException = e;
+                technicalException = e;
             }
             return null;
         }
@@ -410,7 +409,7 @@ public class PanierActivity extends MotherActivity implements View.OnClickListen
                 WSUtilsAdmin.updateCommandStatut(commandeBean, Statut.STATUS_CANCEL, 0, statutAnnulation.getValue());
             }
             catch (TechnicalException e) {
-                this.technicalException = e;
+                technicalException = e;
             }
             return null;
         }
