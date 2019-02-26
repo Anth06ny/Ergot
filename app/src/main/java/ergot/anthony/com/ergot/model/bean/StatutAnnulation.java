@@ -13,21 +13,21 @@ public enum StatutAnnulation {
 
     //Annulation correct sans consequence
     //5min pour annuler une commande ou 20min avant la date de prévision
-    ADMIN(0, R.string.status_ann_admin),
+    ADMIN(1, R.string.status_ann_admin),
 
     //Annulation  mais pas en derniere minute.
-    CLIENT(1, R.string.status_ann_client),
+    CLIENT(2, R.string.status_ann_client),
 
     //Annulation alors que la commande est préte et apres les 5min de passage de commande
-    CLIENT_CMD_PRETE(2, R.string.status_ann_client_cmd_ready),
+    CLIENT_CMD_PRETE(3, R.string.status_ann_client_cmd_ready),
     //Client jamais venu
-    CLIENT_NEVER_COME(3, R.string.status_ann_client_never_come);
+    CLIENT_NEVER_COME(4, R.string.status_ann_client_never_come);
 
     private String text;
     private int value;
 
     StatutAnnulation(int value, @StringRes int resId) {
-        this.text = MyApplication.getMyApplication().getString(resId);
+        text = MyApplication.getMyApplication().getString(resId);
         this.value = value;
     }
 

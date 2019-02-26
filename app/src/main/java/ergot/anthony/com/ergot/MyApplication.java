@@ -17,6 +17,7 @@ public class MyApplication extends Application {
     /***
      * AFaire
      * Dans ProductListActivity, sur le clic d'un produit il faut afficher la liste de popup des complements s'il y en a
+     * -Remettre CrashLytics
      *
      */
 

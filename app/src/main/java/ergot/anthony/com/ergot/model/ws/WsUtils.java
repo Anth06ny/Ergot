@@ -42,7 +42,7 @@ public class WsUtils {
     public static final Gson gson = new Gson();
     private static final String PING_GOOGLE = "http://www.google.fr";
     private static final String URL_GET_CATALOGUE = URL_SERVEUR + "catalogue";
-    private static final String URL_SEND_COMMAND = URL_SERVEUR + "setCommande";
+    private static final String URL_SEND_COMMAND = URL_SERVEUR + "sendCommande";
     private static final String URL_GET_HISTORY = URL_SERVEUR + "getHistorique";
     private static final String URL_CANCEL_COMMAND = URL_SERVEUR + "cancelCommande";
     public static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -68,8 +68,7 @@ public class WsUtils {
         Response response = null;
         try {
             response = getOkHttpClient().newCall(request).execute();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             //On test si google répond pour différencier si c'est internet ou le serveur le probleme
             throw testInternetConnexionOnGoogle(e);
         }
@@ -77,8 +76,7 @@ public class WsUtils {
         //Analyse du code retour
         if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
             throw new TechnicalException("Réponse du serveur incorrect : " + response.code() + "\nErreur:" + response.message(), R.string.generic_error);
-        }
-        else {
+        } else {
 
             try {
                 ArrayList<CategoryBean> catalogue;
@@ -89,8 +87,7 @@ public class WsUtils {
                     Logger.logJson("TAG_JSON_RECU", jsonRecu);
                     catalogue = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CategoryBean>>() {
                     }.getType());
-                }
-                else {
+                } else {
                     //JSON -> Java (Parser une ArrayList typée)
                     catalogue = gson.fromJson(new InputStreamReader(response.body().byteStream()), new TypeToken<ArrayList<CategoryBean>>() {
                     }.getType());
@@ -102,8 +99,7 @@ public class WsUtils {
                 }
 
                 return catalogue;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new TechnicalException(e, "Erreur lors du parsing de la requete");
             }
         }
@@ -130,8 +126,7 @@ public class WsUtils {
         Response response = null;
         try {
             response = getOkHttpClient().newCall(request).execute();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             //On test si google répond pour différencier si c'est internet ou le serveur le probleme
             throw testInternetConnexionOnGoogle(e);
         }
@@ -139,8 +134,7 @@ public class WsUtils {
         //Analyse du code retour si non copmris entre 200 et 299
         if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
             throw new TechnicalException("Réponse du serveur incorrect : " + response.code() + "\nErreur:" + response.message(), R.string.generic_error);
-        }
-        else {
+        } else {
 
             ArrayList<CommandeBean> historique;
 
@@ -151,12 +145,10 @@ public class WsUtils {
                     Logger.logJson("TAG_JSON_RECU", jsonRecu);
                     historique = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CommandeBean>>() {
                     }.getType());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     throw new TechnicalException(e, "Erreur lors du .string dans la requete");
                 }
-            }
-            else {
+            } else {
                 //JSON -> Java (Parser une ArrayList typée)
                 historique = gson.fromJson(new InputStreamReader(response.body().byteStream()),
                         new TypeToken<ArrayList<CommandeBean>>() {
@@ -197,8 +189,7 @@ public class WsUtils {
         Response response;
         try {
             response = getOkHttpClient().newCall(request).execute();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             //On test si google répond pour différencier si c'est internet ou le serveur le probleme
             throw testInternetConnexionOnGoogle(e);
         }
@@ -207,8 +198,7 @@ public class WsUtils {
         if (response.code() < HttpURLConnection.HTTP_OK || response.code() >= HttpURLConnection.HTTP_MULT_CHOICE) {
             throw new TechnicalException("Réponse du serveur incorrect : " + response.code() + "\nErreur:" + response.message(), R.string
                     .generic_error);
-        }
-        else {
+        } else {
             try {
                 ArrayList<CommandeBean> historique;
                 if (MyApplication.isDebugMode()) {
@@ -218,16 +208,14 @@ public class WsUtils {
                     Logger.logJson("TAG_JSON_RECU", json);
                     historique = gson.fromJson(jsonRecu, new TypeToken<ArrayList<CommandeBean>>() {
                     }.getType());
-                }
-                else {
+                } else {
                     //JSON -> Java (Parser une ArrayList typée)
                     historique = gson.fromJson(new InputStreamReader(response.body().byteStream()),
                             new TypeToken<ArrayList<CommandeBean>>() {
                             }.getType());
                 }
                 return historique;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 //La requete s'est bien passé mais on a une erreur sur le parsing. On ne fait pas planter l'envoie pour autant
                 return new ArrayList<>();
@@ -252,8 +240,7 @@ public class WsUtils {
             new OkHttpClient.Builder().connectTimeout(2, TimeUnit.SECONDS).build().newCall(request).execute();
             //Ca marche -> C'est le serveur le probleme
             return new TechnicalException("Le serveur ne répond pas.", e, R.string.server_error);
-        }
-        catch (IOException e1) {
+        } catch (IOException e1) {
             //Ca crash encore -> problème d'internet
             return new TechnicalException("Le serveur ne répond pas.", e1, R.string.bad_internet_connexion_error);
         }
