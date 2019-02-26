@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,6 @@ import ergot.anthony.com.ergot.model.bean.ComplementchoixBean;
 import ergot.anthony.com.ergot.model.bean.ProductBean;
 import ergot.anthony.com.ergot.model.bean.SelectionBean;
 import ergot.anthony.com.ergot.transverse.utils.AlertDialogUtils;
-import ergot.anthony.com.ergot.transverse.utils.GlideApp;
 
 public class ProductListActivity extends MotherActivity implements ProductAdapter.OnProductClicListener {
 
@@ -71,8 +70,7 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
         color = getResources().getColor(R.color.error_color);
         Drawable error_icon = getResources().getDrawable(R.drawable.ic_highlight_off_black_48dp);
         error_icon.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        GlideApp.with(this).load(categoryBean.getUrl_image()).placeholder(waitIcon).error(error_icon).fitCenter().diskCacheStrategy(DiskCacheStrategy.RESOURCE).into
-                (civ);
+        Picasso.get().load(categoryBean.getUrl_image()).placeholder(waitIcon).error(error_icon).centerCrop().fit().into(civ);
     }
 
     /**
@@ -102,7 +100,7 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
      * @param clicOnScreen Position du clic à l'ecran pour l'animation
      */
     @Override
-    public void onProductClick(final ProductBean productBean, final int[] clicOnScreen) {
+    public void onProductClick(ProductBean productBean, int[] clicOnScreen) {
 
         if (productBean.isRupture()) {
             Toast.makeText(this, R.string.product_disable, Toast.LENGTH_SHORT).show();
@@ -121,8 +119,7 @@ public class ProductListActivity extends MotherActivity implements ProductAdapte
         if (productBean.getListcomplements() == null || productBean.getListcomplements().size() <= numero) {
             // Pas de supplement
             addProduct(new SelectionBean(productBean, selectedComplement), clicOnScreen);
-        }
-        else {
+        } else {
             AlertDialogUtils.showSelectSuppDialog(this, productBean.getListcomplements().get(numero).getComplement(), new AlertDialogUtils.SelectComplementDialogListener() {
                 @Override
                 public void onComplementSelected(ComplementchoixBean complementchoixBean) {

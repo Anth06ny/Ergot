@@ -11,13 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import ergot.anthony.com.ergot.R;
 import ergot.anthony.com.ergot.model.bean.CategoryBean;
-import ergot.anthony.com.ergot.transverse.utils.GlideApp;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
@@ -50,7 +49,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         holder.rc_tv.setText(categoryBean.getNom());
         Log.w("TAG_IMAGE", "" + categoryBean.getUrl_image());
-        GlideApp.with(holder.rc_tv.getContext()).load(categoryBean.getUrl_image()).placeholder(waitIcon).error(error_icon).fitCenter().diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(holder.rc_iv);
+        Picasso.get().load(categoryBean.getUrl_image()).placeholder(waitIcon).error(error_icon).centerCrop().fit().into(holder.rc_iv);
 
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override

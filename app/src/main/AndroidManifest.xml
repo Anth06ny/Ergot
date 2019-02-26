@@ -75,9 +75,9 @@
             android:value="@string/chanelId" />
 
         <!-- CRASH LYTICS -->
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="a9cda0381b4a0047c04eb2cc01bacdf698ece33d" />
+        <!--<meta-data-->
+        <!--android:name="io.fabric.ApiKey"-->
+        <!--android:value="a9cda0381b4a0047c04eb2cc01bacdf698ece33d" />-->
 
     </application>
 

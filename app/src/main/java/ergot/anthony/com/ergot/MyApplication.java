@@ -3,12 +3,10 @@ package ergot.anthony.com.ergot;
 import android.app.Application;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Bus;
 
 import ergot.anthony.com.ergot.model.bean.CommandeBean;
 import ergot.anthony.com.ergot.transverse.utils.SharedPreferenceUtils;
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Anthony on 25/10/2017.
@@ -58,7 +56,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
 
         myApplication = this;
         newCommande();

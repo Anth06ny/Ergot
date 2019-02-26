@@ -37,11 +37,14 @@ android {
             flavorDimensions "default"
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
-    api 'com.android.support:appcompat-v7:28.+'
-    api project(':app')
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.+'
+    implementation project(':app')
 }
