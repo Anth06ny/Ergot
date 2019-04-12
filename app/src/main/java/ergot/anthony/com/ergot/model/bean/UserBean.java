@@ -10,6 +10,9 @@ import ergot.anthony.com.ergot.transverse.utils.SharedPreferenceUtils;
 
 public class UserBean implements Serializable {
 
+    private static final long serialVersionUID = 1466818111143896134L;
+
+    private Long id;
     private String telephone;
     private String token;
     private String email;
@@ -89,5 +92,14 @@ public class UserBean implements Serializable {
 
     public void setFirebaseToken(String firebaseToken) {
         this.firebaseToken = firebaseToken;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

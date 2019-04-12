@@ -16,7 +16,8 @@ public class MyApplication extends Application {
 
     /***
      * AFaire
-     * Dans ProductListActivity, sur le clic d'un produit il faut afficher la liste de popup des complements s'il y en a
+     * Mettre la permission du demande de numéro sur la page du panier pour expliquer
+     * Dans pAnier Activity le numéro de téléphone n'est pas le bon
      * -Remettre CrashLytics
      *
      */

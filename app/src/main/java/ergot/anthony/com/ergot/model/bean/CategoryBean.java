@@ -11,7 +11,7 @@ public class CategoryBean implements Serializable {
 
     private static final long serialVersionUID = -683916466855464433L;
 
-    private long id;
+    private Long id;
     private String nom;
     private ArrayList<ProductBean> produitsVisible;
     private String url_image;
@@ -19,11 +19,11 @@ public class CategoryBean implements Serializable {
     public CategoryBean() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,7 +41,7 @@ public class CategoryBean implements Serializable {
     }
 
     public void setProduitsVisible(ArrayList<ProductBean> produitsVisible) {
-        produitsVisible = produitsVisible;
+        this.produitsVisible = produitsVisible;
     }
 
     public String getUrl_image() {

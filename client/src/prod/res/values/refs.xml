@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="url_server">https://winch.amonteiro.fr/</string>
+    <string name="url_server">http://vps623648.ovh.net:8080/ErgotAdmin/ws/api/</string>
+    <string name="url_image">http://vps623648.ovh.net:8080/uploadPicture/</string>
 </resources>

@@ -12,7 +12,7 @@ public class ProductBean implements Serializable, Cloneable {
     private static final long serialVersionUID = 8397614529181902717L;
 
     //Base
-    private long id;
+    private Long id;
     private String nom;
     private String description;
     private long prix;
@@ -31,11 +31,11 @@ public class ProductBean implements Serializable, Cloneable {
         this.rupture = rupture;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

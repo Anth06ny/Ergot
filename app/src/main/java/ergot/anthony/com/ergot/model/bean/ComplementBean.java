@@ -6,7 +6,7 @@ import java.util.List;
 public class ComplementBean implements Serializable {
 
     private static final long serialVersionUID = 228705454883023022L;
-    private long id;
+    private Long id;
     private String nomComplement;
     private String description;
     private String question;
@@ -14,11 +14,11 @@ public class ComplementBean implements Serializable {
 
     private List<ComplementchoixBean> complementchoixes;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

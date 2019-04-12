@@ -5,16 +5,16 @@ import java.io.Serializable;
 public class ComplementchoixBean implements Serializable {
 
     private static final long serialVersionUID = -8287800215109727421L;
-    private long id;
+    private Long id;
     private ProductBean produit;
     private boolean supprimer;
     private int suppPrix;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

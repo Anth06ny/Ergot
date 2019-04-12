@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<string nom="url_server">http://192.168.10.213:8000/</string>-->
-    <string name="url_server">http://192.168.1.16:8080/ErgotAdmin/ws/api/</string>
-    <string name="url_image">http://192.168.1.16:8080/uploadPicture/</string>
+    <string name="url_server">http://192.168.10.16:8080/ErgotAdmin/ws/api/</string>
+    <string name="url_image">http://192.168.10.16:8080/uploadPicture/</string>
 
     <bool name="adminMode">false</bool>
     <integer name="enseigne_id">1</integer>

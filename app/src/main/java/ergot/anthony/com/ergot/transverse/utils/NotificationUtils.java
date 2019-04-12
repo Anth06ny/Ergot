@@ -136,7 +136,7 @@ public class NotificationUtils {
 
         //On demande au système d'afficher la notification
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify((int) commandeBean.getId(), notificationBuilder.build());
+        notificationManagerCompat.notify(commandeBean.getId().intValue(), notificationBuilder.build());
     }
 
     private static void createInstantNotification(Context c, String message) {
@@ -162,6 +162,6 @@ public class NotificationUtils {
     public static void removeNotification(Context context, CommandeBean commandeBean) {
         Log.w("TAG_FIREBASE", "Retire la notification : " + commandeBean.getId());
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.cancel((int) commandeBean.getId());
+        notificationManagerCompat.cancel(commandeBean.getId().intValue());
     }
 }

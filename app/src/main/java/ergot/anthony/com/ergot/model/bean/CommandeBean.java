@@ -11,14 +11,16 @@ public class CommandeBean implements Serializable {
 
     private static final long serialVersionUID = 5046775210799311032L;
 
-    //Liste de selection des produit
+    //Liste de selection des produits pour envoyer au serveur
     private ArrayList<SelectionBean> selectionList;
+    //Version quand la commande est validé retourner par le serveur
+    private ArrayList<DetailCommande> details;
 
     private long dateCommande;
     private long datePrevision;
     private int statut;
     private String remarque;
-    private long id;
+    private Long id;
     private long statutAnnulation;
     private UserBean user;
 
@@ -84,11 +86,11 @@ public class CommandeBean implements Serializable {
         this.selectionList = selectionList;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -140,5 +142,13 @@ public class CommandeBean implements Serializable {
 
     public void setStatutAnnulation(long statutAnnulation) {
         this.statutAnnulation = statutAnnulation;
+    }
+
+    public ArrayList<DetailCommande> getDetails() {
+        return details;
+    }
+
+    public void setDetails(ArrayList<DetailCommande> details) {
+        this.details = details;
     }
 }
